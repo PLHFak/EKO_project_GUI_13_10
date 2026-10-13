@@ -108,6 +108,7 @@ svg .ah{fill:var(--edge)}
 .panel{background:#354353;border:1px solid #5a6b80;border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .panel-hd{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;color:#d3dce6;font-weight:600}
 .seg{display:inline-flex;border:1px solid #7a8ca1;border-radius:5px;overflow:hidden}
+  .viewsw button{font-size:.78rem;padding:5px 12px}
 .seg button{background:transparent;border:0;color:#dfe6ee;font:500 .74rem var(--font-mono);padding:4px 10px;cursor:pointer;letter-spacing:.04em}
 .seg button[aria-pressed="true"]{background:#1e64c8;color:#fff}
 .seg button:focus-visible{outline:2px solid #5c9bf0;outline-offset:-2px}
@@ -431,6 +432,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
     <div class="app-bar">
       <span class="brand"><i>EKO</i> · Replay audio</span>
       <span class="live"><span class="fr">À L'ANTENNE</span><span class="en" lang="en">ON AIR</span> · LSM 2 · <b id="airCam">CAM 1</b></span>
+      <span class="viewsw seg" role="group" aria-label="Vue"><button type="button" id="vFull" aria-pressed="true"><span class="fr">Vue complète</span><span class="en" lang="en">Full view</span></button><button type="button" id="vTracks" aria-pressed="false"><span class="fr">Pistes seules</span><span class="en" lang="en">Tracks only</span></button></span>
       <span class="tc" id="tc">21:14:07:12</span>
     </div>
     <div class="app-main">
@@ -462,7 +464,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
           <button type="button" data-mode="ball" aria-pressed="false"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13" cy="13" r="9"/><path d="M13 7l5 3.6-2 6h-6l-2-6z" fill="currentColor"/></svg>BALL FOLLOW</button>
           <button type="button" data-mode="select" aria-pressed="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="8" height="12" rx="4"/><path d="M5 12a8 8 0 0 0 16 0M13 20v4"/></svg>MIC SELECT</button>
         </div>
-        <div class="panel-hd"><span><span class="fr">Pistes EKO</span><span class="en" lang="en">EKO tracks</span></span><span class="hdr-r"><span id="modeHint">mic select · 12</span><button type="button" class="wbtn" id="wideBtn" aria-pressed="false"></button></span></div>
+        <div class="panel-hd"><span><span class="fr">Pistes EKO</span><span class="en" lang="en">EKO tracks</span></span><span id="modeHint">mic select · 12</span></div>
         <div class="tracks"><div class="tl" id="tl"></div></div>
         <div class="hidden-list" id="hiddenList"></div>
         <div class="legendrow"><span><span class="fr">Trait rouge : l'image à l'antenne. À droite : le son qui arrive, visible avant d'être joué.</span><span class="en" lang="en">Red line: the image on air. To the right: the incoming sound, visible before it plays.</span></span></div>
@@ -931,9 +933,11 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   try{window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){TK=tokens();draw();});}catch(e){}
   try{new MutationObserver(function(){TK=tokens();draw();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});}catch(e){}
 
-  var wideBtn=document.getElementById('wideBtn'), appMain=document.querySelector('.app-main');
-  function setWide(v){appMain.classList.toggle('wide',v);wideBtn.setAttribute('aria-pressed',v);wideBtn.textContent=v?L('◧ Afficher le plan','◧ Show plan'):L('⇤ Masquer le plan','⇤ Hide plan');setTimeout(draw,30);}
-  wideBtn.addEventListener('click',function(){setWide(!appMain.classList.contains('wide'));});
+  /* « Pistes seules » : plan, presets et pavé masqués ; la timeline prend toute la largeur et montre 50 % de temps en plus */
+  var appMain=document.querySelector('.app-main'), vFull=document.getElementById('vFull'), vTracks=document.getElementById('vTracks');
+  function setWide(v){appMain.classList.toggle('wide',v);vFull.setAttribute('aria-pressed',!v);vTracks.setAttribute('aria-pressed',v);SPAN=v?.63:.42;HX=v?.25:.32;setTimeout(draw,30);}
+  vFull.addEventListener('click',function(){setWide(false);});
+  vTracks.addEventListener('click',function(){setWide(true);});
   setWide(false);
   updateCams(); layout(); render();
 })();
