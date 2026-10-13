@@ -601,7 +601,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   var CAMC={1:'#f5d142',2:'#a5e05a',3:'#6ec6ff',4:'#e0a3ff',5:'#ffb27a',ARB:REFC};
   var CAMMIC={1:[6,9],2:[5,8],3:[7,10],4:[2,3],5:[12,13],ARB:['R']};
   /* caméra à l'antenne au fil du replay (instant 0–1 → caméra) */
-  var SCHED=[[0,1],[.28,3],[.46,'ARB'],[.58,2],[.8,5]];
+  var SCHED=[[0,1],[.28,2],[.46,'ARB'],[.6,5],[.9,3]];   /* la caméra 3 prend le tir */
   function camAt(u){var c=SCHED[0][1];for(var i=0;i<SCHED.length;i++){if(u>=SCHED[i][0])c=SCHED[i][1];}return c;}
   function camName(c){return c==='ARB'?L('ARBITRE','REFEREE'):'CAM '+c;}
   var PRESETS=[[L('Filet G','Net L'),[2,3]],[L('Filet D','Net R'),[12,13]],[L('Corners N','Corners N'),[1,11]],[L('Corners S','Corners S'),[4,14]],[L('Bord N','Side N'),[5,6,7]],[L('Bord S','Side S'),[8,9,10]],[L('Banc','Bench'),[9]],[L('Tribune','Stand'),[6]]];
