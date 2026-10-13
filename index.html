@@ -821,19 +821,6 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
       g.fillRect(x,mid-hh,bw2,hh*2);
     }
     g.globalAlpha=1;
-    /* repères de mix : courbes croisées blanches, comme sur un banc de montage */
-    function xfade(xc,wz){var x0=xc-wz/2,x1=xc+wz/2; if(x1<0||x0>w) return; g.strokeStyle='rgba(255,255,255,.9)'; g.lineWidth=1.3; g.beginPath(); g.moveTo(x0,3); g.lineTo(x1,h-3); g.moveTo(x0,h-3); g.lineTo(x1,3); g.stroke(); g.fillStyle='rgba(255,255,255,.10)'; g.fillRect(x0,2,wz,h-4);}
-    var wz=CF/SPAN*w;
-    if(t.camf&&active){for(var q2=1;q2<SCHED.length;q2++) xfade(X(SCHED[q2][0]),wz);}
-    if(t.id==='select'&&active){state.segs.forEach(function(sg){if(sg.t>0) xfade(X(sg.t),wz);});}
-    if(t.clip){                                                              /* fondu au blanc : entrée et sortie du clip */
-      var fz=FD/SPAN*w, xa=X(from), xb=X(to);
-      [[xa,xa+fz,1],[xb-fz,xb,-1]].forEach(function(f){ if(f[1]<0||f[0]>w) return;
-        var gr=g.createLinearGradient(f[0],0,f[1],0); gr.addColorStop(f[2]>0?0:1,'rgba(255,255,255,.55)'); gr.addColorStop(f[2]>0?1:0,'rgba(255,255,255,0)');
-        g.fillStyle=gr; g.fillRect(f[0],3,f[1]-f[0],h-6);
-        g.strokeStyle='#ffffff'; g.lineWidth=1.4; g.beginPath(); if(f[2]>0){g.moveTo(f[0],h-3);g.lineTo(f[1],3);}else{g.moveTo(f[0],3);g.lineTo(f[1],h-3);} g.stroke();});
-    }
-    g.globalAlpha=1;
     if(t.id==='select'){
       state.segs.forEach(function(s){
         var x=X(s.t); if(x>w) return;
