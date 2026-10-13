@@ -744,7 +744,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   function tokens(){var cs=getComputedStyle(document.getElementById('app'));var o={};TRACKS.forEach(function(t){o[t.c]=cs.getPropertyValue(t.c).trim();});o.tally=cs.getPropertyValue('--tally').trim();return o;}
   var TK=tokens();
   /* défilement type banc de montage : la tête de lecture reste fixe, les pistes défilent ; à droite, le son qui arrive */
-  var HX=.32, SPAN=.42, PH=0;
+  var HX=.32, SPAN=.42, PH=0, CF=.022, FD=.03;   /* CF : durée d'un mix ; FD : durée des fondus de clip */
   function hsh(n,seed){var v=Math.sin(n*12.9898+seed*78.233)*43758.5453;return v-Math.floor(v);}
   function drawTrack(t){
     var cv=t.cv; if(t.hide) return;
@@ -799,9 +799,31 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
       var a=0.16+0.34*nz(bi);
       if(u>=0&&u<=1){ESS.forEach(function(e){var d=Math.abs(u-e.t); if(d<.007) a=Math.max(a,(0.4+0.58*e.pw)*Math.pow(1-d/.007,1.5));});}
       if(t.id==='int') a*=1+0.35*Math.sin(u*14);
+      if(t.clip){a*=Math.max(0,Math.min(1,(u-from)/FD,(to-u)/FD));}          /* fondu d'entrée et de sortie du clip */
+      var bw2=stp*.6, al= x>hx ? .55 : 1, xf=null;
+      if(t.camf&&active){for(var q=1;q<SCHED.length;q++){if(Math.abs(u-SCHED[q][0])<CF/2){xf=q;break;}}}
+      if(xf!==null){                                                         /* mix (fondu enchaîné) entre deux caméras */
+        var kx=(u-(SCHED[xf][0]-CF/2))/CF, A=Math.min(1,a)*(h/2-3);
+        g.globalAlpha=al; g.fillStyle=CAMC[SCHED[xf-1][1]]; var h1=Math.max(1,A*(1-kx)); g.fillRect(x,mid-h1,bw2,h1*2);
+        g.globalAlpha=al*.9; g.fillStyle=CAMC[SCHED[xf][1]]; var h2=Math.max(1,A*kx); g.fillRect(x,mid-h2,bw2,h2*2);
+        continue;
+      }
       var hh=Math.max(1,Math.min(1,a)*(h/2-3));
-      g.globalAlpha= x>hx ? .55 : 1;
-      g.fillRect(x,mid-hh,stp*.6,hh*2);
+      g.globalAlpha=al;
+      g.fillRect(x,mid-hh,bw2,hh*2);
+    }
+    g.globalAlpha=1;
+    /* repères de mix : courbes croisées blanches, comme sur un banc de montage */
+    function xfade(xc,wz){var x0=xc-wz/2,x1=xc+wz/2; if(x1<0||x0>w) return; g.strokeStyle='rgba(255,255,255,.9)'; g.lineWidth=1.3; g.beginPath(); g.moveTo(x0,3); g.lineTo(x1,h-3); g.moveTo(x0,h-3); g.lineTo(x1,3); g.stroke(); g.fillStyle='rgba(255,255,255,.10)'; g.fillRect(x0,2,wz,h-4);}
+    var wz=CF/SPAN*w;
+    if(t.camf&&active){for(var q2=1;q2<SCHED.length;q2++) xfade(X(SCHED[q2][0]),wz);}
+    if(t.id==='select'&&active){state.segs.forEach(function(sg){if(sg.t>0) xfade(X(sg.t),wz);});}
+    if(t.clip){                                                              /* fondu au blanc : entrée et sortie du clip */
+      var fz=FD/SPAN*w, xa=X(from), xb=X(to);
+      [[xa,xa+fz,1],[xb-fz,xb,-1]].forEach(function(f){ if(f[1]<0||f[0]>w) return;
+        var gr=g.createLinearGradient(f[0],0,f[1],0); gr.addColorStop(f[2]>0?0:1,'rgba(255,255,255,.55)'); gr.addColorStop(f[2]>0?1:0,'rgba(255,255,255,0)');
+        g.fillStyle=gr; g.fillRect(f[0],3,f[1]-f[0],h-6);
+        g.strokeStyle='#ffffff'; g.lineWidth=1.4; g.beginPath(); if(f[2]>0){g.moveTo(f[0],h-3);g.lineTo(f[1],3);}else{g.moveTo(f[0],3);g.lineTo(f[1],h-3);} g.stroke();});
     }
     g.globalAlpha=1;
     if(t.id==='select'){
