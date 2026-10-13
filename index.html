@@ -11,7 +11,7 @@
 :root{
   --bg:#f2f4f7; --surface:#ffffff; --ink:#15202c; --muted:#5b6979; --edge:#b9c3ce; --line:#dde3ea;
   --eko:#1e64c8;
-  --inter:#0b7d84; --cam:#6247b0; --mode:#1e64c8; --clip:#a86400; --tally:#cc2f27; --ok:#1f7a4d;
+  --inter:#0b7d84; --cam:#6247b0; --mode:#1e64c8; --clip:#a86400; --boost:#a8346f; --tally:#cc2f27; --ok:#1f7a4d;
   --pitch:#e3efe6; --pitchline:#9cc3a6; --key:#e9edf2; --keyedge:#c3ccd6; --dev:#1b2530; --devink:#e7ecf1;
   --font-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-head:"Barlow Semi Condensed","Barlow",system-ui,sans-serif;
@@ -21,7 +21,7 @@
   :root:not([data-theme="light"]){
     --bg:#0f151c; --surface:#17202a; --ink:#e7ecf1; --muted:#9aa8b6; --edge:#4a5868; --line:#263241;
     --eko:#5c9bf0;
-    --inter:#46c3ca; --cam:#a996ef; --mode:#5c9bf0; --clip:#f0aa3c; --tally:#ff6c5f; --ok:#5cc58c;
+    --inter:#46c3ca; --cam:#a996ef; --mode:#5c9bf0; --clip:#f0aa3c; --boost:#e884b6; --tally:#ff6c5f; --ok:#5cc58c;
     --pitch:#15261c; --pitchline:#2f5a3d; --key:#222d39; --keyedge:#3a4857; --dev:#0a0f14; --devink:#e7ecf1;
     color-scheme:dark;
   }
@@ -29,12 +29,13 @@
 :root[data-theme="dark"]{
   --bg:#0f151c; --surface:#17202a; --ink:#e7ecf1; --muted:#9aa8b6; --edge:#4a5868; --line:#263241;
   --eko:#5c9bf0;
-  --inter:#46c3ca; --cam:#a996ef; --mode:#5c9bf0; --clip:#f0aa3c; --tally:#ff6c5f; --ok:#5cc58c;
+  --inter:#46c3ca; --cam:#a996ef; --mode:#5c9bf0; --clip:#f0aa3c; --boost:#e884b6; --tally:#ff6c5f; --ok:#5cc58c;
   --pitch:#15261c; --pitchline:#2f5a3d; --key:#222d39; --keyedge:#3a4857; --dev:#0a0f14; --devink:#e7ecf1;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{margin:0}
+[hidden]{display:none!important}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.5;padding-inline:20px;padding-block:0 64px}
 .wrap{max-width:1080px;margin-inline:auto;display:flex;flex-direction:column;gap:60px}
 h1,h2,h3{font-family:var(--font-head);text-wrap:balance;margin:0;line-height:1.15}
@@ -71,7 +72,7 @@ ul.tight{margin:0;padding-left:1.15em;display:flex;flex-direction:column;gap:5px
 .chip.opt{border-style:dashed;background:var(--surface)}
 .chip .lb{font-family:var(--font-mono);font-weight:600;font-size:.82rem;color:var(--c);white-space:nowrap;min-width:7.5em}
 .chip .tx{font-size:.92rem}
-.c-inter{--c:var(--inter)} .c-cam{--c:var(--cam)} .c-mode{--c:var(--mode)} .c-clip{--c:var(--clip)}
+.c-inter{--c:var(--inter)} .c-cam{--c:var(--cam)} .c-mode{--c:var(--mode)} .c-clip{--c:var(--clip)} .c-boost{--c:var(--boost)}
 .or{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);text-align:center;letter-spacing:.1em}
 .decide{border-left:3px solid var(--mode);padding:4px 0 4px 14px;max-width:72ch}
 
@@ -317,6 +318,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
       <div class="chips">
         <div class="chip c-inter"><span class="lb">EKO INT</span><span class="tx"><span class="fr">Le son inter.</span><span class="en" lang="en">The international sound.</span></span></div>
         <div class="chip c-cam"><span class="lb">CAM FOLLOW</span><span class="tx"><span class="fr">Le micro de la caméra rejouée.</span><span class="en" lang="en">The mic of the camera being replayed.</span></span></div>
+        <div class="chip c-boost opt"><span class="lb">BOOST</span><span class="tx"><span class="fr">En option : des frappes de balle générées par l'IA, placées d'après l'image.</span><span class="en" lang="en">Optional: AI-generated ball kicks, placed from the image.</span></span></div>
       </div>
     </div>
     <div class="blk">
@@ -643,7 +645,8 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     {id:'select',name:'MIC SELECT',sub:L('option','optional'),c:'--mode',seed:23,mode:'select'},
     {id:'clip1',name:'EKO CLIP 1',sub:'LSM 1 · micro 2',c:'--clip',seed:29,clip:[.55,.85]},
     {id:'clip2',name:'EKO CLIP 2',sub:L('option','optional'),c:'--clip',seed:31,clip:null,hide:true},
-    {id:'clip3',name:'EKO CLIP 3',sub:L('option','optional'),c:'--clip',seed:37,clip:null,hide:true}
+    {id:'clip3',name:'EKO CLIP 3',sub:L('option','optional'),c:'--clip',seed:37,clip:null,hide:true},
+    {id:'boost',name:'BOOST',sub:L('IA · frappes','AI · kicks'),c:'--boost',seed:41,boost:true}
   ];
   var tl=document.getElementById('tl'), hl=document.getElementById('hiddenList');
   var eyeSvg='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 8s2.6-5 7-5 7 5 7 5-2.6 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/></svg>';
@@ -685,6 +688,21 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     if(t.mode) active=(state.mode===t.mode);
     if(t.id==='clip2'||t.id==='clip3') active=false;
     t.row.classList.toggle('dim',!active);
+    if(t.boost){
+      g.fillStyle='#1a232d'; g.fillRect(0,mid-0.5,w,1);
+      g.fillStyle=col;
+      [.30,.38,.47,.64].forEach(function(e){
+        var x0=e*w, len=Math.max(10,w*.022);
+        for(var x=x0-len*.35;x<x0+len;x+=2){
+          var f=x/w, k=(x-x0)/len, a;
+          if(k<0) a=0.25+(k+.35)/.35*0.6; else a=0.95*Math.exp(-k*3.2);
+          var hh=Math.max(1,a*(h/2-3));
+          g.globalAlpha= f>head ? .45 : 1;
+          g.fillRect(x,mid-hh,1.4,hh*2);
+        }
+      });
+      g.globalAlpha=1; g.fillStyle=TK.tally; g.fillRect(head*w-1,0,2,h); return;
+    }
     var from=0,to=1; if(t.clip!==undefined){ if(!t.clip){ g.fillStyle='#1a232d'; g.fillRect(0,mid-1,w,2); return;} from=t.clip[0]; to=t.clip[1]; }
     g.fillStyle=col;
     for(var x=0;x<w;x+=2){
