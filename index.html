@@ -752,7 +752,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   function tokens(){var cs=getComputedStyle(document.getElementById('app'));var o={};TRACKS.forEach(function(t){o[t.c]=cs.getPropertyValue(t.c).trim();});o.tally=cs.getPropertyValue('--tally').trim();return o;}
   var TK=tokens();
   /* défilement type banc de montage : la tête de lecture reste fixe, les pistes défilent ; à droite, le son qui arrive */
-  var HX=.32, SPAN=.42, PH=0, CF=.022, FD=.03;   /* CF : durée d'un mix ; FD : durée des fondus de clip */
+  var HX=.32, SPAN=.84, PH=0, CF=.022, FD=.03;   /* CF : durée d'un mix ; FD : durée des fondus de clip */
   function hsh(n,seed){var v=Math.sin(n*12.9898+seed*78.233)*43758.5453;return v-Math.floor(v);}
   function drawTrack(t){
     var cv=t.cv; if(t.hide) return;
@@ -831,7 +831,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     if(t.clip){ g.strokeStyle=col; g.lineWidth=1.5; g.strokeRect(X(from)+.5,2.5,X(to)-X(from)-1,h-5);
       if(t.clipLbl&&X(to)>40){g.font='600 10px "IBM Plex Mono",monospace'; g.fillStyle='#ffffff'; g.fillText(t.clipLbl,Math.max(X(from),0)+5,13);} }
     if(t.camf){
-      SCHED.forEach(function(sc){var x=X(sc[0]); if(x>w||x<-90) return; var lab=sc[1]==='ARB'?'ARB · R':'CAM '+sc[1];
+      SCHED.forEach(function(sc){var x=X(sc[0]); if(x>w||x<-90) return; var lab=sc[1]==='ARB'?'ARB':'CAM '+sc[1];
         g.font='700 10px "IBM Plex Mono",monospace'; var tw=g.measureText(lab).width+8;
         g.fillStyle=active?CAMC[sc[1]]:'#7d8896'; g.fillRect(x,2,2,h-4); g.fillRect(x+2,2,tw,14);
         g.fillStyle='#1c252f'; g.fillText(lab,x+6,13);});
@@ -960,7 +960,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
 
   /* « Pistes seules » : plan, presets et pavé masqués ; la timeline prend toute la largeur et montre 50 % de temps en plus */
   var appMain=document.querySelector('.app-main'), vFull=document.getElementById('vFull'), vTracks=document.getElementById('vTracks');
-  function setWide(v){appMain.classList.toggle('wide',v);vFull.setAttribute('aria-pressed',!v);vTracks.setAttribute('aria-pressed',v);SPAN=v?.63:.42;HX=v?.25:.32;setTimeout(draw,30);}
+  function setWide(v){appMain.classList.toggle('wide',v);vFull.setAttribute('aria-pressed',!v);vTracks.setAttribute('aria-pressed',v);SPAN=v?1.26:.84;HX=v?.25:.32;setTimeout(draw,30);}
   vFull.addEventListener('click',function(){setWide(false);});
   vTracks.addEventListener('click',function(){setWide(true);});
   setWide(false);
