@@ -119,9 +119,11 @@ svg .ah{fill:var(--edge)}
 .mic.lit circle{fill:#5c9bf0;stroke:#bcd6ff}
 .mic.cam circle{stroke:var(--camc,#a996ef);stroke-width:3}
 .mic:focus-visible circle{stroke:#fff;stroke-width:2.4}
-.camk polygon{stroke:#1c252f;stroke-width:1.2}
-.camk.onair polygon{stroke:#ffffff;stroke-width:2.2}
-.camk text{font-family:var(--font-mono);font-size:10.5px;font-weight:700;fill:#1c252f}
+.camk .cbody,.camk .lens{stroke:#1c252f;stroke-width:1.2}
+.camk .lens{filter:brightness(.82)}
+.camk .vf,.camk .hnd{fill:#1c252f;stroke:#9aa6b2;stroke-width:.8}
+.camk.onair .cbody,.camk.onair .lens{stroke:#ffffff;stroke-width:2}
+#pitch .camk text{font-family:var(--font-mono);font-size:11px;font-weight:800;fill:#111820;pointer-events:none}
 .camk .tl{fill:#4a5768;stroke:#1c252f;stroke-width:1}
 .camk.onair .tl{fill:#ff3b30;stroke:#ffd0cc;filter:drop-shadow(0 0 4px #ff3b30)}
 .ref circle.body{fill:#1c252f;stroke:#ffe14d;stroke-width:2.2}
@@ -436,7 +438,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
         <div class="panel-hd"><span><span class="fr">Implantation</span><span class="en" lang="en">Layout</span></span>
           <span class="seg" role="group" aria-label="Vue"><button type="button" id="vPlan" aria-pressed="true">Plan</button><button type="button" id="vPre" aria-pressed="false">Presets</button></span>
         </div>
-        <svg id="pitch" viewBox="0 0 560 380" role="img" aria-label="Plan du stade avec caméras et micros">
+        <svg id="pitch" viewBox="0 0 560 394" role="img" aria-label="Plan du stade avec caméras et micros">
           <rect x="40" y="30" width="480" height="300" rx="2" fill="#2c5a3e" stroke="#6aa880"/>
           <g stroke="#6aa880" fill="none" stroke-width="1.4">
             <line x1="280" y1="30" x2="280" y2="330"/><circle cx="280" cy="180" r="44"/>
@@ -594,7 +596,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   /* ---------- données ---------- */
   var MICS=[[1,48,40],[2,48,160],[3,48,200],[4,48,320],[5,160,16],[6,280,16],[7,400,16],[8,160,344],[9,280,344],[10,400,344],[11,512,40],[12,512,160],[13,512,200],[14,512,320]];
   /* caméras : numéro, position, couleur ; l'arbitre porte un micro (R) et circule sur le terrain */
-  var CAMS=[{id:1,x:280,y:370,c:'#f5d142',dir:'up'},{id:2,x:165,y:370,c:'#a5e05a',dir:'up'},{id:3,x:395,y:370,c:'#6ec6ff',dir:'up'},{id:4,x:14,y:180,c:'#e0a3ff',dir:'right'},{id:5,x:546,y:180,c:'#ffb27a',dir:'left'}];
+  var CAMS=[{id:1,x:280,y:372,c:'#f5d142',dir:'up'},{id:2,x:180,y:372,c:'#a5e05a',dir:'up'},{id:3,x:380,y:372,c:'#6ec6ff',dir:'up'},{id:4,x:18,y:180,c:'#e0a3ff',dir:'right'},{id:5,x:542,y:180,c:'#ffb27a',dir:'left'}];
   var REFC='#ffe14d';
   var CAMC={1:'#f5d142',2:'#a5e05a',3:'#6ec6ff',4:'#e0a3ff',5:'#ffb27a',ARB:REFC};
   var CAMMIC={1:[6,9],2:[5,8],3:[7,10],4:[2,3],5:[12,13],ARB:['R']};
@@ -610,15 +612,23 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   var NS='http://www.w3.org/2000/svg';
   var micsG=document.getElementById('mics'), camsG=document.getElementById('cams');
   var camEls={};
+  /* pictogramme de caméra broadcast : boîtier, objectif évasé, viseur ; numéro sur le boîtier, lampe tally au-dessus */
   CAMS.forEach(function(c){
     var g=document.createElementNS(NS,'g'); g.setAttribute('class','camk');
-    var x=c.x,y=c.y,pts,tx=x,ty=y,lx=x,ly=y;
-    if(c.dir==='up'){pts=[x-11,y+8,x+11,y+8,x,y-9];ty=y+5.5;lx=x+16;ly=y;}
-    else if(c.dir==='right'){pts=[x-8,y-11,x-8,y+11,x+10,y];tx=x-2;ty=y+4;lx=x;ly=y-17;}
-    else {pts=[x+8,y-11,x+8,y+11,x-10,y];tx=x+2;ty=y+4;lx=x;ly=y-17;}
-    var p=document.createElementNS(NS,'polygon'); p.setAttribute('points',pts.join(' ')); p.setAttribute('fill',c.c); g.appendChild(p);
-    var t=document.createElementNS(NS,'text'); t.textContent=c.id; t.setAttribute('x',tx); t.setAttribute('y',ty); t.setAttribute('text-anchor','middle'); g.appendChild(t);
-    var lamp=document.createElementNS(NS,'circle'); lamp.setAttribute('class','tl'); lamp.setAttribute('cx',lx); lamp.setAttribute('cy',ly); lamp.setAttribute('r',4.5); g.appendChild(lamp);
+    var rot=c.dir==='up'?0:(c.dir==='right'?90:-90);
+    var body=document.createElementNS(NS,'g'); body.setAttribute('transform','translate('+c.x+','+c.y+') rotate('+rot+')');
+    body.innerHTML='<path class="lens" d="M-5.5 -2 L5.5 -2 L9 -12 L-9 -12 Z"/>'
+      +'<rect class="cbody" x="-11" y="-2" width="22" height="15" rx="2.5"/>'
+      +'<rect class="vf" x="-14.5" y="0" width="4" height="7" rx="1"/>'
+      +'<rect class="hnd" x="-6" y="13" width="12" height="2.5" rx="1"/>';
+    body.querySelector('.cbody').setAttribute('fill',c.c);
+    body.querySelector('.lens').setAttribute('fill',c.c);
+    g.appendChild(body);
+    var cx=c.x, cy=c.y+5.5, lx=c.x+15, ly=c.y-6;
+    if(c.dir==='right'){cx=c.x-5.5; cy=c.y; lx=c.x-6; ly=c.y-16;}
+    if(c.dir==='left'){cx=c.x+5.5; cy=c.y; lx=c.x+6; ly=c.y-16;}
+    var t=document.createElementNS(NS,'text'); t.textContent=c.id; t.setAttribute('x',cx); t.setAttribute('y',cy+4); t.setAttribute('text-anchor','middle'); g.appendChild(t);
+    var lamp=document.createElementNS(NS,'circle'); lamp.setAttribute('class','tl'); lamp.setAttribute('cx',lx); lamp.setAttribute('cy',ly); lamp.setAttribute('r',4.2); g.appendChild(lamp);
     camsG.appendChild(g); camEls[c.id]=g;
   });
   var refG=document.getElementById('refg'), refEl=document.createElementNS(NS,'g'); refEl.setAttribute('class','ref');
@@ -901,7 +911,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     var tgt=[ballPos[0]-46,ballPos[1]+38]; refPos[0]+=(tgt[0]-refPos[0])*.035; refPos[1]+=(tgt[1]-refPos[1])*.035;
     refEl.setAttribute('transform','translate('+refPos[0].toFixed(1)+','+refPos[1].toFixed(1)+')'); refEl.setAttribute('opacity',Math.min(1,p/.04).toFixed(2));
     var cam=camAt(p); if(cam!==onAirCam){onAirCam=cam;updateCams();render();}
-    var cone=document.getElementById('cone'), src=onAirCam==='ARB'?refPos:[CAMS.filter(function(c){return c.id===onAirCam;})[0].x,CAMS.filter(function(c){return c.id===onAirCam;})[0].y];
+    var cone=document.getElementById('cone'), cc=CAMS.filter(function(c){return c.id===onAirCam;})[0], src=onAirCam==='ARB'?refPos:(cc.dir==='up'?[cc.x,cc.y-12]:cc.dir==='right'?[cc.x+12,cc.y]:[cc.x-12,cc.y]);
     cone.setAttribute('x1',src[0]);cone.setAttribute('y1',src[1]);cone.setAttribute('x2',ballPos[0]);cone.setAttribute('y2',ballPos[1]);cone.setAttribute('stroke',CAMC[onAirCam]);
     var fr=tcBase+Math.floor(p*DUR/1000*50/3);
     var ff=fr%50, s=Math.floor(fr/50)%60, m=Math.floor(fr/3000)%60, h=Math.floor(fr/180000);
