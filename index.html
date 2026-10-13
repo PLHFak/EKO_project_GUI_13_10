@@ -319,7 +319,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
       <div class="chips">
         <div class="chip c-inter"><span class="lb">EKO INT</span><span class="tx"><span class="fr">Le son inter.</span><span class="en" lang="en">The international sound.</span></span></div>
         <div class="chip c-cam"><span class="lb">CAM FOLLOW</span><span class="tx"><span class="fr">Le micro de la caméra rejouée.</span><span class="en" lang="en">The mic of the camera being replayed.</span></span></div>
-        <div class="chip c-boost"><span class="lb">BOOST</span><span class="tx"><span class="fr">Des frappes de balle générées par l'IA, placées d'après l'image.</span><span class="en" lang="en">AI-generated ball kicks, placed from the image.</span></span></div>
+        <div class="chip c-boost"><span class="lb">BOOST</span><span class="tx"><span class="fr">À chaque changement de trajectoire du ballon détecté à l'image, un effet de frappe généré par l'IA. Taille et style varient à chaque fois : aucune répétition mécanique.</span><span class="en" lang="en">Each change in the ball's trajectory detected in the image triggers an AI-generated kick effect. Size and style vary every time: no mechanical repetition.</span></span></div>
       </div>
     </div>
     <div class="blk">
@@ -692,11 +692,13 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     if(t.boost){
       g.fillStyle='#1a232d'; g.fillRect(0,mid-0.5,w,1);
       g.fillStyle=col;
-      [.30,.38,.47,.64].forEach(function(e){
-        var x0=e*w, len=Math.max(10,w*.022);
-        for(var x=x0-len*.35;x<x0+len;x+=2){
+      /* chaque changement de trajectoire : un effet de taille, de longueur et de style différents */
+      [[.27,.55,.018,2.4,.30],[.33,.9,.028,3.6,.15],[.385,.42,.014,1.8,.45],[.47,.78,.034,4.4,.22],[.55,.62,.022,2.8,.38],[.64,.98,.03,3.2,.10]].forEach(function(b){
+        var x0=b[0]*w, amp=b[1], len=Math.max(8,w*b[2]), dec=b[3], att=b[4], r2=rnd(Math.round(b[0]*1000));
+        for(var x=x0-len*att;x<x0+len;x+=2){
           var f=x/w, k=(x-x0)/len, a;
-          if(k<0) a=0.25+(k+.35)/.35*0.6; else a=0.95*Math.exp(-k*3.2);
+          if(k<0) a=amp*(0.2+0.8*(k+att)/att); else a=amp*Math.exp(-k*dec);
+          a*=0.75+0.5*r2();
           var hh=Math.max(1,a*(h/2-3));
           g.globalAlpha= f>head ? .45 : 1;
           g.fillRect(x,mid-hh,1.4,hh*2);
