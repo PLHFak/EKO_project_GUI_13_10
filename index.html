@@ -438,7 +438,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
         <div class="panel-hd"><span><span class="fr">Implantation</span><span class="en" lang="en">Layout</span></span>
           <span class="seg" role="group" aria-label="Vue"><button type="button" id="vPlan" aria-pressed="true">Plan</button><button type="button" id="vPre" aria-pressed="false">Presets</button></span>
         </div>
-        <svg id="pitch" viewBox="0 0 560 394" role="img" aria-label="Plan du stade avec caméras et micros">
+        <svg id="pitch" viewBox="0 0 560 398" role="img" aria-label="Plan du stade avec caméras et micros">
           <rect x="40" y="30" width="480" height="300" rx="2" fill="#2c5a3e" stroke="#6aa880"/>
           <g stroke="#6aa880" fill="none" stroke-width="1.4">
             <line x1="280" y1="30" x2="280" y2="330"/><circle cx="280" cy="180" r="44"/>
@@ -596,7 +596,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   /* ---------- données ---------- */
   var MICS=[[1,48,40],[2,48,160],[3,48,200],[4,48,320],[5,160,16],[6,280,16],[7,400,16],[8,160,344],[9,280,344],[10,400,344],[11,512,40],[12,512,160],[13,512,200],[14,512,320]];
   /* caméras : numéro, position, couleur ; l'arbitre porte un micro (R) et circule sur le terrain */
-  var CAMS=[{id:1,x:280,y:372,c:'#f5d142',dir:'up'},{id:2,x:180,y:372,c:'#a5e05a',dir:'up'},{id:3,x:380,y:372,c:'#6ec6ff',dir:'up'},{id:4,x:18,y:180,c:'#e0a3ff',dir:'right'},{id:5,x:542,y:180,c:'#ffb27a',dir:'left'}];
+  var CAMS=[{id:1,x:280,y:374,c:'#f5d142',dir:'up'},{id:2,x:180,y:374,c:'#a5e05a',dir:'up'},{id:3,x:380,y:374,c:'#6ec6ff',dir:'up'},{id:4,x:20,y:180,c:'#e0a3ff',dir:'right'},{id:5,x:540,y:180,c:'#ffb27a',dir:'left'}];
   var REFC='#ffe14d';
   var CAMC={1:'#f5d142',2:'#a5e05a',3:'#6ec6ff',4:'#e0a3ff',5:'#ffb27a',ARB:REFC};
   var CAMMIC={1:[6,9],2:[5,8],3:[7,10],4:[2,3],5:[12,13],ARB:['R']};
@@ -617,16 +617,17 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     var g=document.createElementNS(NS,'g'); g.setAttribute('class','camk');
     var rot=c.dir==='up'?0:(c.dir==='right'?90:-90);
     var body=document.createElementNS(NS,'g'); body.setAttribute('transform','translate('+c.x+','+c.y+') rotate('+rot+')');
-    body.innerHTML='<path class="lens" d="M-5.5 -2 L5.5 -2 L9 -12 L-9 -12 Z"/>'
-      +'<rect class="cbody" x="-11" y="-2" width="22" height="15" rx="2.5"/>'
-      +'<rect class="vf" x="-14.5" y="0" width="4" height="7" rx="1"/>'
-      +'<rect class="hnd" x="-6" y="13" width="12" height="2.5" rx="1"/>';
+    body.innerHTML='<path class="lens" d="M-5.5 -7.5 L5.5 -7.5 L9 -17.5 L-9 -17.5 Z"/>'
+      +'<rect class="cbody" x="-11" y="-7.5" width="22" height="15" rx="2.5"/>'
+      +'<rect class="vf" x="-14.5" y="-5.5" width="4" height="7" rx="1"/>'
+      +'<rect class="hnd" x="-6" y="7.5" width="12" height="2.5" rx="1"/>';
     body.querySelector('.cbody').setAttribute('fill',c.c);
     body.querySelector('.lens').setAttribute('fill',c.c);
     g.appendChild(body);
-    var cx=c.x, cy=c.y+5.5, lx=c.x+15, ly=c.y-6;
-    if(c.dir==='right'){cx=c.x-5.5; cy=c.y; lx=c.x-6; ly=c.y-16;}
-    if(c.dir==='left'){cx=c.x+5.5; cy=c.y; lx=c.x+6; ly=c.y-16;}
+    var cx=c.x, cy=c.y, lx=c.x+19, ly=c.y+9;
+    if(c.dir==='right'){lx=c.x; ly=c.y+23;}
+    if(c.dir==='left'){lx=c.x; ly=c.y+23;}
+    c.body=body; c.ang=rot;
     var t=document.createElementNS(NS,'text'); t.textContent=c.id; t.setAttribute('x',cx); t.setAttribute('y',cy+4); t.setAttribute('text-anchor','middle'); g.appendChild(t);
     var lamp=document.createElementNS(NS,'circle'); lamp.setAttribute('class','tl'); lamp.setAttribute('cx',lx); lamp.setAttribute('cy',ly); lamp.setAttribute('r',4.2); g.appendChild(lamp);
     camsG.appendChild(g); camEls[c.id]=g;
@@ -913,8 +914,9 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     ballEl.setAttribute('cx',ballPos[0]); ballEl.setAttribute('cy',ballPos[1]);
     var tgt=[ballPos[0]-46,ballPos[1]+38]; refPos[0]+=(tgt[0]-refPos[0])*.035; refPos[1]+=(tgt[1]-refPos[1])*.035;
     refEl.setAttribute('transform','translate('+refPos[0].toFixed(1)+','+refPos[1].toFixed(1)+')'); refEl.setAttribute('opacity',Math.min(1,p/.04).toFixed(2));
+    CAMS.forEach(function(c){var tg=Math.atan2(ballPos[1]-c.y,ballPos[0]-c.x)*180/Math.PI+90, d=((tg-c.ang+540)%360)-180; c.ang+=d*.12; c.body.setAttribute('transform','translate('+c.x+','+c.y+') rotate('+c.ang.toFixed(1)+')');});
     var cam=camAt(p); if(cam!==onAirCam){onAirCam=cam;updateCams();render();}
-    var cone=document.getElementById('cone'), cc=CAMS.filter(function(c){return c.id===onAirCam;})[0], src=onAirCam==='ARB'?refPos:(cc.dir==='up'?[cc.x,cc.y-12]:cc.dir==='right'?[cc.x+12,cc.y]:[cc.x-12,cc.y]);
+    var cone=document.getElementById('cone'), cc=CAMS.filter(function(c){return c.id===onAirCam;})[0], src=onAirCam==='ARB'?refPos:[cc.x+17*Math.sin(cc.ang*Math.PI/180),cc.y-17*Math.cos(cc.ang*Math.PI/180)];
     cone.setAttribute('x1',src[0]);cone.setAttribute('y1',src[1]);cone.setAttribute('x2',ballPos[0]);cone.setAttribute('y2',ballPos[1]);cone.setAttribute('stroke',CAMC[onAirCam]);
     var fr=tcBase+Math.floor(p*DUR/1000*50/3);
     var ff=fr%50, s=Math.floor(fr/50)%60, m=Math.floor(fr/3000)%60, h=Math.floor(fr/180000);
