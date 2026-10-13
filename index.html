@@ -139,8 +139,12 @@ svg .ah{fill:var(--edge)}
 .presets button.on{border-color:#5c9bf0;background:#2a5596}
 .presets button:focus-visible,.pad button:focus-visible{outline:2px solid #5c9bf0;outline-offset:1px}
 .modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
-.modes button{background:#46566a;border:1.5px solid #7a8ca1;border-radius:6px;color:#eef2f6;padding:8px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font:600 .74rem var(--font-mono);letter-spacing:.04em}
+.modes button{background:#46566a;border:1.5px solid #7a8ca1;border-radius:6px;color:#eef2f6;padding:8px 10px;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;font:600 .72rem var(--font-mono);letter-spacing:.04em;text-align:left;min-width:0}
 .modes button svg{width:26px;height:26px}
+.modes .ml{line-height:1.15;min-width:0}
+.modes .mn{font:700 1.25rem var(--font-mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.modes .mn.multi{font-size:.92rem;line-height:1.05}
+.modes .mn small{display:block;font-size:.55rem;font-weight:500;letter-spacing:.06em;opacity:.8;text-align:right}
 .modes button[aria-pressed="true"]{border-color:#5c9bf0;background:#2a5596;color:#fff;box-shadow:0 0 0 3px rgba(92,155,240,.18)}
 .modes button:focus-visible{outline:2px solid #fff;outline-offset:1px}
 .padwrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
@@ -854,6 +858,12 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     state.preset=presetIdx; render();
   }
   function setMode(md){state.mode=md;render();}
+  document.querySelectorAll('.modes [data-mode]').forEach(function(b){
+    var svg=b.querySelector('svg'), txt=b.textContent.trim().replace(' ','<br>');
+    b.innerHTML=''; b.appendChild(svg);
+    var ml=document.createElement('span'); ml.className='ml'; ml.innerHTML=txt; b.appendChild(ml);
+    var mn=document.createElement('span'); mn.className='mn'; mn.id='mn-'+b.getAttribute('data-mode'); b.appendChild(mn);
+  });
   document.querySelectorAll('[data-mode]').forEach(function(b){b.addEventListener('click',function(){setMode(b.getAttribute('data-mode'));});});
 
   /* ---------- claviers Stream Deck ---------- */
@@ -917,6 +927,8 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     var label=state.typed?state.typed+'_':cur.join(' · ');
     document.getElementById('disp').textContent=label;
     document.getElementById('modeHint').textContent=NAMES[state.mode].toLowerCase()+' · '+cur.join(' · ');
+    var MN={mix:state.mixMic,ball:nearest(),select:state.sel};
+    Object.keys(MN).forEach(function(k){var el=document.getElementById('mn-'+k); if(el){el.classList.toggle('multi',MN[k].length>1); el.innerHTML='<small>MIC</small>'+MN[k].join('<br>');}});
     document.getElementById('sub-mix').textContent=L('option · micro ','optional · mic ')+state.mixMic.join('·');
     document.getElementById('sub-ball').textContent=L('option · micros ','optional · mics ')+nearest().join(' · ');
     document.getElementById('sub-select').textContent=L('option · micro ','optional · mic ')+state.sel.join(' · ');
