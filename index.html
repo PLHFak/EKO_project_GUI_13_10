@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>EKO en car</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout : une colonne de lecture ; les schémas et la console opérateur en pleine largeur. Charte des notes EKO (bleu EKO, Barlow, Plex Mono). */
+:root{
+  --bg:#f2f4f7; --surface:#ffffff; --ink:#15202c; --muted:#5b6979; --edge:#b9c3ce; --line:#dde3ea;
+  --eko:#1e64c8;
+  --inter:#0b7d84; --cam:#6247b0; --mode:#1e64c8; --clip:#a86400; --tally:#cc2f27; --ok:#1f7a4d;
+  --pitch:#e3efe6; --pitchline:#9cc3a6; --key:#e9edf2; --keyedge:#c3ccd6; --dev:#1b2530; --devink:#e7ecf1;
+  --font-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-head:"Barlow Semi Condensed","Barlow",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f151c; --surface:#17202a; --ink:#e7ecf1; --muted:#9aa8b6; --edge:#4a5868; --line:#263241;
+    --eko:#5c9bf0;
+    --inter:#46c3ca; --cam:#a996ef; --mode:#5c9bf0; --clip:#f0aa3c; --tally:#ff6c5f; --ok:#5cc58c;
+    --pitch:#15261c; --pitchline:#2f5a3d; --key:#222d39; --keyedge:#3a4857; --dev:#0a0f14; --devink:#e7ecf1;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f151c; --surface:#17202a; --ink:#e7ecf1; --muted:#9aa8b6; --edge:#4a5868; --line:#263241;
+  --eko:#5c9bf0;
+  --inter:#46c3ca; --cam:#a996ef; --mode:#5c9bf0; --clip:#f0aa3c; --tally:#ff6c5f; --ok:#5cc58c;
+  --pitch:#15261c; --pitchline:#2f5a3d; --key:#222d39; --keyedge:#3a4857; --dev:#0a0f14; --devink:#e7ecf1;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.5;padding-inline:20px;padding-block:0 64px}
+.wrap{max-width:1080px;margin-inline:auto;display:flex;flex-direction:column;gap:60px}
+h1,h2,h3{font-family:var(--font-head);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.7rem;font-weight:700}
+h3{font-size:1.1rem;font-weight:600}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.lead{font-size:1.08rem}
+.mono{font-family:var(--font-mono)}
+section{display:flex;flex-direction:column;gap:18px;scroll-margin-top:64px}
+header.top{padding-block:40px 0;display:flex;flex-direction:column;gap:14px}
+header.top .tag{font-size:1.15rem;color:var(--muted);max-width:60ch}
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-20px;padding:10px 20px}
+nav.toc ul{list-style:none;display:flex;gap:6px;margin:0 auto;padding:0;max-width:1080px;white-space:nowrap}
+nav.toc a{display:block;padding:5px 11px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--ink);font-size:.86rem;background:var(--surface)}
+nav.toc a:hover,nav.toc a:focus-visible{border-color:var(--eko);outline:none}
+ul.tight{margin:0;padding-left:1.15em;display:flex;flex-direction:column;gap:5px;max-width:68ch}
+
+/* besoins */
+.needs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));border:1px solid var(--line);border-radius:6px;background:var(--surface);overflow:hidden}
+.need{padding:16px;display:flex;flex-direction:column;gap:6px;box-shadow:0 0 0 .5px var(--line);min-width:0}
+.need .k{font-family:var(--font-mono);font-size:.74rem;color:var(--eko);letter-spacing:.06em}
+.need p{font-size:.95rem;color:var(--muted)}
+.need b{font-weight:600;color:var(--ink)}
+
+/* blocs */
+.blocks{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) minmax(0,1fr);gap:14px}
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.blk .hd{display:flex;flex-direction:column;gap:2px}
+.chips{display:flex;flex-direction:column;gap:8px}
+.chip{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--c);border-radius:5px;padding:9px 10px;background:color-mix(in srgb,var(--c) 10%,var(--surface))}
+.chip.opt{border-style:dashed;background:var(--surface)}
+.chip .lb{font-family:var(--font-mono);font-weight:600;font-size:.82rem;color:var(--c);white-space:nowrap;min-width:7.5em}
+.chip .tx{font-size:.92rem}
+.c-inter{--c:var(--inter)} .c-cam{--c:var(--cam)} .c-mode{--c:var(--mode)} .c-clip{--c:var(--clip)}
+.or{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);text-align:center;letter-spacing:.1em}
+.decide{border-left:3px solid var(--mode);padding:4px 0 4px 14px;max-width:72ch}
+
+/* figures */
+figure{margin:0;display:flex;flex-direction:column;gap:10px}
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;overflow-x:auto}
+.fig svg{display:block;width:100%;min-width:640px;height:auto}
+figcaption{font-size:.92rem;color:var(--muted);max-width:74ch}
+svg text{font-family:var(--font-body);fill:var(--ink);font-size:12.5px}
+svg .tm{fill:var(--muted)} svg .tmono{font-family:var(--font-mono);font-size:11.5px} svg .tb{font-weight:600}
+svg .ln{stroke:var(--edge);stroke-width:1.4;fill:none}
+svg .bx{fill:var(--surface);stroke:var(--edge);stroke-width:1.3}
+svg .ah{fill:var(--edge)}
+.vf .stage{transition:opacity .35s, stroke .35s, fill .35s}
+.vf[data-step] .stage{opacity:.25}
+.vf[data-step="1"] .s1,.vf[data-step="2"] .s1,.vf[data-step="2"] .s2,.vf[data-step="3"] .s1,.vf[data-step="3"] .s2,.vf[data-step="3"] .s3,.vf[data-step="4"] .stage{opacity:1}
+.vf .cmp{stroke:var(--edge);stroke-dasharray:4 4}
+.vf[data-step] .cmp{animation:dash 1s linear infinite}
+.vf .hit{stroke:var(--tally);stroke-width:2.4}
+@keyframes dash{to{stroke-dashoffset:-16}}
+.steps{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.88rem;color:var(--muted)}
+.steps span{font-family:var(--font-mono);font-size:.78rem;color:var(--eko);margin-right:4px}
+
+/* console opérateur */
+.app{background:var(--dev);color:var(--devink);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px;border:1px solid var(--edge)}
+.app-bar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;font-family:var(--font-mono);font-size:.8rem}
+.app-bar .brand{font-family:var(--font-head);font-weight:700;font-size:1.05rem;letter-spacing:.02em}
+.app-bar .brand i{font-style:normal;color:#5c9bf0}
+.live{display:inline-flex;align-items:center;gap:6px;color:#ff6c5f}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:#ff6c5f}
+.tc{font-variant-numeric:tabular-nums;color:#cfd8e2}
+.app-main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:12px}
+.panel{background:#131b23;border:1px solid #2a3643;border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.panel-hd{display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:#8d9bab}
+.seg{display:inline-flex;border:1px solid #2f3c4a;border-radius:5px;overflow:hidden}
+.seg button{background:transparent;border:0;color:#a9b6c4;font:500 .74rem var(--font-mono);padding:4px 10px;cursor:pointer;letter-spacing:.04em}
+.seg button[aria-pressed="true"]{background:#2a3644;color:#fff}
+.seg button:focus-visible{outline:2px solid #5c9bf0;outline-offset:-2px}
+#pitch{width:100%;height:auto;display:block}
+#pitch text{fill:#cfd8e2}
+.mic{cursor:pointer}
+.mic circle{fill:#1f2a35;stroke:#6f7f90;stroke-width:1.4;transition:fill .2s,stroke .2s}
+.mic text{font-family:var(--font-mono);font-size:10px;fill:#dfe6ee;pointer-events:none}
+.mic.lit circle{fill:#5c9bf0;stroke:#bcd6ff}
+.mic.cam circle{stroke:#a996ef;stroke-width:2.4}
+.mic:focus-visible circle{stroke:#fff;stroke-width:2.4}
+.camk polygon{fill:#2a3644;stroke:#8d9bab}
+.camk.onair polygon{fill:#ff6c5f;stroke:#ffb3ac}
+.camk text{font-family:var(--font-mono);font-size:10px;fill:#cfd8e2}
+.presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.presets button,.pad button{background:#1f2a35;border:1px solid #33414f;border-radius:5px;color:#e7ecf1;font:500 .82rem var(--font-body);padding:10px 6px;cursor:pointer;line-height:1.2}
+.presets button small{display:block;font-family:var(--font-mono);font-size:.68rem;color:#8d9bab}
+.presets button.on{border-color:#5c9bf0;background:#1d3456}
+.presets button:focus-visible,.pad button:focus-visible{outline:2px solid #5c9bf0;outline-offset:1px}
+.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.modes button{background:#1a2430;border:1.5px solid #33414f;border-radius:6px;color:#cfd8e2;padding:8px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font:600 .74rem var(--font-mono);letter-spacing:.04em}
+.modes button svg{width:26px;height:26px}
+.modes button[aria-pressed="true"]{border-color:#5c9bf0;background:#1d3456;color:#fff;box-shadow:0 0 0 3px rgba(92,155,240,.18)}
+.modes button:focus-visible{outline:2px solid #fff;outline-offset:1px}
+.padwrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
+.pad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.pad button{padding:8px 0;font-family:var(--font-mono)}
+.pad .ok{background:#1d3456;border-color:#5c9bf0}
+.disp{font-family:var(--font-mono);font-size:1.1rem;background:#0a0f14;border:1px solid #2a3643;border-radius:5px;padding:6px 10px;color:#9fe3b6;font-variant-numeric:tabular-nums;display:flex;flex-direction:column;justify-content:center;min-width:6.5em}
+.disp small{font-size:.62rem;color:#8d9bab;letter-spacing:.08em}
+.tracks{overflow-x:auto}
+.tl{min-width:660px;display:flex;flex-direction:column;gap:4px;position:relative}
+.trk{display:grid;grid-template-columns:150px 26px minmax(0,1fr);gap:6px;align-items:center}
+.trk .nm{display:flex;flex-direction:column;font-family:var(--font-mono);font-size:.72rem;line-height:1.2;color:var(--tc);border-left:3px solid var(--tc);padding-left:7px}
+.trk .nm small{color:#8d9bab;font-size:.64rem}
+.trk canvas{width:100%;height:40px;display:block;background:#0d1319;border-radius:3px}
+.trk.dim canvas{opacity:.32}
+.trk.dim .nm{opacity:.55}
+.trk[hidden]{display:none}
+.eye{width:24px;height:24px;border-radius:4px;border:1px solid #33414f;background:#1a2430;color:#a9b6c4;cursor:pointer;display:grid;place-items:center;padding:0}
+.eye svg{width:14px;height:14px}
+.eye[aria-pressed="false"]{opacity:.45}
+.eye:focus-visible{outline:2px solid #5c9bf0}
+.hidden-list{display:flex;flex-wrap:wrap;gap:6px;font-family:var(--font-mono);font-size:.7rem;color:#8d9bab;align-items:center}
+.hidden-list button{background:transparent;border:1px dashed #3a4857;border-radius:4px;color:#a9b6c4;font:inherit;padding:2px 7px;cursor:pointer}
+.legendrow{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.8rem;color:#8d9bab}
+
+/* langue */
+html:not([data-lang="en"]) .en{display:none}
+html[data-lang="en"] .fr{display:none}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-left:auto;flex:none;background:var(--surface)}
+.lang button{border:0;background:transparent;color:var(--muted);font:600 .78rem var(--font-mono);padding:5px 11px;cursor:pointer;letter-spacing:.04em}
+.lang button[aria-pressed="true"]{background:var(--eko);color:#fff}
+.lang button:focus-visible{outline:2px solid var(--eko);outline-offset:-2px}
+nav.toc .navrow{display:flex;gap:10px;align-items:center;max-width:1080px;margin:0 auto}
+nav.toc .navrow ul{margin:0;min-width:0;overflow-x:auto}
+/* câblage */
+.cabling{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:14px}
+.cab{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.cab.main{border:1.5px solid var(--eko)}
+.cab.alt{border-style:dashed}
+.cab .k{font-family:var(--font-mono);font-size:.74rem;color:var(--eko);letter-spacing:.06em}
+.cab b{font-family:var(--font-head);font-size:1.15rem}
+.cab p{font-size:.95rem;color:var(--muted)}
+.cab svg{width:100%;max-width:560px;height:auto}
+.cab svg text{font-size:11px}
+@media (max-width:860px){.cabling{grid-template-columns:1fr}}
+
+/* Stream Deck */
+.decks{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px;align-items:start}
+.deckcol{display:flex;flex-direction:column;gap:10px;min-width:0}
+.deck{background:#16191d;border-radius:14px;padding:14px;box-shadow:0 8px 20px rgba(10,15,20,.28),inset 0 1px 0 #2a2f36;display:grid;gap:9px;width:100%}
+.deck.mk2{grid-template-columns:repeat(5,minmax(0,1fr));max-width:460px}
+.deck.mini{grid-template-columns:repeat(3,minmax(0,1fr));max-width:260px}
+.deck.xl{grid-template-columns:repeat(8,minmax(0,1fr));max-width:760px;gap:7px;padding:12px}
+.deck.xl .sd{font-size:clamp(.42rem,1.2vw,.62rem)}
+.sd{aspect-ratio:1;border-radius:7px;border:0;background:#05080b;color:#e7ecf1;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:600 clamp(.5rem,1.6vw,.66rem) var(--font-mono);letter-spacing:.02em;line-height:1.1;text-align:center;box-shadow:inset 0 0 0 1px #20262d,0 2px 0 #0a0c0f;overflow:hidden;position:relative}
+.sd svg{width:44%;height:44%}
+.sd small{font-weight:400;color:#8d9bab;font-size:.85em}
+.sd:active{transform:translateY(1px)}
+.sd:focus-visible{outline:2px solid #5c9bf0;outline-offset:2px}
+.sd.mode{color:#9cc2ff}
+.sd.mode.on{background:#1e64c8;color:#fff;box-shadow:inset 0 0 0 2px #9cc2ff}
+.sd.disp{background:#071a10;color:#9fe3b6;cursor:pointer}
+.sd.disp b{font-size:1.5em;font-variant-numeric:tabular-nums}
+.sd.pre.on{background:#1d3456;box-shadow:inset 0 0 0 2px #5c9bf0}
+.sd.dig{font-size:clamp(.9rem,2.6vw,1.25rem);background:#0d1319}
+.sd.ok{background:#1f7a4d;color:#fff}
+.sd.info{cursor:default;color:#cfd8e2}
+.sd.info.cam{color:#c9bcff;box-shadow:inset 0 0 0 1.5px #6247b0}
+.sd.info.air{color:#ffb3ac;box-shadow:inset 0 0 0 1.5px #cc2f27}
+.sd.nav{color:#8d9bab;font-size:1.1rem}
+.deckhd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.deckhd h3{font-size:1.05rem}
+.deckhd span{font-family:var(--font-mono);font-size:.72rem;color:var(--muted)}
+.speccard{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.speccard table{border-collapse:collapse;width:100%;font-size:.88rem}
+.speccard td,.speccard th{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.speccard th{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.speccard tr:last-child td{border-bottom:0}
+.speccard td.n{font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:860px){.decks{grid-template-columns:1fr}}
+
+.symlegend{display:flex;flex-direction:column;gap:12px}
+.symlegend div{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:start}
+.symlegend svg{width:30px;height:30px;color:var(--mode)}
+.symlegend p{font-size:.95rem}
+
+/* synchro */
+.sync .ess{animation:recale 4s ease-in-out infinite}
+@keyframes recale{0%,20%{transform:translateX(56px)}55%,100%{transform:translateX(0)}}
+.sync .okmark{animation:okshow 4s ease-in-out infinite}
+@keyframes okshow{0%,50%{opacity:0}60%,100%{opacity:1}}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.cols>div{min-width:0;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px}
+.note{border:1px dashed var(--edge);border-radius:6px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:6px}
+
+@media (max-width:860px){
+  .blocks{grid-template-columns:1fr}
+  .app-main{grid-template-columns:1fr}
+  .remote-wrap{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .vf[data-step] .cmp,.sync .ess,.sync .okmark{animation:none}
+  .vf .stage{opacity:1!important}
+}
+</style>
+</head>
+<body>
+
+
+<nav class="toc" aria-label="Sections">
+  <div class="navrow">
+  <ul>
+    <li><a href="#demande"><span class="fr">Ce que nous demandons</span><span class="en" lang="en">What we ask for</span></a></li>
+    <li><a href="#sons"><span class="fr">Les sons rendus</span><span class="en" lang="en">Sounds delivered</span></a></li>
+    <li><a href="#follow">Video Follow</a></li>
+    <li><a href="#console"><span class="fr">Console opérateur</span><span class="en" lang="en">Operator console</span></a></li>
+    <li><a href="#remote"><span class="fr">Clavier</span><span class="en" lang="en">Keypad</span></a></li>
+    <li><a href="#synchro"><span class="fr">Synchro</span><span class="en" lang="en">Sync</span></a></li>
+    <li><a href="#option"><span class="fr">En option</span><span class="en" lang="en">Optional</span></a></li>
+  </ul>
+  <span class="lang" role="group" aria-label="Langue / Language"><button type="button" data-setlang="fr">FR</button><button type="button" data-setlang="en">EN</button></span>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<header class="top">
+  <span class="eyebrow"><span class="fr">EKO · Kreativ Labs · Octobre 2026 · Confidentiel</span><span class="en" lang="en">EKO · Kreativ Labs · October 2026 · Confidential</span></span>
+  <h1><span class="fr">EKO en car : une intégration autonome</span><span class="en" lang="en">EKO in the OB van: a self-contained integration</span></h1>
+  <p class="tag"><span class="fr">Aucun setup particulier, aucune intervention du chef de car. EKO observe ce qui passe, et rend au replay le son de l'image d'origine.</span><span class="en" lang="en">No special setup, no work for the EIC. EKO watches what goes to air and gives every replay the sound of its original image.</span></p>
+</header>
+
+<section id="demande">
+  <span class="eyebrow"><span class="fr">Ce que nous demandons</span><span class="en" lang="en">What we ask for</span></span>
+  <h2><span class="fr">Presque rien, et un câblage simple</span><span class="en" lang="en">Almost nothing, and simple cabling</span></h2>
+  <div class="cabling">
+    <div class="cab main">
+      <span class="k"><span class="fr">VIDÉO · CÂBLAGE STANDARD</span><span class="en" lang="en">VIDEO · STANDARD CABLING</span></span>
+      <b><span class="fr">Une SDI en entrée, une SDI en sortie</span><span class="en" lang="en">One SDI in, one SDI out</span></b>
+      <p><span class="fr">En entrée, une mosaïque de multiviewer : le PGM et les sorties monitoring des LSM 1 à 6, en deux lignes de quatre. Le monitoring des LSM porte déjà le son inter, et une qualité monitoring suffit. En sortie, une SDI porte les trois sons EKO et de 1 à 6 monitorings pour les opérateurs LSM.</span><span class="en" lang="en">Input: a multiviewer mosaic with the PGM and the monitoring outputs of LSM 1 to 6, in two rows of four. LSM monitoring already carries the international sound, and monitoring quality is enough. Output: one SDI carrying the three EKO sounds and 1 to 6 monitoring feeds for the LSM operators.</span></p>
+      <svg viewBox="0 0 470 132" role="img" aria-label="Mosaïque de huit cases (PGM, LSM 1 à 6, réserve) sur une SDI vers EKO ; en sortie une SDI avec trois sons EKO et un à six monitorings opérateurs">
+        <text x="8" y="16" class="tm tmono" style="font-size:9.5px">MULTIVIEWER · 2 × 4</text>
+        <rect x="4" y="22" width="190" height="72" rx="3" fill="none" stroke="var(--edge)"/>
+        <rect class="bx" x="8" y="26" width="42" height="30" rx="2" style="fill:color-mix(in srgb,var(--tally) 14%,var(--surface));stroke:var(--tally)"/><text x="29" y="45" text-anchor="middle" class="tmono" style="font-size:9.5px">PGM</text><rect class="bx" x="54" y="26" width="42" height="30" rx="2"/><text x="75" y="45" text-anchor="middle" class="tmono" style="font-size:9.5px">LSM 1</text><rect class="bx" x="100" y="26" width="42" height="30" rx="2"/><text x="121" y="45" text-anchor="middle" class="tmono" style="font-size:9.5px">LSM 2</text><rect class="bx" x="146" y="26" width="42" height="30" rx="2"/><text x="167" y="45" text-anchor="middle" class="tmono" style="font-size:9.5px">LSM 3</text><rect class="bx" x="8" y="60" width="42" height="30" rx="2"/><text x="29" y="79" text-anchor="middle" class="tmono" style="font-size:9.5px">LSM 4</text><rect class="bx" x="54" y="60" width="42" height="30" rx="2"/><text x="75" y="79" text-anchor="middle" class="tmono" style="font-size:9.5px">LSM 5</text><rect class="bx" x="100" y="60" width="42" height="30" rx="2"/><text x="121" y="79" text-anchor="middle" class="tmono" style="font-size:9.5px">LSM 6</text><rect class="bx" x="146" y="60" width="42" height="30" rx="2" stroke-dasharray="3 3"/><text x="167" y="79" text-anchor="middle" class="tmono" style="font-size:9.5px"><tspan class="fr">réserve</tspan><tspan class="en">spare</tspan></text>
+        <path class="ln" d="M194 58H222" marker-end="url(#arC)"/>
+        <text x="208" y="50" text-anchor="middle" class="tm tmono" style="font-size:9px">SDI</text>
+        <rect x="226" y="34" width="86" height="48" rx="4" fill="color-mix(in srgb,var(--eko) 12%,var(--surface))" stroke="var(--eko)" stroke-width="1.6"/>
+        <text x="269" y="62" text-anchor="middle" class="tb" style="fill:var(--eko)">EKO</text>
+        <path class="ln" d="M312 58H340" marker-end="url(#arC)"/>
+        <text x="326" y="50" text-anchor="middle" class="tm tmono" style="font-size:9px">SDI</text>
+        <rect x="344" y="14" width="120" height="104" rx="3" class="bx"/>
+        <text x="352" y="30" class="tmono tb" style="font-size:10px;fill:var(--inter)">1 EKO INT</text>
+        <text x="352" y="44" class="tmono tb" style="font-size:10px;fill:var(--cam)">2 CAM FOLLOW</text>
+        <text x="352" y="58" class="tmono tb" style="font-size:10px;fill:var(--mode)"><tspan class="fr">3 MODE CHOISI</tspan><tspan class="en">3 SELECTED MODE</tspan></text>
+        <line x1="352" y1="66" x2="456" y2="66" stroke="var(--line)"/>
+        <text x="352" y="82" class="tmono" style="font-size:10px">4–9 MONITOR 1–6</text>
+        <text x="352" y="96" class="tm tmono" style="font-size:9px"><tspan class="fr">un par opérateur LSM</tspan><tspan class="en">one per LSM operator</tspan></text>
+        <text x="352" y="108" class="tm tmono" style="font-size:9px">mono</text>
+        <defs><marker id="arC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ah"/></marker></defs>
+      </svg>
+    </div>
+    <div class="cab alt">
+      <span class="k"><span class="fr">VIDÉO · ALTERNATIVE</span><span class="en" lang="en">VIDEO · ALTERNATIVE</span></span>
+      <b><span class="fr">Le PGM en SDI, les LSM par protocole</span><span class="en" lang="en">PGM over SDI, LSMs by protocol</span></b>
+      <p><span class="fr">Les entrées LSM arrivent par le protocole AMP ou par LinX. EKO reçoit alors le VITC, le pourcentage de vitesse et l'image via LinX.</span><span class="en" lang="en">LSM inputs arrive over the AMP protocol or LinX. EKO then receives the VITC, the speed percentage and the image via LinX.</span></p>
+    </div>
+  </div>
+  <div class="needs">
+    <div class="need"><span class="k">AUDIO</span><b><span class="fr">Tous les micros, en Dante</span><span class="en" lang="en">All microphones, over Dante</span></b><p><span class="fr">Sorties directes pré-fader sur des canaux Dante libres, avec un abonnement vers EKO.</span><span class="en" lang="en">Pre-fader direct outs on free Dante channels, subscribed to EKO.</span></p></div>
+    <div class="need"><span class="k">CONSOLE · IP</span><b><span class="fr">Une liaison IP avec la console</span><span class="en" lang="en">An IP link to the audio console</span></b><p><span class="fr">Pour recevoir la position des faders pendant le direct. C'est elle qui nourrit MIX FOLLOW.</span><span class="en" lang="en">To receive fader positions during the live action. This is what feeds MIX FOLLOW.</span></p></div>
+    <div class="need"><span class="k"><span class="fr">TEMPS</span><span class="en" lang="en">TIME</span></span><b><span class="fr">La synchro du car</span><span class="en" lang="en">The OB van reference</span></b><p><span class="fr">L'horloge interne d'EKO est mise à l'heure, puis verrouillée sur la synchro du car. Elle ne dérive pas. Le VITC du PGM n'est plus nécessaire.</span><span class="en" lang="en">EKO's internal clock is set to time of day, then locked to the van's reference. It does not drift. PGM VITC is no longer needed.</span></p></div>
+    <div class="need"><span class="k">TABLE</span><b><span class="fr">Entrées LSM → micros</span><span class="en" lang="en">LSM inputs → mics</span></b><p><span class="fr">La correspondance entre caméras et micros, mise à jour si elle change en cours de match.</span><span class="en" lang="en">The camera-to-mic mapping, updated if it changes during the match.</span></p></div>
+    <div class="need"><span class="k"><span class="fr">CONSOLE · CANAUX</span><span class="en" lang="en">CONSOLE · CHANNELS</span></span><b><span class="fr">Trois canaux, plus les monitorings</span><span class="en" lang="en">Three channels, plus monitoring</span></b><p><span class="fr">EKO INT, CAM FOLLOW et le mode choisi, plus de 1 à 6 monitorings opérateurs, tous sur la SDI de sortie. Les clips arrivent en plus, quand un opérateur LSM en envoie.</span><span class="en" lang="en">EKO INT, CAM FOLLOW and the selected mode, plus 1 to 6 operator monitoring feeds, all on the output SDI. Clips come on top, whenever an LSM operator sends one.</span></p></div>
+  </div>
+</section>
+
+<section id="sons">
+  <span class="eyebrow"><span class="fr">Les sons rendus au replay</span><span class="en" lang="en">Sounds delivered on replay</span></span>
+  <h2><span class="fr">Deux sons d'office, un mode au choix, des clips à la demande</span><span class="en" lang="en">Two sounds by default, one selectable mode, clips on demand</span></h2>
+  <div class="blocks">
+    <div class="blk">
+      <div class="hd"><h3><span class="fr">D'office</span><span class="en" lang="en">By default</span></h3><span class="muted"><span class="fr">Rendus à chaque replay</span><span class="en" lang="en">Delivered on every replay</span></span></div>
+      <div class="chips">
+        <div class="chip c-inter"><span class="lb">EKO INT</span><span class="tx"><span class="fr">Le son inter.</span><span class="en" lang="en">The international sound.</span></span></div>
+        <div class="chip c-cam"><span class="lb">CAM FOLLOW</span><span class="tx"><span class="fr">Le micro de la caméra rejouée.</span><span class="en" lang="en">The mic of the camera being replayed.</span></span></div>
+      </div>
+    </div>
+    <div class="blk">
+      <div class="hd"><h3><span class="fr">Un mode au choix</span><span class="en" lang="en">One selectable mode</span></h3><span class="muted"><span class="fr">Un seul actif à la fois, choisi par l'opérateur</span><span class="en" lang="en">One active at a time, chosen by the operator</span></span></div>
+      <div class="chips">
+        <div class="chip c-mode"><span class="lb">MIX FOLLOW</span><span class="tx"><span class="fr">Le micro retenu par l'ingénieur du son pendant le direct, rejoué légèrement en avance.</span><span class="en" lang="en">The mic the sound engineer used during the live action, played slightly ahead.</span></span></div>
+        <div class="or"><span class="fr">OU</span><span class="en" lang="en">OR</span></div>
+        <div class="chip c-mode"><span class="lb">BALL FOLLOW</span><span class="tx"><span class="fr">Les micros les plus proches du ballon, quand sa position nous parvient.</span><span class="en" lang="en">The mics closest to the ball, when its position is available.</span></span></div>
+        <div class="or"><span class="fr">OU</span><span class="en" lang="en">OR</span></div>
+        <div class="chip c-mode"><span class="lb">MIC SELECT</span><span class="tx"><span class="fr">Le micro choisi à la main : sur le plan, par numéro ou par preset.</span><span class="en" lang="en">A mic chosen by hand: on the plan, by number or by preset.</span></span></div>
+      </div>
+    </div>
+    <div class="blk">
+      <div class="hd"><h3><span class="fr">À la demande</span><span class="en" lang="en">On demand</span></h3><span class="muted"><span class="fr">Envoyés par les opérateurs LSM</span><span class="en" lang="en">Sent by LSM operators</span></span></div>
+      <div class="chips">
+        <div class="chip c-clip"><span class="lb">EKO CLIP 1</span><span class="tx"><span class="fr">Une séquence micro choisie par un opérateur LSM.</span><span class="en" lang="en">A mic sequence chosen by an LSM operator.</span></span></div>
+        <div class="chip c-clip opt"><span class="lb">EKO CLIP 2–3</span><span class="tx"><span class="fr">En option.</span><span class="en" lang="en">Optional.</span></span></div>
+      </div>
+    </div>
+  </div>
+  <p class="decide"><span class="fr">Le mode ne se fixe pas pour un match. L'opérateur le choisit replay par replay, avant ou pendant le ralenti, depuis l'écran tactile du service web ou depuis un clavier à touches-écrans.</span><span class="en" lang="en">The mode is not set per match. The operator picks it replay by replay, before or during the slow motion, from the web service's touch screen or from an LCD-key keypad.</span></p>
+  <p class="muted"><span class="fr">Jusqu'à six sons de qualité EKO pour un même timecode : trois générations continues et trois ponctuelles, les clips.</span><span class="en" lang="en">Up to six EKO-quality sounds for a single timecode: three continuous generations and three occasional ones, the clips.</span></p>
+</section>
+
+<section id="follow">
+  <span class="eyebrow">Video Follow</span>
+  <h2><span class="fr">Retrouver l'image à l'antenne, et son micro</span><span class="en" lang="en">Finding the on-air image, and its mic</span></h2>
+  <p class="lead"><span class="fr">EKO compare en continu le PGM aux sorties des LSM. Aucun tally n'est requis. La méthode tient aussi quand une cascade de mélangeurs (ME replay en amont du ME final) empêche de déduire le LSM de l'entrée de la table.</span><span class="en" lang="en">EKO continuously compares the PGM with the LSM outputs. No tally is required. The method also holds when cascaded switchers (a replay ME upstream of the final ME) make it impossible to infer the LSM from the switcher input.</span></p>
+  <figure>
+    <div class="fig">
+      <svg class="vf" id="vf" viewBox="0 0 900 330" role="img" aria-label="Le PGM est comparé aux trois sorties LSM ; le LSM 2 correspond ; son VITC et l'OCR de son monitoring donnent la caméra C ; la table donne les micros 10 et 7 ; EKO rend CAM FOLLOW.">
+        <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ah"/></marker></defs>
+        <!-- PGM -->
+        <g class="stage s1">
+          <rect class="bx" x="20" y="110" width="150" height="96" rx="4"/>
+          <rect x="30" y="120" width="130" height="64" rx="2" fill="var(--pitch)"/>
+          <line x1="95" y1="120" x2="95" y2="184" stroke="var(--pitchline)"/><circle cx="95" cy="152" r="14" fill="none" stroke="var(--pitchline)"/>
+          <circle cx="118" cy="146" r="4" fill="var(--ink)"/>
+          <text x="95" y="200" text-anchor="middle" class="tb">PGM</text>
+        </g>
+        <!-- LSM -->
+        <g>
+          <g class="stage s1"><rect class="bx" x="300" y="20" width="150" height="76" rx="4"/><rect x="310" y="28" width="130" height="44" rx="2" fill="var(--pitch)"/><circle cx="350" cy="50" r="4" fill="var(--ink)"/><text x="375" y="88" text-anchor="middle" class="tm">LSM 1</text></g>
+          <g class="stage s1"><rect id="lsm2" class="bx" x="300" y="122" width="150" height="76" rx="4"/><rect x="310" y="130" width="130" height="44" rx="2" fill="var(--pitch)"/><line x1="375" y1="130" x2="375" y2="174" stroke="var(--pitchline)"/><circle cx="375" cy="152" r="10" fill="none" stroke="var(--pitchline)"/><circle cx="392" cy="148" r="3.4" fill="var(--ink)"/><text x="375" y="190" text-anchor="middle" class="tb">LSM 2</text></g>
+          <g class="stage s1"><rect class="bx" x="300" y="224" width="150" height="76" rx="4"/><rect x="310" y="232" width="130" height="44" rx="2" fill="var(--pitch)"/><circle cx="420" cy="262" r="4" fill="var(--ink)"/><text x="375" y="292" text-anchor="middle" class="tm">LSM 3</text></g>
+          <line class="cmp" x1="172" y1="150" x2="296" y2="58"/>
+          <line class="cmp stage s1" id="cmp2" x1="172" y1="158" x2="296" y2="160"/>
+          <line class="cmp" x1="172" y1="166" x2="296" y2="262"/>
+          <text x="232" y="128" text-anchor="middle" class="tm"><tspan class="fr">signatures</tspan><tspan class="en">signatures</tspan></text>
+        </g>
+        <!-- VITC + OCR -->
+        <g class="stage s2">
+          <rect class="bx" x="500" y="104" width="160" height="40" rx="4"/>
+          <text x="512" y="120" class="tm tmono">VITC LSM 2</text>
+          <text x="512" y="137" class="tmono tb">21:14:07:12</text>
+          <rect class="bx" x="500" y="156" width="160" height="40" rx="4"/>
+          <text x="512" y="172" class="tm tmono">OCR monitoring</text>
+          <text x="512" y="189" class="tmono tb">CAM C</text>
+          <line class="ln" x1="452" y1="150" x2="496" y2="126" marker-end="url(#ar)"/>
+          <line class="ln" x1="452" y1="164" x2="496" y2="176" marker-end="url(#ar)"/>
+        </g>
+        <!-- table -->
+        <g class="stage s3">
+          <rect class="bx" x="700" y="96" width="180" height="112" rx="4"/>
+          <text x="712" y="114" class="tm tmono"><tspan class="fr">ENTRÉE LSM → MICROS</tspan><tspan class="en">LSM INPUT → MICS</tspan></text>
+          <text x="712" y="136" class="tmono tm">A → 6 · 9</text>
+          <text x="712" y="154" class="tmono tm">B → 5 · 8</text>
+          <rect x="706" y="160" width="168" height="20" rx="2" fill="color-mix(in srgb,var(--cam) 18%,var(--surface))"/>
+          <text x="712" y="174" class="tmono tb">C → 7 · 10</text>
+          <text x="712" y="196" class="tmono tm">D → 2 · 3</text>
+          <line class="ln" x1="662" y1="176" x2="696" y2="170" marker-end="url(#ar)"/>
+        </g>
+        <!-- sortie -->
+        <g class="stage s4">
+          <rect x="700" y="240" width="180" height="44" rx="4" fill="color-mix(in srgb,var(--cam) 16%,var(--surface))" stroke="var(--cam)" stroke-width="1.6"/>
+          <text x="712" y="258" class="tmono tb" fill="var(--cam)" style="fill:var(--cam)">CAM FOLLOW</text>
+          <text x="712" y="275" class="tmono"><tspan class="fr">micros 7 · 10 · 21:14:07:12</tspan><tspan class="en">mics 7 · 10 · 21:14:07:12</tspan></text>
+          <line class="ln" x1="790" y1="210" x2="790" y2="236" marker-end="url(#ar)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="steps"><div><span>1</span><span class="fr">Comparaison PGM ↔ sorties LSM</span><span class="en" lang="en">PGM ↔ LSM outputs comparison</span></div><div><span>2</span><span class="fr">VITC du LSM trouvé, entrée lue par OCR</span><span class="en" lang="en">LSM VITC found, input read by OCR</span></div><div><span>3</span><span class="fr">Table entrée → micros</span><span class="en" lang="en">Input → mics table</span></div><div><span>4</span><span class="fr">EKO rend le son de cette image</span><span class="en" lang="en">EKO delivers this image's sound</span></div></div>
+    <figcaption><span class="fr">Deux limites connues : un effet DVE qui déforme trop l'image, et un réglage du LSM qui déplace l'incrustation du monitoring. Le système reste robuste, mais peut demander une retouche.</span><span class="en" lang="en">Two known limits: a DVE effect that distorts the image too much, and an LSM setting that moves the monitoring overlay. The system remains robust but may occasionally need a touch-up.</span></figcaption>
+  </figure>
+</section>
+
+<section id="console">
+  <span class="eyebrow"><span class="fr">Service web · écran tactile</span><span class="en" lang="en">Web service · touch screen</span></span>
+  <h2><span class="fr">La console de l'opérateur</span><span class="en" lang="en">The operator console</span></h2>
+  <p class="lead"><span class="fr">Toutes les pistes restent visibles. La piste du mode choisi passe en surbrillance ; les autres restent affichées en retrait. Un œil masque ou réaffiche une piste. Maquette interactive : choisissez un mode, touchez un micro, un preset ou tapez un numéro.</span><span class="en" lang="en">All tracks stay visible. The selected mode's track is highlighted; the others stay dimmed. An eye icon hides or shows a track. Interactive mock-up: choose a mode, tap a mic or a preset, or type a number.</span></p>
+
+  <div class="app" id="app">
+    <div class="app-bar">
+      <span class="brand"><i>EKO</i> · Replay audio</span>
+      <span class="live"><span class="fr">À L'ANTENNE · LSM 2 · CAM C</span><span class="en" lang="en">ON AIR · LSM 2 · CAM C</span></span>
+      <span class="tc" id="tc">21:14:07:12</span>
+    </div>
+    <div class="app-main">
+      <div class="panel">
+        <div class="panel-hd"><span><span class="fr">Implantation</span><span class="en" lang="en">Layout</span></span>
+          <span class="seg" role="group" aria-label="Vue"><button type="button" id="vPlan" aria-pressed="true">Plan</button><button type="button" id="vPre" aria-pressed="false">Presets</button></span>
+        </div>
+        <svg id="pitch" viewBox="0 0 560 380" role="img" aria-label="Plan du stade avec caméras et micros">
+          <rect x="40" y="30" width="480" height="300" rx="2" fill="#173524" stroke="#2f6b46"/>
+          <g stroke="#2f6b46" fill="none" stroke-width="1.4">
+            <line x1="280" y1="30" x2="280" y2="330"/><circle cx="280" cy="180" r="44"/>
+            <rect x="40" y="105" width="70" height="150"/><rect x="450" y="105" width="70" height="150"/>
+            <rect x="32" y="160" width="8" height="40"/><rect x="520" y="160" width="8" height="40"/>
+          </g>
+          <g id="ballg"><circle id="ball" cx="300" cy="170" r="6" fill="#ffffff" stroke="#0a0f14"/></g>
+          <g id="cams"></g>
+          <g id="mics"></g>
+        </svg>
+        <div class="presets" id="presets" hidden></div>
+        <div class="padwrap">
+          <div class="pad" id="pad"></div>
+          <div class="disp" aria-live="polite"><small>MIC</small><span id="disp">--</span></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd"><span><span class="fr">Mode du replay</span><span class="en" lang="en">Replay mode</span></span><span><span class="fr">un seul actif</span><span class="en" lang="en">one active</span></span></div>
+        <div class="modes" role="group" aria-label="Mode">
+          <button type="button" data-mode="mix" aria-pressed="false"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="3" x2="6" y2="23"/><line x1="13" y1="3" x2="13" y2="23"/><line x1="20" y1="3" x2="20" y2="23"/><rect x="3" y="15" width="6" height="4" fill="currentColor"/><rect x="10" y="5" width="6" height="4" fill="currentColor"/><rect x="17" y="12" width="6" height="4" fill="currentColor"/></svg>MIX FOLLOW</button>
+          <button type="button" data-mode="ball" aria-pressed="false"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13" cy="13" r="9"/><path d="M13 7l5 3.6-2 6h-6l-2-6z" fill="currentColor"/></svg>BALL FOLLOW</button>
+          <button type="button" data-mode="select" aria-pressed="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="8" height="12" rx="4"/><path d="M5 12a8 8 0 0 0 16 0M13 20v4"/></svg>MIC SELECT</button>
+        </div>
+        <div class="panel-hd"><span><span class="fr">Pistes EKO</span><span class="en" lang="en">EKO tracks</span></span><span id="modeHint">mic select · 12</span></div>
+        <div class="tracks"><div class="tl" id="tl"></div></div>
+        <div class="hidden-list" id="hiddenList"></div>
+        <div class="legendrow"><span><span class="fr">Trait rouge : l'image à l'antenne. À droite : le son qui arrive, visible avant d'être joué.</span><span class="en" lang="en">Red line: the image on air. To the right: the incoming sound, visible before it plays.</span></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="remote">
+  <span class="eyebrow"><span class="fr">Alternative physique · clavier à touches-écrans</span><span class="en" lang="en">Hardware alternative · LCD-key keypad</span></span>
+  <h2><span class="fr">Le boîtier de commande</span><span class="en" lang="en">The control keypad</span></h2>
+  <p class="lead"><span class="fr">Un clavier à touches LCD, de type Stream Deck, en deux tailles. Chaque touche est un petit écran que le plugin EKO redessine en direct : mode actif, micro en cours, caméra à l'antenne. Il pilote la même console : un appui se voit à l'écran. Le format se choisit selon la place disponible.</span><span class="en" lang="en">A Stream Deck-type LCD keypad, in two sizes. Each key is a small screen that the EKO plugin redraws live: active mode, current mic, camera on air. It drives the same console: a key press shows on screen. Choose the size that fits the available space.</span></p>
+  <div class="decks">
+    <div class="deckcol">
+      <div class="deckhd"><h3><span class="fr">15 touches</span><span class="en" lang="en">15 keys</span></h3><span><span class="fr">type Stream Deck MK.2 · 5 × 3</span><span class="en" lang="en">Stream Deck MK.2 type · 5 × 3</span></span></div>
+      <div class="deck mk2" id="deckMk2" aria-label="Clavier 15 touches"></div>
+      <p class="muted"><span class="fr">Rangée du haut : les trois modes, l'afficheur du micro, la touche 123. Les deux rangées du bas portent huit presets et deux touches d'information. La touche 123 change ces dix touches en pavé numérique ; OK valide et revient aux presets. Un appui sur l'afficheur efface la saisie.</span><span class="en" lang="en">Top row: the three modes, the mic display and the 123 key. The two lower rows hold eight presets and two status keys. The 123 key turns these ten keys into a number pad; OK confirms and returns to the presets. Pressing the display clears the entry.</span></p>
+    </div>
+    <div class="deckcol">
+      <div class="deckhd"><h3><span class="fr">6 touches</span><span class="en" lang="en">6 keys</span></h3><span><span class="fr">type Stream Deck Mini · 3 × 2</span><span class="en" lang="en">Stream Deck Mini type · 3 × 2</span></span></div>
+      <div class="deck mini" id="deckMini" aria-label="Clavier 6 touches"></div>
+      <p class="muted"><span class="fr">Pour qui ne veut pas d'un appareil encombrant. En haut, les trois modes. En bas, les flèches font défiler les presets et la touche centrale applique celui affiché. La saisie d'un numéro reste sur l'écran tactile.</span><span class="en" lang="en">For those who don't want a bulky device. Top row: the three modes. Bottom row: the arrows scroll through presets and the centre key applies the one shown. Number entry stays on the touch screen.</span></p>
+    </div>
+  </div>
+  <div class="symlegend">
+    <div><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="3" x2="6" y2="23"/><line x1="13" y1="3" x2="13" y2="23"/><line x1="20" y1="3" x2="20" y2="23"/><rect x="3" y="15" width="6" height="4" fill="currentColor"/><rect x="10" y="5" width="6" height="4" fill="currentColor"/><rect x="17" y="12" width="6" height="4" fill="currentColor"/></svg><p><span class="fr"><b>Faders</b> : MIX FOLLOW, le choix de l'ingénieur du son pendant le direct.</span><span class="en" lang="en"><b>Faders</b>: MIX FOLLOW, the sound engineer's choice during the live action.</span></p></div>
+    <div><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13" cy="13" r="9"/><path d="M13 7l5 3.6-2 6h-6l-2-6z" fill="currentColor"/></svg><p><span class="fr"><b>Ballon</b> : BALL FOLLOW, les micros au plus près de l'action.</span><span class="en" lang="en"><b>Ball</b>: BALL FOLLOW, the mics closest to the action.</span></p></div>
+    <div><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="8" height="12" rx="4"/><path d="M5 12a8 8 0 0 0 16 0M13 20v4"/></svg><p><span class="fr"><b>Micro</b> : MIC SELECT, le choix de l'opérateur.</span><span class="en" lang="en"><b>Mic</b>: MIC SELECT, the operator's choice.</span></p></div>
+  </div>
+  <div class="speccard">
+    <h3><span class="fr">Images des touches</span><span class="en" lang="en">Key images</span></h3>
+    <table>
+      <tr><th><span class="fr">Modèle</span><span class="en" lang="en">Model</span></th><th><span class="fr">Touches</span><span class="en" lang="en">Keys</span></th><th><span class="fr">Rendu natif</span><span class="en" lang="en">Native size</span></th><th><span class="fr">Fichier à fournir</span><span class="en" lang="en">File to supply</span></th></tr>
+      <tr><td>Stream Deck MK.2</td><td class="n">15 · 5 × 3</td><td class="n">72 × 72 px</td><td class="n">PNG 144 × 144 px</td></tr>
+      <tr><td>Stream Deck Mini</td><td class="n">6 · 3 × 2</td><td class="n">80 × 80 px</td><td class="n">PNG 144 × 144 px</td></tr>
+    </table>
+    <p class="muted"><span class="fr">Un même jeu d'icônes carrées en 144 × 144 px sert les deux modèles : l'application les réduit proprement. Prévoir une marge et un fort contraste. Chaque touche a un état actif et un état inactif ; en production, le plugin EKO envoie l'image de chaque touche en direct.</span><span class="en" lang="en">One set of square 144 × 144 px icons serves both models: the app scales them down cleanly. Leave a margin and use strong contrast. Each key has an active and an inactive state; in production, the EKO plugin sends each key's image live.</span></p>
+  </div>
+</section>
+
+<section id="synchro">
+  <span class="eyebrow">Frame accurate</span>
+  <h2><span class="fr">La synchro, tenue en permanence</span><span class="en" lang="en">Sync, held at all times</span></h2>
+  <div class="cols">
+    <div>
+      <p><span class="fr">Au ralenti, l'œil guette le moment de la frappe ou l'ouverture d'une bouche. Nous traitons ce point à la source.</span><span class="en" lang="en">In slow motion, the eye watches for the moment of the kick or a mouth opening. We deal with this at the source.</span></p>
+      <p><span class="fr">Les ESS (frappes, chocs) ne sont jamais régénérés : EKO les recopie de la bande-son d'origine. Notre détection visuelle des frappes par IA confronte en permanence la signature visuelle de chaque frappe à sa signature audio. Chaque ESS est replacé exactement là où l'image l'attend.</span><span class="en" lang="en">Significant sound events (kicks, impacts) are never regenerated: EKO copies them from the original soundtrack. Our AI visual kick detection constantly checks each kick's visual signature against its audio signature. Each event is placed exactly where the image expects it.</span></p>
+      <p><span class="fr">Cette vérification neutralise les décalages rencontrés en essais :</span><span class="en" lang="en">This check cancels the offsets we met during trials:</span></p>
+      <ul class="tight">
+        <li><span class="fr">les latences des micros HF ;</span><span class="en" lang="en">RF mic latency;</span></li>
+        <li><span class="fr">les images ajoutées par les mélangeurs et les DVE ;</span><span class="en" lang="en">frames added by switchers and DVEs;</span></li>
+        <li><span class="fr">le retard de propagation du son sur les micros éloignés.</span><span class="en" lang="en">sound propagation delay on distant mics.</span></li>
+      </ul>
+      <p><span class="fr">EKO ajuste en continu, micro par micro et image par image.</span><span class="en" lang="en">EKO adjusts continuously, mic by mic and frame by frame.</span></p>
+    </div>
+    <figure>
+      <div class="fig">
+        <svg class="sync" viewBox="0 0 460 210" role="img" aria-label="La frappe détectée à l'image ; l'ESS du micro est recalé sur elle." style="min-width:0">
+          <text x="14" y="26" class="tm tmono">IMAGE</text>
+          <g>
+            <rect class="bx" x="80" y="12" width="40" height="28" rx="2"/><rect class="bx" x="124" y="12" width="40" height="28" rx="2"/><rect class="bx" x="168" y="12" width="40" height="28" rx="2"/>
+            <rect x="212" y="12" width="40" height="28" rx="2" fill="color-mix(in srgb,var(--tally) 14%,var(--surface))" stroke="var(--tally)" stroke-width="1.8"/>
+            <rect class="bx" x="256" y="12" width="40" height="28" rx="2"/><rect class="bx" x="300" y="12" width="40" height="28" rx="2"/><rect class="bx" x="344" y="12" width="40" height="28" rx="2"/>
+          </g>
+          <text x="232" y="58" text-anchor="middle" class="tmono" style="fill:var(--tally)"><tspan class="fr">frappe détectée</tspan><tspan class="en">kick detected</tspan></text>
+          <line x1="232" y1="64" x2="232" y2="190" stroke="var(--tally)" stroke-dasharray="4 4"/>
+          <text x="14" y="122" class="tm tmono">MICRO 12</text>
+          <line class="ln" x1="80" y1="118" x2="440" y2="118"/>
+          <g class="ess">
+            <polyline fill="none" stroke="var(--inter)" stroke-width="2" points="200,118 214,118 220,92 226,146 232,84 238,150 244,98 250,136 256,112 262,122 270,118"/>
+            <text x="234" y="168" text-anchor="middle" class="tmono" style="fill:var(--inter)"><tspan class="fr">ESS original</tspan><tspan class="en">original event</tspan></text>
+          </g>
+          <text x="232" y="200" text-anchor="middle" class="tmono okmark" style="fill:var(--ok)"><tspan class="fr">recalé sur l'image</tspan><tspan class="en">aligned to the image</tspan></text>
+        </svg>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<section id="option">
+  <span class="eyebrow"><span class="fr">Si c'est possible, sans exigence</span><span class="en" lang="en">If possible, not required</span></span>
+  <h2><span class="fr">Ce qui nous aiderait</span><span class="en" lang="en">What would help us</span></h2>
+  <div class="cols">
+    <div class="card">
+      <ul class="tight">
+        <li><span class="fr">Le timecode d'origine des images du PGM.</span><span class="en" lang="en">The original timecode of the PGM images.</span></li>
+        <li><span class="fr">Les entrées micro associées aux images du PGM.</span><span class="en" lang="en">The mic inputs associated with the PGM images.</span></li>
+        <li><span class="fr">Les micros proches du ballon, ou sa position.</span><span class="en" lang="en">The mics close to the ball, or its position.</span></li>
+      </ul>
+    </div>
+    <div>
+      <p><span class="fr">Par IP ou en SDI. EKO disposerait alors de deux chaînes indépendantes qui doivent aboutir au même résultat : un double contrôle permanent.</span><span class="en" lang="en">Over IP or SDI. EKO would then have two independent chains that must reach the same result: a permanent cross-check.</span></p>
+      <p class="muted"><span class="fr">Sans ces informations, EKO fonctionne avec les seules sources décrites plus haut.</span><span class="en" lang="en">Without this information, EKO works with the sources described above alone.</span></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Kreativ Labs · EKO · info@kreativlabs.tv</span>
+  <span><span class="fr">Document confidentiel, réservé à ses destinataires. Interface présentée à titre de maquette.</span><span class="en" lang="en">Confidential document, for its recipients only. The interface shown is a mock-up.</span></span>
+</footer>
+
+</div>
+
+<script>
+var LANG='fr';
+try{var q=(location.hash||'').replace('#','');if(q==='en'||q==='fr'){LANG=q}else{var st=localStorage.getItem('eko-lang');if(st==='en'||st==='fr')LANG=st;}}catch(e){}
+document.documentElement.setAttribute('data-lang',LANG);document.documentElement.lang=LANG;
+document.title=LANG==='en'?'EKO in the OB van':'EKO en car';
+function L(fr,en){return LANG==='en'?en:fr;}
+document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-setlang')===LANG);b.addEventListener('click',function(){var v=b.getAttribute('data-setlang');if(v===LANG)return;try{localStorage.setItem('eko-lang',v)}catch(e){}if(location.hash==='#fr'||location.hash==='#en'){history.replaceState(null,'',location.pathname)}location.reload();});});
+</script>
+<script>
+(function(){
+  /* ---------- Video Follow : étapes ---------- */
+  var vf=document.getElementById('vf');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce){
+    var st=1; vf.setAttribute('data-step','1');
+    setInterval(function(){
+      st=st%5+1; if(st===5){vf.setAttribute('data-step','4');return;}
+      vf.setAttribute('data-step',String(st));
+      var c=document.getElementById('cmp2'), l=document.getElementById('lsm2');
+      if(st>=2){c.classList.add('hit');l.style.stroke='var(--tally)';l.style.strokeWidth='2.4';}
+      else{c.classList.remove('hit');l.style.stroke='';l.style.strokeWidth='';}
+    },1500);
+  }else{
+    document.getElementById('cmp2').classList.add('hit');
+  }
+
+  /* ---------- données ---------- */
+  var MICS=[[1,48,40],[2,48,160],[3,48,200],[4,48,320],[5,160,16],[6,280,16],[7,400,16],[8,160,344],[9,280,344],[10,400,344],[11,512,40],[12,512,160],[13,512,200],[14,512,320]];
+  var CAMS=[['A',280,368],['B',170,368],['C',390,368],['D',16,180],['E',544,180]];
+  var CAMMIC={A:[6,9],B:[5,8],C:[7,10],D:[2,3],E:[12,13]};
+  var PRESETS=[[L('Filet G','Net L'),[2,3]],[L('Filet D','Net R'),[12,13]],[L('Corners N','Corners N'),[1,11]],[L('Corners S','Corners S'),[4,14]],[L('Bord N','Side N'),[5,6,7]],[L('Bord S','Side S'),[8,9,10]],[L('Banc','Bench'),[9]],[L('Tribune','Stand'),[6]]];
+  var state={mode:'select',sel:[12],typed:'',view:'plan',num:false,mixMic:[12]};
+  var onAirCam='C';
+
+  /* ---------- plan ---------- */
+  var NS='http://www.w3.org/2000/svg';
+  var micsG=document.getElementById('mics'), camsG=document.getElementById('cams');
+  CAMS.forEach(function(c){
+    var g=document.createElementNS(NS,'g'); g.setAttribute('class','camk'+(c[0]===onAirCam?' onair':''));
+    var p=document.createElementNS(NS,'polygon');
+    var x=c[1],y=c[2],pts;
+    if(y>350) pts=[x-9,y+7,x+9,y+7,x,y-7];
+    else if(x<30) pts=[x-7,y-9,x-7,y+9,x+8,y];
+    else pts=[x+7,y-9,x+7,y+9,x-8,y];
+    p.setAttribute('points',pts.join(' ')); g.appendChild(p);
+    var t=document.createElementNS(NS,'text'); t.textContent=c[0];
+    t.setAttribute('x',y>350?x+13:x); t.setAttribute('y',y>350?y+4:y-13); t.setAttribute('text-anchor','middle'); g.appendChild(t);
+    camsG.appendChild(g);
+  });
+  var micEls={};
+  MICS.forEach(function(m){
+    var g=document.createElementNS(NS,'g'); g.setAttribute('class','mic'); g.setAttribute('tabindex','0'); g.setAttribute('role','button'); g.setAttribute('aria-label','Micro '+m[0]);
+    var c=document.createElementNS(NS,'circle'); c.setAttribute('cx',m[1]); c.setAttribute('cy',m[2]); c.setAttribute('r',11); g.appendChild(c);
+    var t=document.createElementNS(NS,'text'); t.textContent=m[0]; t.setAttribute('x',m[1]); t.setAttribute('y',m[2]+3.5); t.setAttribute('text-anchor','middle'); g.appendChild(t);
+    g.addEventListener('click',function(){pick([m[0]]);});
+    g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick([m[0]]);}});
+    micsG.appendChild(g); micEls[m[0]]=g;
+  });
+
+  /* ---------- presets + pavé ---------- */
+  var pre=document.getElementById('presets');
+  PRESETS.forEach(function(p,i){
+    var b=document.createElement('button'); b.type='button'; b.innerHTML=p[0]+'<small>'+p[1].join(' · ')+'</small>';
+    b.addEventListener('click',function(){pick(p[1],i);}); pre.appendChild(b);
+  });
+  var pad=document.getElementById('pad');
+  ['1','2','3','C','4','5','6','0','7','8','9','OK'].forEach(function(k){
+    var b=document.createElement('button'); b.type='button'; b.textContent=k; if(k==='OK')b.className='ok';
+    b.addEventListener('click',function(){key(k);}); pad.appendChild(b);
+  });
+  function key(k){
+    if(k==='C'){state.typed='';}
+    else if(k==='OK'){var n=parseInt(state.typed,10); state.typed=''; if(n>=1&&n<=MICS.length){pick([n]);return;}}
+    else if(state.typed.length<2){state.typed+=k;}
+    render();
+  }
+  function setView(v){
+    state.view=v;
+    document.getElementById('vPlan').setAttribute('aria-pressed',v==='plan');
+    document.getElementById('vPre').setAttribute('aria-pressed',v==='pre');
+    document.getElementById('pitch').hidden=(v!=='plan');
+    pre.hidden=(v!=='pre');
+  }
+  document.getElementById('vPlan').addEventListener('click',function(){setView('plan');});
+  document.getElementById('vPre').addEventListener('click',function(){setView('pre');});
+
+  /* ---------- pistes ---------- */
+  var TRACKS=[
+    {id:'int',name:'EKO INT',sub:L("d'office","default"),c:'--inter',seed:3},
+    {id:'cam',name:'CAM FOLLOW',sub:L('cam C · micros 7 · 10','cam C · mics 7 · 10'),c:'--cam',seed:7},
+    {id:'mix',name:'MIX FOLLOW',sub:L('option','optional'),c:'--mode',seed:11,mode:'mix'},
+    {id:'ball',name:'BALL FOLLOW',sub:L('option','optional'),c:'--mode',seed:17,mode:'ball'},
+    {id:'select',name:'MIC SELECT',sub:L('option','optional'),c:'--mode',seed:23,mode:'select'},
+    {id:'clip1',name:'EKO CLIP 1',sub:'LSM 1 · micro 2',c:'--clip',seed:29,clip:[.55,.85]},
+    {id:'clip2',name:'EKO CLIP 2',sub:L('option','optional'),c:'--clip',seed:31,clip:null,hide:true},
+    {id:'clip3',name:'EKO CLIP 3',sub:L('option','optional'),c:'--clip',seed:37,clip:null,hide:true}
+  ];
+  var tl=document.getElementById('tl'), hl=document.getElementById('hiddenList');
+  var eyeSvg='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 8s2.6-5 7-5 7 5 7 5-2.6 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/></svg>';
+  TRACKS.forEach(function(t){
+    var row=document.createElement('div'); row.className='trk'; row.id='trk-'+t.id;
+    var col=getComputedStyle(document.documentElement).getPropertyValue(t.c).trim();
+    row.style.setProperty('--tc','var('+t.c+')');
+    row.innerHTML='<div class="nm"><span>'+t.name+'</span><small id="sub-'+t.id+'">'+t.sub+'</small></div>';
+    var eye=document.createElement('button'); eye.type='button'; eye.className='eye'; eye.innerHTML=eyeSvg; eye.setAttribute('aria-pressed','true'); eye.setAttribute('aria-label',L('Masquer ','Hide ')+t.name);
+    eye.addEventListener('click',function(){t.hide=true;layout();});
+    row.appendChild(eye);
+    var cv=document.createElement('canvas'); row.appendChild(cv); t.cv=cv; t.row=row;
+    tl.appendChild(row);
+  });
+  function layout(){
+    hl.innerHTML='';
+    var any=false;
+    TRACKS.forEach(function(t){
+      t.row.hidden=!!t.hide;
+      if(t.hide){any=true;var b=document.createElement('button');b.type='button';b.textContent='+ '+t.name;b.addEventListener('click',function(){t.hide=false;layout();});hl.appendChild(b);}
+    });
+    if(any){var s=document.createElement('span');s.textContent=L('Pistes masquées :','Hidden tracks:');hl.insertBefore(s,hl.firstChild);}
+    draw();
+  }
+
+  /* waveform */
+  function rnd(seed){var s=seed;return function(){s=(s*9301+49297)%233280;return s/233280;};}
+  var ESS=[.38,.64];
+  var t0=performance.now(), DUR=12000, head=.3;
+  function tokens(){var cs=getComputedStyle(document.documentElement);var o={};TRACKS.forEach(function(t){o[t.c]=cs.getPropertyValue(t.c).trim();});o.tally=cs.getPropertyValue('--tally').trim();return o;}
+  var TK=tokens();
+  function drawTrack(t){
+    var cv=t.cv; if(t.hide) return;
+    var dpr=window.devicePixelRatio||1, w=cv.clientWidth, h=cv.clientHeight; if(!w) return;
+    if(cv.width!==Math.round(w*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
+    var g=cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,w,h);
+    var col=TK[t.c]; var r=rnd(t.seed); var mid=h/2;
+    var active=true;
+    if(t.mode) active=(state.mode===t.mode);
+    if(t.id==='clip2'||t.id==='clip3') active=false;
+    t.row.classList.toggle('dim',!active);
+    var from=0,to=1; if(t.clip!==undefined){ if(!t.clip){ g.fillStyle='#1a232d'; g.fillRect(0,mid-1,w,2); return;} from=t.clip[0]; to=t.clip[1]; }
+    g.fillStyle=col;
+    for(var x=0;x<w;x+=2){
+      var f=x/w, a=0.18+0.22*r();
+      if(f<from||f>to){continue;}
+      ESS.forEach(function(e){var d=Math.abs(f-e); if(d<.012) a=0.95-d*30;});
+      if(t.id==='int') a*=1+0.4*Math.sin(f*7);
+      var hh=Math.max(1,a*(h/2-3));
+      g.globalAlpha= f>head ? .45 : 1;
+      g.fillRect(x,mid-hh,1.4,hh*2);
+    }
+    g.globalAlpha=1;
+    if(t.id==='select'){
+      state.segs.forEach(function(s,i){
+        var x=s.t*w; g.fillStyle='rgba(255,255,255,.75)'; g.fillRect(x,2,1,h-4);
+        g.font='600 10px "IBM Plex Mono",monospace'; g.fillStyle='#ffffff'; g.fillText('MIC '+s.mics.join('·'),x+4,12);
+      });
+    }
+    if(t.clip){ g.strokeStyle=col; g.lineWidth=1; g.strokeRect(from*w+.5,2.5,(to-from)*w-1,h-5); }
+    g.fillStyle=TK.tally; g.fillRect(head*w-1,0,2,h);
+  }
+  function draw(){TRACKS.forEach(drawTrack);}
+  state.segs=[{t:.05,mics:[12]}];
+
+  function pick(m,presetIdx){
+    state.mode='select'; state.sel=m.slice();
+    var tNow=Math.max(.02,Math.min(.95,head));
+    state.segs=state.segs.filter(function(s){return s.t<tNow-.02;});
+    state.segs.push({t:tNow,mics:m.slice()});
+    state.preset=presetIdx; render();
+  }
+  function setMode(md){state.mode=md;render();}
+  document.querySelectorAll('[data-mode]').forEach(function(b){b.addEventListener('click',function(){setMode(b.getAttribute('data-mode'));});});
+
+  /* ---------- claviers Stream Deck ---------- */
+  var ICON={
+    mix:'<svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="3" x2="6" y2="23"/><line x1="13" y1="3" x2="13" y2="23"/><line x1="20" y1="3" x2="20" y2="23"/><rect x="3" y="15" width="6" height="4" fill="currentColor"/><rect x="10" y="5" width="6" height="4" fill="currentColor"/><rect x="17" y="12" width="6" height="4" fill="currentColor"/></svg>',
+    ball:'<svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13" cy="13" r="9"/><path d="M13 7l5 3.6-2 6h-6l-2-6z" fill="currentColor"/></svg>',
+    select:'<svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="8" height="12" rx="4"/><path d="M5 12a8 8 0 0 0 16 0M13 20v4"/></svg>',
+    pad:'<svg viewBox="0 0 26 26" fill="currentColor"><rect x="4" y="4" width="5" height="5" rx="1"/><rect x="10.5" y="4" width="5" height="5" rx="1"/><rect x="17" y="4" width="5" height="5" rx="1"/><rect x="4" y="10.5" width="5" height="5" rx="1"/><rect x="10.5" y="10.5" width="5" height="5" rx="1"/><rect x="17" y="10.5" width="5" height="5" rx="1"/><rect x="10.5" y="17" width="5" height="5" rx="1"/></svg>'
+  };
+  var MODE_LBL={mix:'MIX',ball:'BALL',select:'SELECT'};
+  state.miniIdx=0;
+  function sdKey(cls,html,fn,label){
+    var b=document.createElement('button'); b.type='button'; b.className='sd '+cls; b.innerHTML=html;
+    if(label) b.setAttribute('aria-label',label);
+    if(fn) b.addEventListener('click',fn); else b.tabIndex=-1;
+    return b;
+  }
+  function modeKey(m){return sdKey('mode'+(state.mode===m?' on':''),ICON[m]+MODE_LBL[m],function(){setMode(m);},MODE_LBL[m]+' FOLLOW');}
+  function buildRemote(){
+    var cur=current();
+    var mk=document.getElementById('deckMk2'); mk.innerHTML='';
+    ['mix','ball','select'].forEach(function(m){mk.appendChild(modeKey(m));});
+    var shown=state.typed?state.typed+'_':cur.join('·');
+    mk.appendChild(sdKey('disp','<small>MIC</small><b>'+shown+'</b>',function(){state.typed='';render();},L('Afficheur micro, appuyer pour effacer','Mic display, press to clear')));
+    if(state.num){
+      mk.appendChild(sdKey('ok','OK',function(){state.num=false;key('OK');},L('Valider','Confirm')));
+      ['1','2','3','4','5','6','7','8','9','0'].forEach(function(d){mk.appendChild(sdKey('dig',d,function(){key(d);}));});
+    }else{
+      mk.appendChild(sdKey('',ICON.pad+'123',function(){state.num=true;state.typed='';render();},L('Pavé numérique','Number pad')));
+      PRESETS.forEach(function(p,i){
+        mk.appendChild(sdKey('pre'+(state.mode==='select'&&state.preset===i?' on':''),p[0]+'<small>'+p[1].join('·')+'</small>',function(){pick(p[1],i);}));
+      });
+      mk.appendChild(sdKey('info cam','<small>CAM</small><b style="font-size:1.4em">'+onAirCam+'</b><small>'+CAMMIC[onAirCam].join('·')+'</small>',null));
+      mk.appendChild(sdKey('info air','<small>'+L('ANTENNE','ON AIR')+'</small><b style="font-size:1.1em">LSM 2</b>',null));
+    }
+
+    var mi=document.getElementById('deckMini'); mi.innerHTML='';
+    ['mix','ball','select'].forEach(function(m){mi.appendChild(modeKey(m));});
+    var P=PRESETS[state.miniIdx];
+    mi.appendChild(sdKey('nav','◂',function(){state.miniIdx=(state.miniIdx+PRESETS.length-1)%PRESETS.length;render();},L('Preset précédent','Previous preset')));
+    mi.appendChild(sdKey('pre'+(state.mode==='select'&&state.preset===state.miniIdx?' on':''),P[0]+'<small>'+P[1].join('·')+'</small>',function(){pick(P[1],state.miniIdx);},L('Appliquer ','Apply ')+P[0]));
+    mi.appendChild(sdKey('nav','▸',function(){state.miniIdx=(state.miniIdx+1)%PRESETS.length;render();},L('Preset suivant','Next preset')));
+  }
+
+  /* ---------- rendu ---------- */
+  var ballPos=[300,170];
+  function nearest(){
+    return MICS.map(function(m){return [m[0],Math.hypot(m[1]-ballPos[0],m[2]-ballPos[1])];}).sort(function(a,b){return a[1]-b[1];}).slice(0,2).map(function(a){return a[0];});
+  }
+  function current(){
+    if(state.mode==='mix') return state.mixMic;
+    if(state.mode==='ball') return nearest();
+    return state.sel;
+  }
+  var NAMES={mix:'MIX FOLLOW',ball:'BALL FOLLOW',select:'MIC SELECT'};
+  function render(){
+    var cur=current(), camMics=CAMMIC[onAirCam];
+    Object.keys(micEls).forEach(function(k){var n=+k;micEls[k].classList.toggle('lit',cur.indexOf(n)>=0);micEls[k].classList.toggle('cam',camMics.indexOf(n)>=0);});
+    document.querySelectorAll('[data-mode]').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-mode')===state.mode);});
+    var label=state.typed?state.typed+'_':cur.join(' · ');
+    document.getElementById('disp').textContent=label;
+    document.getElementById('modeHint').textContent=NAMES[state.mode].toLowerCase()+' · '+cur.join(' · ');
+    document.getElementById('sub-mix').textContent=L('option · micro ','optional · mic ')+state.mixMic.join('·');
+    document.getElementById('sub-ball').textContent=L('option · micros ','optional · mics ')+nearest().join(' · ');
+    document.getElementById('sub-select').textContent=L('option · micro ','optional · mic ')+state.sel.join(' · ');
+    pre.querySelectorAll('button').forEach(function(b,i){b.classList.toggle('on',state.mode==='select'&&state.preset===i);});
+    buildRemote(); draw();
+  }
+
+  /* ---------- animation ---------- */
+  var ballEl=document.getElementById('ball');
+  var path=[[300,170],[360,140],[430,160],[470,185],[400,230],[330,200]];
+  var tcBase=((21*60+14)*60+7)*50+12;
+  function pad2(n){return (n<10?'0':'')+n;}
+  var lastBall='';
+  function tick(now){
+    var p=((now-t0)%DUR)/DUR;
+    head=.12+p*.55;
+    var seg=p*(path.length-1), i=Math.floor(seg), f=seg-i, a=path[i], b=path[Math.min(i+1,path.length-1)];
+    ballPos=[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f];
+    ballEl.setAttribute('cx',ballPos[0]); ballEl.setAttribute('cy',ballPos[1]);
+    var fr=tcBase+Math.floor(p*DUR/1000*50/3);
+    var ff=fr%50, s=Math.floor(fr/50)%60, m=Math.floor(fr/3000)%60, h=Math.floor(fr/180000);
+    document.getElementById('tc').textContent=pad2(h)+':'+pad2(m)+':'+pad2(s)+':'+pad2(ff);
+    var nb=nearest().join(',');
+    if(nb!==lastBall){lastBall=nb;render();} else draw();
+    requestAnimationFrame(tick);
+  }
+  if(reduce){draw();}else{requestAnimationFrame(tick);}
+
+  window.addEventListener('resize',draw);
+  try{window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){TK=tokens();draw();});}catch(e){}
+  try{new MutationObserver(function(){TK=tokens();draw();}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});}catch(e){}
+
+  layout(); render();
+})();
+</script>
+
+</body>
+</html>
