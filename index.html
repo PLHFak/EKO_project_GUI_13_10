@@ -429,7 +429,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
             <rect x="40" y="105" width="70" height="150"/><rect x="450" y="105" width="70" height="150"/>
             <rect x="32" y="160" width="8" height="40"/><rect x="520" y="160" width="8" height="40"/>
           </g>
-          <g id="ballg"><circle id="ball" cx="300" cy="170" r="6" fill="#ffffff" stroke="#0a0f14"/></g>
+          <g id="kicks"></g><g id="ballg"><circle id="ball" cx="300" cy="170" r="6" fill="#ffffff" stroke="#0a0f14"/></g>
           <g id="cams"></g>
           <g id="mics"></g>
         </svg>
@@ -675,7 +675,25 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
 
   /* waveform */
   function rnd(seed){var s=seed;return function(){s=(s*9301+49297)%233280;return s/233280;};}
-  var ESS=[.38,.64];
+  /* trajectoire du ballon : chaque point de la liste est un changement de direction (une frappe) ; le dernier est le filet */
+  var H0=.08, HS=.6;
+  var path=[[150,250],[232,206],[300,232],[345,150],[418,178],[452,118],[478,196],[519,181]];
+  var SPD=[1.0,1.35,0.85,1.6,1.05,0.75,2.4];           /* vitesse de chaque passe ; la dernière est le tir */
+  var SEGT=[], TT=0;
+  for(var si=0;si<path.length-1;si++){var dx=path[si+1][0]-path[si][0],dy=path[si+1][1]-path[si][1];var d=Math.hypot(dx,dy)/SPD[si];SEGT.push(d);TT+=d;}
+  var KT=[0]; for(si=0;si<SEGT.length;si++) KT.push(KT[si]+SEGT[si]/TT);   /* instant (0–1) de chaque point */
+  var KICKS=[];
+  for(si=0;si<path.length-1;si++){
+    var rk=(function(s){return function(){s=(s*9301+49297)%233280;return s/233280;};})(97+si*131);
+    var ang=0; if(si>0){var a1=Math.atan2(path[si][1]-path[si-1][1],path[si][0]-path[si-1][0]),a2=Math.atan2(path[si+1][1]-path[si][1],path[si+1][0]-path[si][0]);ang=Math.abs(Math.atan2(Math.sin(a2-a1),Math.cos(a2-a1)));}
+    var pw=Math.min(1,0.28+0.32*SPD[si]+0.12*ang/Math.PI);   /* puissance déduite de la vitesse de départ et du changement d'angle */
+    KICKS.push({t:KT[si],x:H0+KT[si]*HS,pw:pw,att:.08+.4*rk(),dec:1.4+3.6*rk(),len:.010+.026*rk(),grain:.25+.6*rk(),seed:si*17+3,pt:path[si]});
+  }
+  var NET={t:1,x:H0+HS,pw:1};
+  var ESS=KICKS.concat([NET]);
+  function posAt(p){var i=0;while(i<KT.length-2&&p>KT[i+1])i++;var f=(p-KT[i])/(KT[i+1]-KT[i]);var a=path[i],b=path[i+1];return [a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f];}
+  var kickEls=[]; var kg=document.getElementById('kicks');
+  KICKS.forEach(function(k){var c=document.createElementNS(NS,'circle');c.setAttribute('cx',k.pt[0]);c.setAttribute('cy',k.pt[1]);c.setAttribute('r',7);c.setAttribute('fill','none');c.setAttribute('stroke','#e884b6');c.setAttribute('opacity','0');kg.appendChild(c);kickEls.push(c);});
   var t0=performance.now(), DUR=12000, head=.3;
   function tokens(){var cs=getComputedStyle(document.documentElement);var o={};TRACKS.forEach(function(t){o[t.c]=cs.getPropertyValue(t.c).trim();});o.tally=cs.getPropertyValue('--tally').trim();return o;}
   var TK=tokens();
@@ -692,16 +710,16 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     if(t.boost){
       g.fillStyle='#1a232d'; g.fillRect(0,mid-0.5,w,1);
       g.fillStyle=col;
-      /* chaque changement de trajectoire : un effet de taille, de longueur et de style différents */
-      [[.27,.55,.018,2.4,.30],[.33,.9,.028,3.6,.15],[.385,.42,.014,1.8,.45],[.47,.78,.034,4.4,.22],[.55,.62,.022,2.8,.38],[.64,.98,.03,3.2,.10]].forEach(function(b){
-        var x0=b[0]*w, amp=b[1], len=Math.max(8,w*b[2]), dec=b[3], att=b[4], r2=rnd(Math.round(b[0]*1000));
-        for(var x=x0-len*att;x<x0+len;x+=2){
-          var f=x/w, k=(x-x0)/len, a;
-          if(k<0) a=amp*(0.2+0.8*(k+att)/att); else a=amp*Math.exp(-k*dec);
-          a*=0.75+0.5*r2();
+      /* une frappe générée à chaque changement de trajectoire : puissance, attaque, chute et grain propres à chacune ; rien sur le filet */
+      KICKS.forEach(function(k){
+        var x0=k.x*w, len=Math.max(7,w*k.len), r2=rnd(k.seed);
+        for(var x=x0-len*k.att;x<x0+len;x+=1.6){
+          var f=x/w, q=(x-x0)/len, a;
+          if(q<0) a=k.pw*(0.15+0.85*(q+k.att)/k.att); else a=k.pw*Math.exp(-q*k.dec);
+          a*=1-k.grain/2+k.grain*r2();
           var hh=Math.max(1,a*(h/2-3));
           g.globalAlpha= f>head ? .45 : 1;
-          g.fillRect(x,mid-hh,1.4,hh*2);
+          g.fillRect(x,mid-hh,1.2,hh*2);
         }
       });
       g.globalAlpha=1; g.fillStyle=TK.tally; g.fillRect(head*w-1,0,2,h); return;
@@ -711,7 +729,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     for(var x=0;x<w;x+=2){
       var f=x/w, a=0.18+0.22*r();
       if(f<from||f>to){continue;}
-      ESS.forEach(function(e){var d=Math.abs(f-e); if(d<.012) a=0.95-d*30;});
+      ESS.forEach(function(e){var d=Math.abs(f-e.x); if(d<.010) a=Math.max(a,(0.35+0.6*e.pw)*(1-d*80));});
       if(t.id==='int') a*=1+0.4*Math.sin(f*7);
       var hh=Math.max(1,a*(h/2-3));
       g.globalAlpha= f>head ? .45 : 1;
@@ -783,7 +801,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   }
 
   /* ---------- rendu ---------- */
-  var ballPos=[300,170];
+  var ballPos=path[0].slice();
   function nearest(){
     return MICS.map(function(m){return [m[0],Math.hypot(m[1]-ballPos[0],m[2]-ballPos[1])];}).sort(function(a,b){return a[1]-b[1];}).slice(0,2).map(function(a){return a[0];});
   }
@@ -809,15 +827,15 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
 
   /* ---------- animation ---------- */
   var ballEl=document.getElementById('ball');
-  var path=[[300,170],[360,140],[430,160],[470,185],[400,230],[330,200]];
   var tcBase=((21*60+14)*60+7)*50+12;
   function pad2(n){return (n<10?'0':'')+n;}
   var lastBall='';
   function tick(now){
     var p=((now-t0)%DUR)/DUR;
-    head=.12+p*.55;
-    var seg=p*(path.length-1), i=Math.floor(seg), f=seg-i, a=path[i], b=path[Math.min(i+1,path.length-1)];
-    ballPos=[a[0]+(b[0]-a[0])*f,a[1]+(b[1]-a[1])*f];
+    head=H0+p*HS;
+    ballPos=posAt(p);
+    KICKS.forEach(function(k,j){var age=p-k.t, el=kickEls[j];
+      if(age>=0&&age<.07){el.setAttribute('r',7+age*420);el.setAttribute('opacity',(1-age/.07).toFixed(2));el.setAttribute('stroke-width',1+3*k.pw);} else el.setAttribute('opacity','0');});
     ballEl.setAttribute('cx',ballPos[0]); ballEl.setAttribute('cy',ballPos[1]);
     var fr=tcBase+Math.floor(p*DUR/1000*50/3);
     var ff=fr%50, s=Math.floor(fr/50)%60, m=Math.floor(fr/3000)%60, h=Math.floor(fr/180000);
