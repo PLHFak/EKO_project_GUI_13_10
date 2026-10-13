@@ -312,14 +312,14 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
 
 <section id="sons">
   <span class="eyebrow"><span class="fr">Les sons rendus au replay</span><span class="en" lang="en">Sounds delivered on replay</span></span>
-  <h2><span class="fr">Deux sons d'office, un mode au choix, des clips à la demande</span><span class="en" lang="en">Two sounds by default, one selectable mode, clips on demand</span></h2>
+  <h2><span class="fr">Trois sons d'office, un mode au choix, des clips à la demande</span><span class="en" lang="en">Three sounds by default, one selectable mode, clips on demand</span></h2>
   <div class="blocks">
     <div class="blk">
       <div class="hd"><h3><span class="fr">D'office</span><span class="en" lang="en">By default</span></h3><span class="muted"><span class="fr">Rendus à chaque replay</span><span class="en" lang="en">Delivered on every replay</span></span></div>
       <div class="chips">
         <div class="chip c-inter"><span class="lb">EKO INT</span><span class="tx"><span class="fr">Le son inter.</span><span class="en" lang="en">The international sound.</span></span></div>
         <div class="chip c-cam"><span class="lb">CAM FOLLOW</span><span class="tx"><span class="fr">Le micro de la caméra rejouée.</span><span class="en" lang="en">The mic of the camera being replayed.</span></span></div>
-        <div class="chip c-boost opt"><span class="lb">BOOST</span><span class="tx"><span class="fr">En option : des frappes de balle générées par l'IA, placées d'après l'image.</span><span class="en" lang="en">Optional: AI-generated ball kicks, placed from the image.</span></span></div>
+        <div class="chip c-boost"><span class="lb">BOOST</span><span class="tx"><span class="fr">Des frappes de balle générées par l'IA, placées d'après l'image.</span><span class="en" lang="en">AI-generated ball kicks, placed from the image.</span></span></div>
       </div>
     </div>
     <div class="blk">
@@ -647,7 +647,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     {id:'clip1',name:'EKO CLIP 1',sub:'LSM 1 · micro 2',c:'--clip',seed:29,clip:[.55,.85]},
     {id:'clip2',name:'EKO CLIP 2',sub:L('option','optional'),c:'--clip',seed:31,clip:null,hide:true},
     {id:'clip3',name:'EKO CLIP 3',sub:L('option','optional'),c:'--clip',seed:37,clip:null,hide:true},
-    {id:'boost',name:'BOOST',sub:L('IA · frappes','AI · kicks'),c:'--boost',seed:41,boost:true}
+    {id:'boost',name:'BOOST',sub:L("d'office · IA",'default · AI'),c:'--boost',seed:41,boost:true}
   ];
   var tl=document.getElementById('tl'), hl=document.getElementById('hiddenList');
   var eyeSvg='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 8s2.6-5 7-5 7 5 7 5-2.6 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/></svg>';
