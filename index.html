@@ -177,8 +177,7 @@ svg .ah{fill:var(--edge)}
 .legendrow{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.86rem;color:#d3dce6}
 
 /* langue */
-html:not([data-lang="en"]) .en{display:none}
-html[data-lang="en"] .fr{display:none}
+html:not([data-lang="en"]) .en,html:not([data-lang="es"]) .es,html[data-lang="en"] .fr,html[data-lang="es"] .fr{display:none}
 .lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-left:auto;flex:none;background:var(--surface)}
 .lang button{border:0;background:transparent;color:var(--muted);font:600 .78rem var(--font-mono);padding:5px 11px;cursor:pointer;letter-spacing:.04em}
 .lang button[aria-pressed="true"]{background:var(--eko);color:#fff}
@@ -196,6 +195,25 @@ nav.toc .navrow ul{margin:0;min-width:0;overflow-x:auto}
 .cab svg{width:100%;max-width:560px;height:auto}
 .cab svg text{font-size:11px}
 @media (max-width:860px){.cabling{grid-template-columns:1fr}}
+
+/* mixage */
+.mxintro{max-width:820px;display:flex;flex-direction:column;gap:10px}
+.mxintro ul{margin:0;padding-left:1.2em}
+.mxgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:22px}
+.mxf{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.mxf svg{width:100%;height:auto;display:block}
+.mxf svg text{font:14px var(--font-mono);fill:var(--muted)}
+.mxf svg .mxt{font:700 17px var(--font-head);fill:var(--ink)}
+.mxf svg .band{fill:var(--eko);opacity:.12}
+.mxf svg .nob{fill:#D85A30;opacity:.08}
+.mxf svg .ax{stroke:var(--ink);stroke-width:1}
+.mxf svg .mk{stroke:var(--muted);stroke-width:1;stroke-dasharray:3 4}
+.mxf svg .cur{stroke:var(--ink);stroke-width:1;opacity:.35}
+.mxf figcaption{font-size:.92rem;color:var(--muted)}
+.mxrules{margin-top:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px}
+.mxrules h3{grid-row:1;margin:0}
+.mxrules ul{grid-row:2;margin:0;padding-left:1.2em;color:var(--muted)}
+@media (max-width:860px){.mxgrid,.mxrules{grid-template-columns:1fr}.mxrules h3,.mxrules ul{grid-row:auto}}
 
 /* Stream Deck */
 .decks{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:22px;align-items:start}
@@ -275,38 +293,39 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
 <nav class="toc" aria-label="Sections">
   <div class="navrow">
   <ul>
-    <li><a href="#demande"><span class="fr">Ce que nous demandons</span><span class="en" lang="en">What we ask for</span></a></li>
-    <li><a href="#sons"><span class="fr">Les sons rendus</span><span class="en" lang="en">Sounds delivered</span></a></li>
+    <li><a href="#demande"><span class="fr">Ce que nous demandons</span><span class="en" lang="en">What we ask for</span><span class="es" lang="es">Lo que pedimos</span></a></li>
+    <li><a href="#sons"><span class="fr">Les sons rendus</span><span class="en" lang="en">Sounds delivered</span><span class="es" lang="es">Sonidos entregados</span></a></li>
     <li><a href="#follow">Video Follow</a></li>
-    <li><a href="#console"><span class="fr">Console opérateur</span><span class="en" lang="en">Operator console</span></a></li>
-    <li><a href="#remote"><span class="fr">Clavier</span><span class="en" lang="en">Keypad</span></a></li>
-    <li><a href="#synchro"><span class="fr">Synchro</span><span class="en" lang="en">Sync</span></a></li>
-    <li><a href="#option"><span class="fr">En option</span><span class="en" lang="en">Optional</span></a></li>
+    <li><a href="#mixage"><span class="fr">Mixage</span><span class="en" lang="en">Mixing</span><span class="es" lang="es">Mezcla</span></a></li>
+    <li><a href="#console"><span class="fr">Console opérateur</span><span class="en" lang="en">Operator console</span><span class="es" lang="es">Consola del operador</span></a></li>
+    <li><a href="#remote"><span class="fr">Clavier</span><span class="en" lang="en">Keypad</span><span class="es" lang="es">Teclado</span></a></li>
+    <li><a href="#synchro"><span class="fr">Synchro</span><span class="en" lang="en">Sync</span><span class="es" lang="es">Sincronía</span></a></li>
+    <li><a href="#option"><span class="fr">En option</span><span class="en" lang="en">Optional</span><span class="es" lang="es">Opcional</span></a></li>
   </ul>
-  <span class="lang" role="group" aria-label="Langue / Language"><button type="button" data-setlang="fr">FR</button><button type="button" data-setlang="en">EN</button></span>
+  <span class="lang" role="group" aria-label="Langue / Language"><button type="button" data-setlang="fr">FR</button><button type="button" data-setlang="en">EN</button><button type="button" data-setlang="es">ES</button></span>
   </div>
 </nav>
 
 <div class="wrap">
 
 <header class="top">
-  <span class="eyebrow"><span class="fr">EKO · Kreativ Labs · Octobre 2026 · Confidentiel</span><span class="en" lang="en">EKO · Kreativ Labs · October 2026 · Confidential</span></span>
-  <h1><span class="fr">EKO en car : une intégration autonome</span><span class="en" lang="en">EKO in the OB van: a self-contained integration</span></h1>
-  <p class="tag"><span class="fr">Aucun setup particulier, aucune intervention du chef de car. EKO observe ce qui passe, et rend au replay le son de l'image d'origine.</span><span class="en" lang="en">No special setup, no work for the EIC. EKO watches what goes to air and gives every replay the sound of its original image.</span></p>
+  <span class="eyebrow"><span class="fr">EKO · Kreativ Labs · Octobre 2026 · Confidentiel</span><span class="en" lang="en">EKO · Kreativ Labs · October 2026 · Confidential</span><span class="es" lang="es">EKO · Kreativ Labs · Octubre 2026 · Confidencial</span></span>
+  <h1><span class="fr">EKO en car : une intégration autonome</span><span class="en" lang="en">EKO in the OB van: a self-contained integration</span><span class="es" lang="es">EKO en la unidad móvil: una integración autónoma</span></h1>
+  <p class="tag"><span class="fr">Aucun setup particulier, aucune intervention du chef de car. EKO observe ce qui passe, et rend au replay le son de l'image d'origine.</span><span class="en" lang="en">No special setup, no work for the EIC. EKO watches what goes to air and gives every replay the sound of its original image.</span><span class="es" lang="es">Ningún setup particular, ningún trabajo para el jefe técnico. EKO observa lo que sale en antena y devuelve a cada repetición el sonido de su imagen original.</span></p>
 </header>
 
 <section id="demande">
-  <span class="eyebrow"><span class="fr">Ce que nous demandons</span><span class="en" lang="en">What we ask for</span></span>
-  <h2><span class="fr">Presque rien, et un câblage simple</span><span class="en" lang="en">Almost nothing, and simple cabling</span></h2>
+  <span class="eyebrow"><span class="fr">Ce que nous demandons</span><span class="en" lang="en">What we ask for</span><span class="es" lang="es">Lo que pedimos</span></span>
+  <h2><span class="fr">Presque rien, et un câblage simple</span><span class="en" lang="en">Almost nothing, and simple cabling</span><span class="es" lang="es">Casi nada, y un cableado sencillo</span></h2>
   <div class="cabling">
     <div class="cab main">
-      <span class="k"><span class="fr">VIDÉO · CÂBLAGE STANDARD</span><span class="en" lang="en">VIDEO · STANDARD CABLING</span></span>
-      <b><span class="fr">Une SDI en entrée, une SDI en sortie</span><span class="en" lang="en">One SDI in, one SDI out</span></b>
-      <p><span class="fr">En entrée, une mosaïque de multiviewer : le PGM et les sorties monitoring des LSM 1 à 6, en grille de 3 × 3 (neuf cases). Le monitoring des LSM porte déjà le son inter, et une qualité monitoring suffit. En sortie, une SDI porte les quatre sons EKO et de 1 à 6 monitorings pour les opérateurs LSM.</span><span class="en" lang="en">Input: a multiviewer mosaic with the PGM and the monitoring outputs of LSM 1 to 6, in a 3 × 3 grid (nine tiles). LSM monitoring already carries the international sound, and monitoring quality is enough. Output: one SDI carrying the four EKO sounds and 1 to 6 monitoring feeds for the LSM operators.</span></p>
+      <span class="k"><span class="fr">VIDÉO · CÂBLAGE STANDARD</span><span class="en" lang="en">VIDEO · STANDARD CABLING</span><span class="es" lang="es">VÍDEO · CABLEADO ESTÁNDAR</span></span>
+      <b><span class="fr">Une SDI en entrée, une SDI en sortie</span><span class="en" lang="en">One SDI in, one SDI out</span><span class="es" lang="es">Una SDI de entrada, una SDI de salida</span></b>
+      <p><span class="fr">En entrée, une mosaïque de multiviewer : le PGM et les sorties monitoring des LSM 1 à 6, en grille de 3 × 3 (neuf cases). Le monitoring des LSM porte déjà le son inter, et une qualité monitoring suffit. En sortie, une SDI porte les quatre sons EKO et de 1 à 6 monitorings pour les opérateurs LSM.</span><span class="en" lang="en">Input: a multiviewer mosaic with the PGM and the monitoring outputs of LSM 1 to 6, in a 3 × 3 grid (nine tiles). LSM monitoring already carries the international sound, and monitoring quality is enough. Output: one SDI carrying the four EKO sounds and 1 to 6 monitoring feeds for the LSM operators.</span><span class="es" lang="es">Entrada: un mosaico de multiviewer con el PGM y las salidas de monitoring de los LSM 1 a 6, en una cuadrícula de 3 × 3 (nueve casillas). El monitoring de los LSM ya lleva el sonido internacional, y una calidad de monitoring basta. Salida: una SDI con los cuatro sonidos EKO y de 1 a 6 monitorings para los operadores LSM.</span></p>
       <svg viewBox="0 0 470 132" role="img" aria-label="Mosaïque de neuf cases (PGM, LSM 1 à 6, deux réserves) sur une SDI vers EKO ; en sortie une SDI avec quatre sons EKO et un à six monitorings opérateurs">
         <text x="8" y="16" class="tm tmono" style="font-size:9.5px">MULTIVIEWER · 3 × 3</text>
         <rect x="4" y="22" width="136" height="88" rx="3" fill="none" stroke="var(--edge)"/>
-        <rect class="bx" x="8" y="26" width="40" height="24" rx="2" style="fill:color-mix(in srgb,var(--tally) 14%,var(--surface));stroke:var(--tally)"/><text x="28" y="41.5" text-anchor="middle" class="tmono" style="font-size:9px">PGM</text><rect class="bx" x="52" y="26" width="40" height="24" rx="2"/><text x="72" y="41.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 1</text><rect class="bx" x="96" y="26" width="40" height="24" rx="2"/><text x="116" y="41.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 2</text><rect class="bx" x="8" y="54" width="40" height="24" rx="2"/><text x="28" y="69.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 3</text><rect class="bx" x="52" y="54" width="40" height="24" rx="2"/><text x="72" y="69.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 4</text><rect class="bx" x="96" y="54" width="40" height="24" rx="2"/><text x="116" y="69.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 5</text><rect class="bx" x="8" y="82" width="40" height="24" rx="2"/><text x="28" y="97.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 6</text><rect class="bx" x="52" y="82" width="40" height="24" rx="2" stroke-dasharray="3 3"/><text x="72" y="97.5" text-anchor="middle" class="tmono" style="font-size:8.5px"><tspan class="fr">réserve</tspan><tspan class="en">spare</tspan></text><rect class="bx" x="96" y="82" width="40" height="24" rx="2" stroke-dasharray="3 3"/><text x="116" y="97.5" text-anchor="middle" class="tmono" style="font-size:8.5px"><tspan class="fr">réserve</tspan><tspan class="en">spare</tspan></text>
+        <rect class="bx" x="8" y="26" width="40" height="24" rx="2" style="fill:color-mix(in srgb,var(--tally) 14%,var(--surface));stroke:var(--tally)"/><text x="28" y="41.5" text-anchor="middle" class="tmono" style="font-size:9px">PGM</text><rect class="bx" x="52" y="26" width="40" height="24" rx="2"/><text x="72" y="41.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 1</text><rect class="bx" x="96" y="26" width="40" height="24" rx="2"/><text x="116" y="41.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 2</text><rect class="bx" x="8" y="54" width="40" height="24" rx="2"/><text x="28" y="69.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 3</text><rect class="bx" x="52" y="54" width="40" height="24" rx="2"/><text x="72" y="69.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 4</text><rect class="bx" x="96" y="54" width="40" height="24" rx="2"/><text x="116" y="69.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 5</text><rect class="bx" x="8" y="82" width="40" height="24" rx="2"/><text x="28" y="97.5" text-anchor="middle" class="tmono" style="font-size:9px">LSM 6</text><rect class="bx" x="52" y="82" width="40" height="24" rx="2" stroke-dasharray="3 3"/><text x="72" y="97.5" text-anchor="middle" class="tmono" style="font-size:8.5px"><tspan class="fr">réserve</tspan><tspan class="en">spare</tspan><tspan class="es">reserva</tspan></text><rect class="bx" x="96" y="82" width="40" height="24" rx="2" stroke-dasharray="3 3"/><text x="116" y="97.5" text-anchor="middle" class="tmono" style="font-size:8.5px"><tspan class="fr">réserve</tspan><tspan class="en">spare</tspan><tspan class="es">reserva</tspan></text>
         <path class="ln" d="M140 66H222" marker-end="url(#arC)"/>
         <text x="181" y="60" text-anchor="middle" class="tm tmono" style="font-size:9px">SDI</text>
         <rect x="226" y="34" width="86" height="48" rx="4" fill="color-mix(in srgb,var(--eko) 12%,var(--surface))" stroke="var(--eko)" stroke-width="1.6"/>
@@ -316,68 +335,68 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
         <rect x="344" y="14" width="120" height="114" rx="3" class="bx"/>
         <text x="352" y="30" class="tmono tb" style="font-size:10px;fill:var(--inter)">1 EKO INT</text>
         <text x="352" y="44" class="tmono tb" style="font-size:10px;fill:var(--cam)">2 CAM FOLLOW</text>
-        <text x="352" y="58" class="tmono tb" style="font-size:10px;fill:var(--mode)"><tspan class="fr">3 MODE CHOISI</tspan><tspan class="en">3 SELECTED MODE</tspan></text>
+        <text x="352" y="58" class="tmono tb" style="font-size:10px;fill:var(--mode)"><tspan class="fr">3 MODE CHOISI</tspan><tspan class="en">3 SELECTED MODE</tspan><tspan class="es">3 MODO ELEGIDO</tspan></text>
         <text x="352" y="72" class="tmono tb" style="font-size:10px;fill:var(--boost)">4 BOOST</text>
         <line x1="352" y1="80" x2="456" y2="80" stroke="var(--line)"/>
         <text x="352" y="95" class="tmono" style="font-size:10px">5–10 MONITOR 1–6</text>
-        <text x="352" y="108" class="tm tmono" style="font-size:9px"><tspan class="fr">un par opérateur LSM</tspan><tspan class="en">one per LSM operator</tspan></text>
+        <text x="352" y="108" class="tm tmono" style="font-size:9px"><tspan class="fr">un par opérateur LSM</tspan><tspan class="en">one per LSM operator</tspan><tspan class="es">uno por operador LSM</tspan></text>
         <text x="352" y="120" class="tm tmono" style="font-size:9px">mono</text>
         <defs><marker id="arC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ah"/></marker></defs>
       </svg>
     </div>
     <div class="cab alt">
-      <span class="k"><span class="fr">VIDÉO · ALTERNATIVE</span><span class="en" lang="en">VIDEO · ALTERNATIVE</span></span>
-      <b><span class="fr">Le PGM en SDI, les LSM par protocole</span><span class="en" lang="en">PGM over SDI, LSMs by protocol</span></b>
-      <p><span class="fr">Les entrées LSM arrivent par le protocole AMP ou par LinX. EKO reçoit alors le VITC, le pourcentage de vitesse et l'image via LinX.</span><span class="en" lang="en">LSM inputs arrive over the AMP protocol or LinX. EKO then receives the VITC, the speed percentage and the image via LinX.</span></p>
+      <span class="k"><span class="fr">VIDÉO · ALTERNATIVE</span><span class="en" lang="en">VIDEO · ALTERNATIVE</span><span class="es" lang="es">VÍDEO · ALTERNATIVA</span></span>
+      <b><span class="fr">Le PGM en SDI, les LSM par protocole</span><span class="en" lang="en">PGM over SDI, LSMs by protocol</span><span class="es" lang="es">El PGM por SDI, los LSM por protocolo</span></b>
+      <p><span class="fr">Les entrées LSM arrivent par le protocole AMP ou par LinX. EKO reçoit alors le VITC, le pourcentage de vitesse et l'image via LinX.</span><span class="en" lang="en">LSM inputs arrive over the AMP protocol or LinX. EKO then receives the VITC, the speed percentage and the image via LinX.</span><span class="es" lang="es">Las entradas LSM llegan por el protocolo AMP o por LinX. EKO recibe entonces el VITC, el porcentaje de velocidad y la imagen vía LinX.</span></p>
     </div>
   </div>
   <div class="needs">
-    <div class="need"><span class="k">AUDIO</span><b><span class="fr">Tous les micros, en Dante</span><span class="en" lang="en">All microphones, over Dante</span></b><p><span class="fr">Sorties directes pré-fader sur des canaux Dante libres, avec un abonnement vers EKO.</span><span class="en" lang="en">Pre-fader direct outs on free Dante channels, subscribed to EKO.</span></p></div>
-    <div class="need"><span class="k">CONSOLE · IP</span><b><span class="fr">Une liaison IP avec la console</span><span class="en" lang="en">An IP link to the audio console</span></b><p><span class="fr">Pour recevoir la position des faders pendant le direct. C'est elle qui nourrit MIX FOLLOW.</span><span class="en" lang="en">To receive fader positions during the live action. This is what feeds MIX FOLLOW.</span></p></div>
-    <div class="need"><span class="k"><span class="fr">TEMPS</span><span class="en" lang="en">TIME</span></span><b><span class="fr">La synchro du car</span><span class="en" lang="en">The OB van reference</span></b><p><span class="fr">L'horloge interne d'EKO est mise à l'heure, puis verrouillée sur la synchro du car. Elle ne dérive pas. Le VITC du PGM n'est plus nécessaire.</span><span class="en" lang="en">EKO's internal clock is set to time of day, then locked to the van's reference. It does not drift. PGM VITC is no longer needed.</span></p></div>
-    <div class="need"><span class="k">TABLE</span><b><span class="fr">Entrées LSM → micros</span><span class="en" lang="en">LSM inputs → mics</span></b><p><span class="fr">La correspondance entre caméras et micros, mise à jour si elle change en cours de match.</span><span class="en" lang="en">The camera-to-mic mapping, updated if it changes during the match.</span></p></div>
-    <div class="need"><span class="k"><span class="fr">CONSOLE · CANAUX</span><span class="en" lang="en">CONSOLE · CHANNELS</span></span><b><span class="fr">Quatre canaux, plus les monitorings</span><span class="en" lang="en">Four channels, plus monitoring</span></b><p><span class="fr">EKO INT, CAM FOLLOW, le mode choisi et BOOST, plus de 1 à 6 monitorings opérateurs, tous sur la SDI de sortie. Les clips arrivent en plus, quand un opérateur LSM en envoie.</span><span class="en" lang="en">EKO INT, CAM FOLLOW, the selected mode and BOOST, plus 1 to 6 operator monitoring feeds, all on the output SDI. Clips come on top, whenever an LSM operator sends one.</span></p></div>
+    <div class="need"><span class="k">AUDIO</span><b><span class="fr">Tous les micros, en Dante</span><span class="en" lang="en">All microphones, over Dante</span><span class="es" lang="es">Todos los micros, en Dante</span></b><p><span class="fr">Sorties directes pré-fader sur des canaux Dante libres, avec un abonnement vers EKO.</span><span class="en" lang="en">Pre-fader direct outs on free Dante channels, subscribed to EKO.</span><span class="es" lang="es">Salidas directas pre-fader en canales Dante libres, con suscripción hacia EKO.</span></p></div>
+    <div class="need"><span class="k">CONSOLE · IP</span><b><span class="fr">Une liaison IP avec la console</span><span class="en" lang="en">An IP link to the audio console</span><span class="es" lang="es">Un enlace IP con la mesa de sonido</span></b><p><span class="fr">Pour recevoir la position des faders pendant le direct. C'est elle qui nourrit MIX FOLLOW.</span><span class="en" lang="en">To receive fader positions during the live action. This is what feeds MIX FOLLOW.</span><span class="es" lang="es">Para recibir la posición de los faders durante el directo. Es lo que alimenta MIX FOLLOW.</span></p></div>
+    <div class="need"><span class="k"><span class="fr">TEMPS</span><span class="en" lang="en">TIME</span><span class="es" lang="es">TIEMPO</span></span><b><span class="fr">La synchro du car</span><span class="en" lang="en">The OB van reference</span><span class="es" lang="es">La sincronía de la unidad móvil</span></b><p><span class="fr">L'horloge interne d'EKO est mise à l'heure, puis verrouillée sur la synchro du car. Elle ne dérive pas. Le VITC du PGM n'est plus nécessaire.</span><span class="en" lang="en">EKO's internal clock is set to time of day, then locked to the van's reference. It does not drift. PGM VITC is no longer needed.</span><span class="es" lang="es">El reloj interno de EKO se pone en hora y luego se enclava en la sincronía de la unidad móvil. No deriva. El VITC del PGM ya no es necesario.</span></p></div>
+    <div class="need"><span class="k">TABLE</span><b><span class="fr">Entrées LSM → micros</span><span class="en" lang="en">LSM inputs → mics</span><span class="es" lang="es">Entradas LSM → micros</span></b><p><span class="fr">La correspondance entre caméras et micros, mise à jour si elle change en cours de match.</span><span class="en" lang="en">The camera-to-mic mapping, updated if it changes during the match.</span><span class="es" lang="es">La correspondencia entre cámaras y micros, actualizada si cambia durante el partido.</span></p></div>
+    <div class="need"><span class="k"><span class="fr">CONSOLE · CANAUX</span><span class="en" lang="en">CONSOLE · CHANNELS</span><span class="es" lang="es">MESA · CANALES</span></span><b><span class="fr">Quatre canaux, plus les monitorings</span><span class="en" lang="en">Four channels, plus monitoring</span><span class="es" lang="es">Cuatro canales, más los monitorings</span></b><p><span class="fr">EKO INT, CAM FOLLOW, le mode choisi et BOOST, plus de 1 à 6 monitorings opérateurs, tous sur la SDI de sortie. Les clips arrivent en plus, quand un opérateur LSM en envoie.</span><span class="en" lang="en">EKO INT, CAM FOLLOW, the selected mode and BOOST, plus 1 to 6 operator monitoring feeds, all on the output SDI. Clips come on top, whenever an LSM operator sends one.</span><span class="es" lang="es">EKO INT, CAM FOLLOW, el modo elegido y BOOST, más de 1 a 6 monitorings de operadores, todos en la SDI de salida. Los clips llegan además, cuando un operador LSM envía uno.</span></p></div>
   </div>
 </section>
 
 <section id="sons">
-  <span class="eyebrow"><span class="fr">Les sons rendus au replay</span><span class="en" lang="en">Sounds delivered on replay</span></span>
-  <h2><span class="fr">Trois sons d'office, un mode au choix, des clips à la demande</span><span class="en" lang="en">Three sounds by default, one selectable mode, clips on demand</span></h2>
+  <span class="eyebrow"><span class="fr">Les sons rendus au replay</span><span class="en" lang="en">Sounds delivered on replay</span><span class="es" lang="es">Los sonidos entregados en la repetición</span></span>
+  <h2><span class="fr">Trois sons d'office, un mode au choix, des clips à la demande</span><span class="en" lang="en">Three sounds by default, one selectable mode, clips on demand</span><span class="es" lang="es">Tres sonidos por defecto, un modo a elegir, clips a demanda</span></h2>
   <div class="blocks">
     <div class="blk">
-      <div class="hd"><h3><span class="fr">D'office</span><span class="en" lang="en">By default</span></h3><span class="muted"><span class="fr">Rendus à chaque replay</span><span class="en" lang="en">Delivered on every replay</span></span></div>
+      <div class="hd"><h3><span class="fr">D'office</span><span class="en" lang="en">By default</span><span class="es" lang="es">Por defecto</span></h3><span class="muted"><span class="fr">Rendus à chaque replay</span><span class="en" lang="en">Delivered on every replay</span><span class="es" lang="es">Entregados en cada repetición</span></span></div>
       <div class="chips">
-        <div class="chip c-inter"><span class="lb">EKO INT</span><span class="tx"><span class="fr">Le son inter.</span><span class="en" lang="en">The international sound.</span></span></div>
-        <div class="chip c-cam"><span class="lb">CAM FOLLOW</span><span class="tx"><span class="fr">Le micro de la caméra rejouée.</span><span class="en" lang="en">The mic of the camera being replayed.</span></span></div>
-        <div class="chip c-boost"><span class="lb">BOOST</span><span class="tx"><span class="fr">À chaque changement de trajectoire du ballon détecté à l'image, un effet de frappe généré par l'IA. Taille et style varient à chaque fois : aucune répétition mécanique.</span><span class="en" lang="en">Each change in the ball's trajectory detected in the image triggers an AI-generated kick effect. Size and style vary every time: no mechanical repetition.</span></span></div>
+        <div class="chip c-inter"><span class="lb">EKO INT</span><span class="tx"><span class="fr">Le son inter.</span><span class="en" lang="en">The international sound.</span><span class="es" lang="es">El sonido internacional.</span></span></div>
+        <div class="chip c-cam"><span class="lb">CAM FOLLOW</span><span class="tx"><span class="fr">Le micro de la caméra rejouée.</span><span class="en" lang="en">The mic of the camera being replayed.</span><span class="es" lang="es">El micro de la cámara repetida.</span></span></div>
+        <div class="chip c-boost"><span class="lb">BOOST</span><span class="tx"><span class="fr">À chaque changement de trajectoire du ballon détecté à l'image, un effet de frappe généré par l'IA. Taille et style varient à chaque fois : aucune répétition mécanique.</span><span class="en" lang="en">Each change in the ball's trajectory detected in the image triggers an AI-generated kick effect. Size and style vary every time: no mechanical repetition.</span><span class="es" lang="es">Cada cambio de trayectoria del balón detectado en la imagen genera un efecto de golpe creado por la IA. Tamaño y estilo varían cada vez: ninguna repetición mecánica.</span></span></div>
       </div>
     </div>
     <div class="blk">
-      <div class="hd"><h3><span class="fr">Un mode au choix</span><span class="en" lang="en">One selectable mode</span></h3><span class="muted"><span class="fr">Un seul actif à la fois, choisi par l'opérateur</span><span class="en" lang="en">One active at a time, chosen by the operator</span></span></div>
+      <div class="hd"><h3><span class="fr">Un mode au choix</span><span class="en" lang="en">One selectable mode</span><span class="es" lang="es">Un modo a elegir</span></h3><span class="muted"><span class="fr">Un seul actif à la fois, choisi par l'opérateur</span><span class="en" lang="en">One active at a time, chosen by the operator</span><span class="es" lang="es">Uno solo activo a la vez, elegido por el operador</span></span></div>
       <div class="chips">
-        <div class="chip c-mode"><span class="lb">MIX FOLLOW</span><span class="tx"><span class="fr">Le micro retenu par l'ingénieur du son pendant le direct, rejoué légèrement en avance.</span><span class="en" lang="en">The mic the sound engineer used during the live action, played slightly ahead.</span></span></div>
-        <div class="or"><span class="fr">OU</span><span class="en" lang="en">OR</span></div>
-        <div class="chip c-mode"><span class="lb">BALL FOLLOW</span><span class="tx"><span class="fr">Les micros les plus proches du ballon, quand sa position nous parvient.</span><span class="en" lang="en">The mics closest to the ball, when its position is available.</span></span></div>
-        <div class="or"><span class="fr">OU</span><span class="en" lang="en">OR</span></div>
-        <div class="chip c-mode"><span class="lb">MIC SELECT</span><span class="tx"><span class="fr">Le micro choisi à la main : sur le plan, par numéro ou par preset.</span><span class="en" lang="en">A mic chosen by hand: on the plan, by number or by preset.</span></span></div>
+        <div class="chip c-mode"><span class="lb">MIX FOLLOW</span><span class="tx"><span class="fr">Le micro retenu par l'ingénieur du son pendant le direct, rejoué légèrement en avance.</span><span class="en" lang="en">The mic the sound engineer used during the live action, played slightly ahead.</span><span class="es" lang="es">El micro que eligió el técnico de sonido durante el directo, reproducido ligeramente adelantado.</span></span></div>
+        <div class="or"><span class="fr">OU</span><span class="en" lang="en">OR</span><span class="es" lang="es">O</span></div>
+        <div class="chip c-mode"><span class="lb">BALL FOLLOW</span><span class="tx"><span class="fr">Les micros les plus proches du ballon, quand sa position nous parvient.</span><span class="en" lang="en">The mics closest to the ball, when its position is available.</span><span class="es" lang="es">Los micros más cercanos al balón, cuando nos llega su posición.</span></span></div>
+        <div class="or"><span class="fr">OU</span><span class="en" lang="en">OR</span><span class="es" lang="es">O</span></div>
+        <div class="chip c-mode"><span class="lb">MIC SELECT</span><span class="tx"><span class="fr">Le micro choisi à la main : sur le plan, par numéro ou par preset.</span><span class="en" lang="en">A mic chosen by hand: on the plan, by number or by preset.</span><span class="es" lang="es">Un micro elegido a mano: en el plano, por número o por preset.</span></span></div>
       </div>
     </div>
     <div class="blk">
-      <div class="hd"><h3><span class="fr">À la demande</span><span class="en" lang="en">On demand</span></h3><span class="muted"><span class="fr">Envoyés par les opérateurs LSM</span><span class="en" lang="en">Sent by LSM operators</span></span></div>
+      <div class="hd"><h3><span class="fr">À la demande</span><span class="en" lang="en">On demand</span><span class="es" lang="es">A demanda</span></h3><span class="muted"><span class="fr">Envoyés par les opérateurs LSM</span><span class="en" lang="en">Sent by LSM operators</span><span class="es" lang="es">Enviados por los operadores LSM</span></span></div>
       <div class="chips">
-        <div class="chip c-clip"><span class="lb">EKO CLIP 1</span><span class="tx"><span class="fr">Une séquence micro choisie par un opérateur LSM.</span><span class="en" lang="en">A mic sequence chosen by an LSM operator.</span></span></div>
-        <div class="chip c-clip opt"><span class="lb">EKO CLIP 2–3</span><span class="tx"><span class="fr">En option.</span><span class="en" lang="en">Optional.</span></span></div>
+        <div class="chip c-clip"><span class="lb">EKO CLIP 1</span><span class="tx"><span class="fr">Une séquence micro choisie par un opérateur LSM.</span><span class="en" lang="en">A mic sequence chosen by an LSM operator.</span><span class="es" lang="es">Una secuencia de micro elegida por un operador LSM.</span></span></div>
+        <div class="chip c-clip opt"><span class="lb">EKO CLIP 2–3</span><span class="tx"><span class="fr">En option.</span><span class="en" lang="en">Optional.</span><span class="es" lang="es">Opcional.</span></span></div>
       </div>
     </div>
   </div>
-  <p class="decide"><span class="fr">Le mode ne se fixe pas pour un match. L'opérateur le choisit replay par replay, avant ou pendant le ralenti, depuis l'écran tactile du service web ou depuis un clavier à touches-écrans.</span><span class="en" lang="en">The mode is not set per match. The operator picks it replay by replay, before or during the slow motion, from the web service's touch screen or from an LCD-key keypad.</span></p>
-  <p class="muted"><span class="fr">Trois sons continus : EKO INT, CAM FOLLOW et BOOST. S'y ajoute un mode exclusif (MIX FOLLOW, BALL FOLLOW ou MIC SELECT), et en complément jusqu'à trois EKO CLIP envoyés par les LSM sur un même timecode.</span><span class="en" lang="en">Three continuous sounds: EKO INT, CAM FOLLOW and BOOST. One exclusive mode is added (MIX FOLLOW, BALL FOLLOW or MIC SELECT), plus up to three EKO CLIPs sent by the LSMs on the same timecode.</span></p>
+  <p class="decide"><span class="fr">Le mode ne se fixe pas pour un match. L'opérateur le choisit replay par replay, avant ou pendant le ralenti, depuis l'écran tactile du service web ou depuis un clavier à touches-écrans.</span><span class="en" lang="en">The mode is not set per match. The operator picks it replay by replay, before or during the slow motion, from the web service's touch screen or from an LCD-key keypad.</span><span class="es" lang="es">El modo no se fija para un partido. El operador lo elige repetición a repetición, antes o durante la cámara lenta, desde la pantalla táctil del servicio web o desde un teclado de teclas-pantalla.</span></p>
+  <p class="muted"><span class="fr">Trois sons continus : EKO INT, CAM FOLLOW et BOOST. S'y ajoute un mode exclusif (MIX FOLLOW, BALL FOLLOW ou MIC SELECT), et en complément jusqu'à trois EKO CLIP envoyés par les LSM sur un même timecode.</span><span class="en" lang="en">Three continuous sounds: EKO INT, CAM FOLLOW and BOOST. One exclusive mode is added (MIX FOLLOW, BALL FOLLOW or MIC SELECT), plus up to three EKO CLIPs sent by the LSMs on the same timecode.</span><span class="es" lang="es">Tres sonidos continuos: EKO INT, CAM FOLLOW y BOOST. Se añade un modo exclusivo (MIX FOLLOW, BALL FOLLOW o MIC SELECT) y, como complemento, hasta tres EKO CLIP enviados por los LSM sobre un mismo timecode.</span></p>
 </section>
 
 <section id="follow">
   <span class="eyebrow">Video Follow</span>
-  <h2><span class="fr">Retrouver l'image à l'antenne, et son micro</span><span class="en" lang="en">Finding the on-air image, and its mic</span></h2>
-  <p class="lead"><span class="fr">EKO compare en continu le PGM aux sorties des LSM. Aucun tally n'est requis. La méthode tient aussi quand une cascade de mélangeurs (ME replay en amont du ME final) empêche de déduire le LSM de l'entrée de la table.</span><span class="en" lang="en">EKO continuously compares the PGM with the LSM outputs. No tally is required. The method also holds when cascaded switchers (a replay ME upstream of the final ME) make it impossible to infer the LSM from the switcher input.</span></p>
+  <h2><span class="fr">Retrouver l'image à l'antenne, et son micro</span><span class="en" lang="en">Finding the on-air image, and its mic</span><span class="es" lang="es">Encontrar la imagen en antena, y su micro</span></h2>
+  <p class="lead"><span class="fr">EKO compare en continu le PGM aux sorties des LSM. Aucun tally n'est requis. La méthode tient aussi quand une cascade de mélangeurs (ME replay en amont du ME final) empêche de déduire le LSM de l'entrée de la table.</span><span class="en" lang="en">EKO continuously compares the PGM with the LSM outputs. No tally is required. The method also holds when cascaded switchers (a replay ME upstream of the final ME) make it impossible to infer the LSM from the switcher input.</span><span class="es" lang="es">EKO compara continuamente el PGM con las salidas de los LSM. No hace falta tally. El método funciona también cuando una cascada de mezcladores (un ME de repetición antes del ME final) impide deducir el LSM a partir de la entrada del mezclador.</span></p>
   <figure>
     <div class="fig">
       <svg class="vf" id="vf" viewBox="0 0 900 330" role="img" aria-label="Le PGM est comparé aux trois sorties LSM ; le LSM 2 correspond ; son VITC et l'OCR de son monitoring donnent la caméra C ; la table donne les micros 10 et 7 ; EKO rend CAM FOLLOW.">
@@ -398,7 +417,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
           <line class="cmp" x1="172" y1="150" x2="296" y2="58"/>
           <line class="cmp stage s1" id="cmp2" x1="172" y1="158" x2="296" y2="160"/>
           <line class="cmp" x1="172" y1="166" x2="296" y2="262"/>
-          <text x="232" y="128" text-anchor="middle" class="tm"><tspan class="fr">signatures</tspan><tspan class="en">signatures</tspan></text>
+          <text x="232" y="128" text-anchor="middle" class="tm"><tspan class="fr">signatures</tspan><tspan class="en">signatures</tspan><tspan class="es">firmas</tspan></text>
         </g>
         <!-- VITC + OCR -->
         <g class="stage s2">
@@ -414,7 +433,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
         <!-- table -->
         <g class="stage s3">
           <rect class="bx" x="700" y="96" width="180" height="112" rx="4"/>
-          <text x="712" y="114" class="tm tmono"><tspan class="fr">ENTRÉE LSM → MICROS</tspan><tspan class="en">LSM INPUT → MICS</tspan></text>
+          <text x="712" y="114" class="tm tmono"><tspan class="fr">ENTRÉE LSM → MICROS</tspan><tspan class="en">LSM INPUT → MICS</tspan><tspan class="es">ENTRADA LSM → MICROS</tspan></text>
           <text x="712" y="136" class="tmono tm">A → 6 · 9</text>
           <text x="712" y="154" class="tmono tm">B → 5 · 8</text>
           <rect x="706" y="160" width="168" height="20" rx="2" fill="color-mix(in srgb,var(--cam) 18%,var(--surface))"/>
@@ -426,31 +445,83 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
         <g class="stage s4">
           <rect x="700" y="240" width="180" height="44" rx="4" fill="color-mix(in srgb,var(--cam) 16%,var(--surface))" stroke="var(--cam)" stroke-width="1.6"/>
           <text x="712" y="258" class="tmono tb" fill="var(--cam)" style="fill:var(--cam)">CAM FOLLOW</text>
-          <text x="712" y="275" class="tmono"><tspan class="fr">micros 7 · 10 · 21:14:07:12</tspan><tspan class="en">mics 7 · 10 · 21:14:07:12</tspan></text>
+          <text x="712" y="275" class="tmono"><tspan class="fr">micros 7 · 10 · 21:14:07:12</tspan><tspan class="en">mics 7 · 10 · 21:14:07:12</tspan><tspan class="es">micros 7 · 10 · 21:14:07:12</tspan></text>
           <line class="ln" x1="790" y1="210" x2="790" y2="236" marker-end="url(#ar)"/>
         </g>
       </svg>
     </div>
-    <div class="steps"><div><span>1</span><span class="fr">Comparaison PGM ↔ sorties LSM</span><span class="en" lang="en">PGM ↔ LSM outputs comparison</span></div><div><span>2</span><span class="fr">VITC du LSM trouvé, entrée lue par OCR</span><span class="en" lang="en">LSM VITC found, input read by OCR</span></div><div><span>3</span><span class="fr">Table entrée → micros</span><span class="en" lang="en">Input → mics table</span></div><div><span>4</span><span class="fr">EKO rend le son de cette image</span><span class="en" lang="en">EKO delivers this image's sound</span></div></div>
-    <figcaption><span class="fr">Deux limites connues : un effet DVE qui déforme trop l'image, et un réglage du LSM qui déplace l'incrustation du monitoring. Le système reste robuste, mais peut demander une retouche.</span><span class="en" lang="en">Two known limits: a DVE effect that distorts the image too much, and an LSM setting that moves the monitoring overlay. The system remains robust but may occasionally need a touch-up.</span></figcaption>
+    <div class="steps"><div><span>1</span><span class="fr">Comparaison PGM ↔ sorties LSM</span><span class="en" lang="en">PGM ↔ LSM outputs comparison</span><span class="es" lang="es">Comparación PGM ↔ salidas LSM</span></div><div><span>2</span><span class="fr">VITC du LSM trouvé, entrée lue par OCR</span><span class="en" lang="en">LSM VITC found, input read by OCR</span><span class="es" lang="es">VITC del LSM encontrado, entrada leída por OCR</span></div><div><span>3</span><span class="fr">Table entrée → micros</span><span class="en" lang="en">Input → mics table</span><span class="es" lang="es">Tabla entrada → micros</span></div><div><span>4</span><span class="fr">EKO rend le son de cette image</span><span class="en" lang="en">EKO delivers this image's sound</span><span class="es" lang="es">EKO entrega el sonido de esta imagen</span></div></div>
+    <figcaption><span class="fr">Deux limites connues : un effet DVE qui déforme trop l'image, et un réglage du LSM qui déplace l'incrustation du monitoring. Le système reste robuste, mais peut demander une retouche.</span><span class="en" lang="en">Two known limits: a DVE effect that distorts the image too much, and an LSM setting that moves the monitoring overlay. The system remains robust but may occasionally need a touch-up.</span><span class="es" lang="es">Dos límites conocidos: un efecto DVE que deforma demasiado la imagen, y un ajuste del LSM que desplaza la incrustación del monitoring. El sistema sigue siendo robusto, pero puede requerir un retoque.</span></figcaption>
   </figure>
 </section>
 
+<section id="mixage">
+  <span class="eyebrow"><span class="fr">Pour les ingénieurs du son</span><span class="en" lang="en">For sound engineers</span><span class="es" lang="es">Para los técnicos de sonido</span></span>
+  <h2><span class="fr">Le mixage EKO en direct : automatique ou manuel</span><span class="en" lang="en">Live EKO mixing: automatic or manual</span><span class="es" lang="es">La mezcla EKO en directo: automática o manual</span></h2>
+  <div class="mxintro">
+    <p><b><span class="fr">Le constat.</span><span class="en" lang="en">The starting point.</span><span class="es" lang="es">El punto de partida.</span></b> <span class="fr">Aujourd'hui, en playlist comme sur un TAKE, le son du LSM n'est ouvert qu'à vitesse 100 %. En ralenti, il est coupé d'office, pour ne pas envoyer à la régie son un son déformé qui s'interrompt à chaque pause ou à vitesse 0 %. C'est l'ingénieur du son qui doit alors reconstruire l'ambiance lui-même, au jugé.</span><span class="en" lang="en">Today, in a playlist as on a TAKE, LSM audio is only open at 100 % speed. In slow motion it is muted by default, so as not to send the sound control room distorted audio that cuts out at every pause or at 0 % speed. The sound engineer then has to rebuild the atmosphere alone, by ear.</span><span class="es" lang="es">Hoy, tanto en playlist como en un TAKE, el sonido del LSM solo se abre a velocidad 100 %. En cámara lenta se corta de oficio, para no enviar al control de sonido un audio deformado que se interrumpe en cada pausa o a velocidad 0 %. Es entonces el técnico de sonido quien tiene que reconstruir el ambiente por su cuenta, a ojo.</span></p>
+    <p><b><span class="fr">Ce qu'apporte EKO.</span><span class="en" lang="en">What EKO brings.</span><span class="es" lang="es">Lo que aporta EKO.</span></b> <span class="fr">Grâce à PGM Follow, EKO fait ses fondus en même temps que le LSM, en regardant l'image à l'antenne. Nous ne nous fions pas à l'écran de monitoring du LSM : le timecode du clip suivant qui s'y affiche est parfois décalé de plusieurs frames, de façon aléatoire, à cause du rafraîchissement de l'écran. En ralenti, où la synchronisation est critique, ce n'est pas exploitable. L'image à l'antenne est la seule garantie de ne pas se tromper.</span><span class="en" lang="en">With PGM Follow, EKO makes its fades at the same time as the LSM, by watching the on-air image. We do not rely on the LSM monitoring screen: the next clip's timecode it displays is sometimes several frames off, at random, because of the screen refresh. In slow motion, where sync is critical, that is not usable. The on-air image is the only guarantee of getting it right.</span><span class="es" lang="es">Gracias a PGM Follow, EKO hace sus fundidos al mismo tiempo que el LSM, mirando la imagen en antena. No nos fiamos de la pantalla de monitoring del LSM: el timecode del clip siguiente que muestra a veces llega con varios frames de retraso, de forma aleatoria, por el refresco de la pantalla. En cámara lenta, donde la sincronía es crítica, eso no es aprovechable. La imagen en antena es la única garantía de no equivocarse.</span></p>
+    <p><b><span class="fr">Deux façons de travailler que nous vous proposons</span><span class="en" lang="en">Two ways of working that we propose</span><span class="es" lang="es">Dos formas de trabajar que les proponemos</span></b><span class="fr">, au choix de l'ingénieur du son :</span><span class="en" lang="en">, at the sound engineer's choice:</span><span class="es" lang="es">, a elección del técnico de sonido:</span></p>
+    <ul>
+      <li><b><span class="fr">Manuel, A/B Flip-Flop</span><span class="en" lang="en">Manual, A/B Flip-Flop</span><span class="es" lang="es">Manual, A/B Flip-Flop</span></b> : <span class="fr">EKO envoie A sur une tranche et B sur l'autre. Vous faites les fondus aux faders.</span><span class="en" lang="en">EKO sends A to one channel and B to the other. You make the fades on the faders.</span><span class="es" lang="es">EKO envía A a un canal y B a otro. Ustedes hacen los fundidos con los faders.</span></li>
+      <li><b><span class="fr">Automatique, Auto Mix</span><span class="en" lang="en">Automatic, Auto Mix</span><span class="es" lang="es">Automático, Auto Mix</span></b> : <span class="fr">EKO enchaîne lui-même les fondus. Un fader reste disponible pour reprendre la main à tout moment.</span><span class="en" lang="en">EKO runs the fades itself. A fader stays available to take back control at any time.</span><span class="es" lang="es">EKO encadena él mismo los fundidos. Un fader queda disponible para retomar el control en cualquier momento.</span></li>
+    </ul>
+    <p><b><span class="fr">L'apport du mélangeur image.</span><span class="en" lang="en">What the vision mixer adds.</span><span class="es" lang="es">Lo que aporta el mezclador de vídeo.</span></b> <span class="fr">Si EKO lit la barre PGM et la barre Preview, il connaît la prochaine source avant le fondu et peut la préparer. Sinon, il la découvre seulement au moment où l'image change. Cela donne les quatre schémas qui suivent.</span><span class="en" lang="en">If EKO reads the PGM bar and the Preview bar, it knows the next source before the fade and can prepare it. Otherwise it only discovers it when the image changes. This gives the four diagrams below.</span><span class="es" lang="es">Si EKO lee la barra PGM y la barra Preview, conoce la fuente siguiente antes del fundido y puede prepararla. Si no, solo la descubre en el momento en que cambia la imagen. De ahí salen los cuatro esquemas que siguen.</span></p>
+    <p class="decide"><b><span class="fr">Votre avis d'abord.</span><span class="en" lang="en">Your opinion first.</span><span class="es" lang="es">Primero, su opinión.</span></b> <span class="fr">Vous vivez ces transitions tous les jours. Avant de figer quoi que ce soit, on voudrait savoir si notre lecture vous paraît juste, et trouver ensemble la formule la plus simple à mettre en place et à maîtriser en direct. À vos critiques, remarques et inventions.</span><span class="en" lang="en">You live these transitions every day. Before freezing anything, we would like to know whether our reading seems right to you, and find together the simplest formula to set up and master live. Over to you for criticism, remarks and inventions.</span><span class="es" lang="es">Ustedes viven estas transiciones a diario. Antes de cerrar nada, queremos saber si nuestra lectura les parece correcta, y encontrar juntos la fórmula más sencilla de poner en marcha y de dominar en directo. Esperamos sus críticas, comentarios e inventos.</span></p>
+  </div>
+  <div class="mxgrid"><figure class="mxf"><svg viewBox="0 0 680 372" role="img" aria-label="A/B Flip-Flop · with Preview">
+<defs><clipPath id="mxc1"><rect x="0" y="0" height="372" width="80"><animate attributeName="width" values="80;640;640" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/></rect></clipPath></defs>
+<text x="20" y="24" class="mxt">A/B Flip-Flop · with Preview</text>
+<rect x="300" y="50" width="130" height="240" class="band"/><text x="365" y="44" text-anchor="middle">Image fade</text>
+<line x1="80" y1="290" x2="630" y2="290" class="ax"/><line x1="80" y1="56" x2="80" y2="290" class="ax"/>
+<line x1="170" y1="290" x2="170" y2="118" class="mk"/><text x="170" y="310" text-anchor="middle">LSM 2 in Preview</text><line x1="250" y1="290" x2="250" y2="118" class="mk"/><text x="250" y="330" text-anchor="middle">1 s before the fade</text><g clip-path="url(#mxc1)"><path d="M80 110 L250 110" fill="none" stroke="#D85A30" stroke-width="3.5" stroke-linecap="round"/><path d="M250 110 C290 120 330 190 380 245 C395 258 405 262 415 262 L540 262 C555 263 565 280 575 288" fill="none" stroke="#D85A30" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="8 6"/><path d="M250 288 C290 270 330 200 380 165 C400 152 420 150 450 150 L630 150" fill="none" stroke="#1D9E75" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="8 6"/></g><text x="95" y="98">RAL 1 · LSM 1</text><text x="470" y="138">RAL 2 · LSM 2</text><text x="478" y="250" text-anchor="middle">A trickle · 3 s</text><line x1="80" y1="56" x2="80" y2="290" class="cur"><animate attributeName="x1" values="80;630;630" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/><animate attributeName="x2" values="80;630;630" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/></line><line x1="90" y1="351" x2="116" y2="351" stroke="#D85A30" stroke-width="3.5"/><text x="124" y="356">RAL 1 (A)</text><line x1="240" y1="351" x2="266" y2="351" stroke="#1D9E75" stroke-width="3.5" stroke-dasharray="8 6"/><text x="274" y="356">RAL 2 (B)</text><line x1="390" y1="351" x2="416" y2="351" stroke="var(--muted)" stroke-width="3.5" stroke-dasharray="8 6"/><text x="424" y="356">manual, free</text></svg><figcaption><span class="fr">Le mélangeur est en manuel : vous êtes libre du début à la fin. B peut monter dès 1 s avant le fondu, A baisse à votre rythme, et un filet de A peut durer 3 s avant fermeture.</span><span class="en" lang="en">The switcher is under manual control: you are free from start to finish. B can rise from 1 s before the fade, A comes down at your pace, and a trickle of A can last 3 s before closing.</span><span class="es" lang="es">El mezclador está en manual: ustedes son libres de principio a fin. B puede subir desde 1 s antes del fundido, A baja a su ritmo, y un hilo de A puede durar 3 s antes de cerrar.</span></figcaption></figure><figure class="mxf"><svg viewBox="0 0 680 372" role="img" aria-label="A/B Flip-Flop · without Preview">
+<defs><clipPath id="mxc2"><rect x="0" y="0" height="372" width="80"><animate attributeName="width" values="80;640;640" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/></rect></clipPath></defs>
+<text x="20" y="24" class="mxt">A/B Flip-Flop · without Preview</text>
+<rect x="300" y="50" width="130" height="240" class="band"/><text x="365" y="44" text-anchor="middle">Image fade</text>
+<line x1="80" y1="290" x2="630" y2="290" class="ax"/><line x1="80" y1="56" x2="80" y2="290" class="ax"/>
+<line x1="350" y1="290" x2="350" y2="118" class="mk"/><text x="350" y="310" text-anchor="middle">Image detected</text><rect x="250" y="62" width="100" height="228" class="nob"/><text x="300" y="196" text-anchor="middle">B not</text><text x="300" y="214" text-anchor="middle">available</text><g clip-path="url(#mxc2)"><path d="M80 110 L350 110" fill="none" stroke="#D85A30" stroke-width="3.5" stroke-linecap="round"/><path d="M350 110 C375 120 390 190 410 240 C420 258 430 262 440 262 L560 262 C575 263 585 280 595 288" fill="none" stroke="#D85A30" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="8 6"/><path d="M350 288 C370 282 390 220 410 180 C425 156 440 150 470 150 L630 150" fill="none" stroke="#1D9E75" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="8 6"/></g><text x="95" y="98">RAL 1 · LSM 1</text><text x="480" y="138">RAL 2 · LSM 2</text><text x="500" y="250" text-anchor="middle">A trickle · 3 s</text><line x1="80" y1="56" x2="80" y2="290" class="cur"><animate attributeName="x1" values="80;630;630" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/><animate attributeName="x2" values="80;630;630" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/></line><line x1="90" y1="351" x2="116" y2="351" stroke="#D85A30" stroke-width="3.5"/><text x="124" y="356">RAL 1 (A)</text><line x1="240" y1="351" x2="266" y2="351" stroke="#1D9E75" stroke-width="3.5" stroke-dasharray="8 6"/><text x="274" y="356">RAL 2 (B)</text><line x1="390" y1="351" x2="416" y2="351" stroke="var(--muted)" stroke-width="3.5" stroke-dasharray="8 6"/><text x="424" y="356">manual, free</text></svg><figcaption><span class="fr">B n'est disponible qu'une fois l'image détectée : pas d'anticipation possible. La fin reste libre, filet de A compris.</span><span class="en" lang="en">B is only available once the image is detected: no anticipation possible. The end stays free, trickle of A included.</span><span class="es" lang="es">B solo está disponible una vez detectada la imagen: no es posible anticipar. El final sigue libre, hilo de A incluido.</span></figcaption></figure><figure class="mxf"><svg viewBox="0 0 680 372" role="img" aria-label="Auto Mix · with Preview">
+<defs><clipPath id="mxc3"><rect x="0" y="0" height="372" width="80"><animate attributeName="width" values="80;640;640" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/></rect></clipPath></defs>
+<text x="20" y="24" class="mxt">Auto Mix · with Preview</text>
+<rect x="300" y="50" width="130" height="240" class="band"/><text x="365" y="44" text-anchor="middle">Image fade</text>
+<line x1="80" y1="290" x2="630" y2="290" class="ax"/><line x1="80" y1="56" x2="80" y2="290" class="ax"/>
+<line x1="170" y1="290" x2="170" y2="118" class="mk"/><text x="170" y="310" text-anchor="middle">LSM 2 in Preview</text><line x1="340" y1="290" x2="340" y2="118" class="mk"/><text x="340" y="330" text-anchor="middle">Image detected</text><g clip-path="url(#mxc3)"><path d="M80 110 L340 110 C355 112 365 150 380 190 C395 230 410 258 425 262 L520 262 C535 264 545 282 555 288" fill="none" stroke="#D85A30" stroke-width="3.5" stroke-linecap="round"/><path d="M340 288 C350 280 360 240 372 225 L395 222 C410 200 420 160 440 150 L630 150" fill="none" stroke="#1D9E75" stroke-width="3.5" stroke-linecap="round"/><path d="M230 288 C250 284 270 250 300 236 C315 230 325 228 372 225" fill="none" stroke="#7F77DD" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 6"/><path d="M372 225 C380 240 388 280 400 288 L470 288 C485 286 500 240 530 205 L630 205" fill="none" stroke="#7F77DD" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 6"/><circle cx="372" cy="225" r="6" fill="none" stroke="var(--ink)" stroke-width="1.5"/></g><text x="95" y="98">A · LSM 1 on air</text><text x="460" y="138">B · LSM 2, EKO level</text><text x="246" y="226" text-anchor="end">RAL 2 pushed</text><text x="364" y="206" text-anchor="end">EKO takes over</text><text x="435" y="310" text-anchor="middle">RAL 2 → 0 · 3 s</text><text x="545" y="194">new Preview</text><line x1="80" y1="56" x2="80" y2="290" class="cur"><animate attributeName="x1" values="80;630;630" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/><animate attributeName="x2" values="80;630;630" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/></line><line x1="90" y1="351" x2="116" y2="351" stroke="#D85A30" stroke-width="3.5"/><text x="124" y="356">A · EKO</text><line x1="220" y1="351" x2="246" y2="351" stroke="#1D9E75" stroke-width="3.5"/><text x="254" y="356">B · EKO</text><line x1="350" y1="351" x2="376" y2="351" stroke="#7F77DD" stroke-width="3.5" stroke-dasharray="8 6"/><text x="384" y="356">RAL 2 (optional)</text></svg><figcaption><span class="fr">EKO connaît B dès la barre Preview et enchaîne seul : A baisse d'abord, B monte, puis B à son niveau ; un filet de A reste 2 à 3 s. Pousser RAL 2 appelle le mix plus tôt : EKO reprend quand son niveau rejoint RAL 2, qui retombe à zéro puis revient 3 s après avec le nouveau preview.</span><span class="en" lang="en">EKO knows B from the Preview bar and runs the mix itself: A comes down first, B rises, then B reaches its level; a trickle of A stays 2 to 3 s. Pushing RAL 2 calls the mix earlier: EKO takes over when its level meets RAL 2, which drops to zero and comes back 3 s later with the new preview.</span><span class="es" lang="es">EKO conoce B desde la barra Preview y encadena solo: A baja primero, B sube y luego alcanza su nivel; un hilo de A queda 2 a 3 s. Subir RAL 2 adelanta la mezcla: EKO retoma cuando su nivel alcanza RAL 2, que cae a cero y vuelve 3 s después con el nuevo preview.</span></figcaption></figure><figure class="mxf"><svg viewBox="0 0 680 372" role="img" aria-label="Auto Mix · without Preview">
+<defs><clipPath id="mxc4"><rect x="0" y="0" height="372" width="80"><animate attributeName="width" values="80;640;640" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/></rect></clipPath></defs>
+<text x="20" y="24" class="mxt">Auto Mix · without Preview</text>
+<rect x="300" y="50" width="130" height="240" class="band"/><text x="365" y="44" text-anchor="middle">Image fade</text>
+<line x1="80" y1="290" x2="630" y2="290" class="ax"/><line x1="80" y1="56" x2="80" y2="290" class="ax"/>
+<line x1="350" y1="290" x2="350" y2="118" class="mk"/><text x="350" y="310" text-anchor="middle">Image detected</text><g clip-path="url(#mxc4)"><path d="M80 110 L350 110 C365 112 375 160 390 200 C402 235 415 258 430 262 L530 262 C545 264 555 282 565 288" fill="none" stroke="#D85A30" stroke-width="3.5" stroke-linecap="round"/><path d="M370 288 C385 280 395 225 410 195 C422 165 435 152 455 150 L630 150" fill="none" stroke="#1D9E75" stroke-width="3.5" stroke-linecap="round"/></g><line x1="352" y1="276" x2="368" y2="276" class="ax"/><text x="345" y="272" text-anchor="end">identification</text><text x="95" y="98">A · LSM 1 on air</text><text x="470" y="138">B · LSM 2, EKO level</text><text x="485" y="250" text-anchor="middle">A trickle · 2–3 s</text><line x1="80" y1="56" x2="80" y2="290" class="cur"><animate attributeName="x1" values="80;630;630" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/><animate attributeName="x2" values="80;630;630" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;1;0" keyTimes="0;0.8;1" dur="10s" repeatCount="indefinite"/></line><line x1="90" y1="351" x2="116" y2="351" stroke="#D85A30" stroke-width="3.5"/><text x="124" y="356">A · EKO</text><line x1="220" y1="351" x2="246" y2="351" stroke="#1D9E75" stroke-width="3.5"/><text x="254" y="356">B · EKO</text></svg><figcaption><span class="fr">EKO découvre B à la détection de l'image, entre 20 et 50 % du fondu : montée plus tardive et plus courte. Pas d'appel anticipé par RAL 2, faute de son de preview.</span><span class="en" lang="en">EKO discovers B when the image is detected, between 20 and 50 % of the fade: a later, shorter rise. No early call through RAL 2, as there is no preview sound.</span><span class="es" lang="es">EKO descubre B al detectar la imagen, entre el 20 y el 50 % del fundido: subida más tardía y más corta. No hay llamada anticipada por RAL 2, al no haber sonido de preview.</span></figcaption></figure></div>
+  <div class="mxrules">
+    <h3><span class="fr">Règles communes</span><span class="en" lang="en">Common rules</span><span class="es" lang="es">Reglas comunes</span></h3>
+    <ul>
+      <li><span class="fr">EKO ne détecte jamais un changement avant le début de l'effet image.</span><span class="en" lang="en">EKO never detects a change before the image effect starts.</span><span class="es" lang="es">EKO nunca detecta un cambio antes del inicio del efecto de imagen.</span></li>
+      <li><span class="fr">La détection tombe entre 20 et 50 % du fondu, selon le logo ou le volet du replay.</span><span class="en" lang="en">Detection falls between 20 and 50 % of the fade, depending on the replay logo or wipe.</span><span class="es" lang="es">La detección cae entre el 20 y el 50 % del fundido, según el logo o la cortinilla de la repetición.</span></li>
+      <li><span class="fr">La sortie sortante reste ouverte 2 à 3 s : EKO ne coupe jamais un son brutalement.</span><span class="en" lang="en">The outgoing output stays open 2 to 3 s: EKO never cuts a sound abruptly.</span><span class="es" lang="es">La salida saliente queda abierta 2 a 3 s: EKO nunca corta un sonido de golpe.</span></li>
+      <li><span class="fr">Les automatismes du mélangeur (barre Preview qui s'efface, noir) sont ignorés.</span><span class="en" lang="en">Switcher automations (Preview bar clearing, black) are ignored.</span><span class="es" lang="es">Los automatismos del mezclador (barra Preview que se borra, negro) se ignoran.</span></li>
+    </ul>
+    <h3><span class="fr">Questions ouvertes</span><span class="en" lang="en">Open questions</span><span class="es" lang="es">Preguntas abiertas</span></h3>
+    <ul>
+      <li><span class="fr">Deux faders ou trois ?</span><span class="en" lang="en">Two faders or three?</span><span class="es" lang="es">¿Dos faders o tres?</span></li>
+      <li><span class="fr">Durée du filet de A : fixe, ou réglable par vous ?</span><span class="en" lang="en">Length of the A trickle: fixed, or set by you?</span><span class="es" lang="es">Duración del hilo de A: ¿fija o ajustable por ustedes?</span></li>
+      <li><span class="fr">Les noms des modes vous parlent-ils ?</span><span class="en" lang="en">Do the mode names make sense to you?</span><span class="es" lang="es">¿Les resultan claros los nombres de los modos?</span></li>
+    </ul>
+  </div>
+</section>
+
 <section id="console">
-  <span class="eyebrow"><span class="fr">Service web · écran tactile</span><span class="en" lang="en">Web service · touch screen</span></span>
-  <h2><span class="fr">La console de l'opérateur</span><span class="en" lang="en">The operator console</span></h2>
-  <p class="lead"><span class="fr">Toutes les pistes restent visibles. La piste du mode choisi passe en surbrillance ; les autres restent affichées en retrait. Un œil masque ou réaffiche une piste. Maquette interactive : choisissez un mode, touchez un micro, un preset ou tapez un numéro.</span><span class="en" lang="en">All tracks stay visible. The selected mode's track is highlighted; the others stay dimmed. An eye icon hides or shows a track. Interactive mock-up: choose a mode, tap a mic or a preset, or type a number.</span></p>
+  <span class="eyebrow"><span class="fr">Service web · écran tactile</span><span class="en" lang="en">Web service · touch screen</span><span class="es" lang="es">Servicio web · pantalla táctil</span></span>
+  <h2><span class="fr">La console de l'opérateur</span><span class="en" lang="en">The operator console</span><span class="es" lang="es">La consola del operador</span></h2>
+  <p class="lead"><span class="fr">Toutes les pistes restent visibles. La piste du mode choisi passe en surbrillance ; les autres restent affichées en retrait. Un œil masque ou réaffiche une piste. Maquette interactive : choisissez un mode, touchez un micro, un preset ou tapez un numéro.</span><span class="en" lang="en">All tracks stay visible. The selected mode's track is highlighted; the others stay dimmed. An eye icon hides or shows a track. Interactive mock-up: choose a mode, tap a mic or a preset, or type a number.</span><span class="es" lang="es">Todas las pistas quedan visibles. La pista del modo elegido se resalta; las demás quedan atenuadas. Un ojo oculta o vuelve a mostrar una pista. Maqueta interactiva: elijan un modo, toquen un micro, un preset o tecleen un número.</span></p>
 
   <div class="app" id="app">
     <div class="app-bar">
       <span class="brand"><i>EKO</i> · Replay audio</span>
-      <span class="live"><span class="fr">À L'ANTENNE</span><span class="en" lang="en">ON AIR</span> · LSM 2 · <b id="airCam">CAM 1</b></span>
-      <span class="viewsw seg" role="group" aria-label="Vue"><button type="button" id="vFull" aria-pressed="true"><span class="fr">Vue complète</span><span class="en" lang="en">Full view</span></button><button type="button" id="vTracks" aria-pressed="false"><span class="fr">Pistes seules</span><span class="en" lang="en">Tracks only</span></button></span>
+      <span class="live"><span class="fr">À L'ANTENNE</span><span class="en" lang="en">ON AIR</span><span class="es" lang="es">EN ANTENA</span> · LSM 2 · <b id="airCam">CAM 1</b></span>
+      <span class="viewsw seg" role="group" aria-label="Vue"><button type="button" id="vFull" aria-pressed="true"><span class="fr">Vue complète</span><span class="en" lang="en">Full view</span><span class="es" lang="es">Vista completa</span></button><button type="button" id="vTracks" aria-pressed="false"><span class="fr">Pistes seules</span><span class="en" lang="en">Tracks only</span><span class="es" lang="es">Solo pistas</span></button></span>
       <span class="tc" id="tc">21:14:07:12</span>
     </div>
     <div class="app-main">
       <div class="panel">
-        <div class="panel-hd"><span><span class="fr">Implantation</span><span class="en" lang="en">Layout</span></span>
+        <div class="panel-hd"><span><span class="fr">Implantation</span><span class="en" lang="en">Layout</span><span class="es" lang="es">Disposición</span></span>
           <span class="seg" role="group" aria-label="Vue"><button type="button" id="vPlan" aria-pressed="true">Plan</button><button type="button" id="vPre" aria-pressed="false">Presets</button></span>
         </div>
         <svg id="pitch" viewBox="0 0 560 398" role="img" aria-label="Plan du stade avec caméras et micros">
@@ -471,33 +542,33 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
         </div>
       </div>
       <div class="panel">
-        <div class="panel-hd"><span><span class="fr">Mode du replay</span><span class="en" lang="en">Replay mode</span></span><span><span class="fr">un seul actif</span><span class="en" lang="en">one active</span></span></div>
+        <div class="panel-hd"><span><span class="fr">Mode du replay</span><span class="en" lang="en">Replay mode</span><span class="es" lang="es">Modo de repetición</span></span><span><span class="fr">un seul actif</span><span class="en" lang="en">one active</span><span class="es" lang="es">uno activo</span></span></div>
         <div class="modes" role="group" aria-label="Mode">
           <button type="button" data-mode="mix" aria-pressed="false"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="3" x2="6" y2="23"/><line x1="13" y1="3" x2="13" y2="23"/><line x1="20" y1="3" x2="20" y2="23"/><rect x="3" y="15" width="6" height="4" fill="currentColor"/><rect x="10" y="5" width="6" height="4" fill="currentColor"/><rect x="17" y="12" width="6" height="4" fill="currentColor"/></svg>MIX FOLLOW</button>
           <button type="button" data-mode="ball" aria-pressed="false"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13" cy="13" r="9"/><path d="M13 7l5 3.6-2 6h-6l-2-6z" fill="currentColor"/></svg>BALL FOLLOW</button>
           <button type="button" data-mode="select" aria-pressed="true"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="8" height="12" rx="4"/><path d="M5 12a8 8 0 0 0 16 0M13 20v4"/></svg>MIC SELECT</button>
         </div>
-        <div class="panel-hd"><span><span class="fr">Pistes EKO</span><span class="en" lang="en">EKO tracks</span></span><span id="modeHint">mic select · 12</span></div>
+        <div class="panel-hd"><span><span class="fr">Pistes EKO</span><span class="en" lang="en">EKO tracks</span><span class="es" lang="es">Pistas EKO</span></span><span id="modeHint">mic select · 12</span></div>
         <div class="tracks"><div class="tl" id="tl"></div></div>
         <div class="hidden-list" id="hiddenList"></div>
-        <div class="legendrow"><span><span class="fr">Trait rouge : l'image à l'antenne. À droite : le son qui arrive, visible avant d'être joué.</span><span class="en" lang="en">Red line: the image on air. To the right: the incoming sound, visible before it plays.</span></span></div>
+        <div class="legendrow"><span><span class="fr">Trait rouge : l'image à l'antenne. À droite : le son qui arrive, visible avant d'être joué.</span><span class="en" lang="en">Red line: the image on air. To the right: the incoming sound, visible before it plays.</span><span class="es" lang="es">Línea roja: la imagen en antena. A la derecha: el sonido que llega, visible antes de sonar.</span></span></div>
       </div>
     </div>
   </div>
 </section>
 
 <section id="remote">
-  <span class="eyebrow"><span class="fr">Alternative physique · clavier à touches-écrans</span><span class="en" lang="en">Hardware alternative · LCD-key keypad</span></span>
-  <h2><span class="fr">Le boîtier de commande</span><span class="en" lang="en">The control keypad</span></h2>
-  <p class="lead"><span class="fr">Un clavier à touches LCD, de type Stream Deck, en deux tailles. Chaque touche est un petit écran que le plugin EKO redessine en direct : mode actif, micro en cours, caméra à l'antenne. Il pilote la même console : un appui se voit à l'écran. Le format se choisit selon la place disponible.</span><span class="en" lang="en">A Stream Deck-type LCD keypad, in two sizes. Each key is a small screen that the EKO plugin redraws live: active mode, current mic, camera on air. It drives the same console: a key press shows on screen. Choose the size that fits the available space.</span></p>
+  <span class="eyebrow"><span class="fr">Alternative physique · clavier à touches-écrans</span><span class="en" lang="en">Hardware alternative · LCD-key keypad</span><span class="es" lang="es">Alternativa física · teclado de teclas-pantalla</span></span>
+  <h2><span class="fr">Le boîtier de commande</span><span class="en" lang="en">The control keypad</span><span class="es" lang="es">El teclado de control</span></h2>
+  <p class="lead"><span class="fr">Un clavier à touches LCD, de type Stream Deck, en deux tailles. Chaque touche est un petit écran que le plugin EKO redessine en direct : mode actif, micro en cours, caméra à l'antenne. Il pilote la même console : un appui se voit à l'écran. Le format se choisit selon la place disponible.</span><span class="en" lang="en">A Stream Deck-type LCD keypad, in two sizes. Each key is a small screen that the EKO plugin redraws live: active mode, current mic, camera on air. It drives the same console: a key press shows on screen. Choose the size that fits the available space.</span><span class="es" lang="es">Un teclado de teclas-pantalla tipo Stream Deck, en dos tamaños. Cada tecla es una pequeña pantalla que el plugin EKO redibuja en directo: modo activo, micro en curso, cámara en antena. Controla la misma consola: una pulsación se ve en pantalla. Elijan el tamaño según el espacio disponible.</span></p>
   <div class="decks">
     <div class="deckcol">
-      <div class="deckhd"><h3><span class="fr">15 touches</span><span class="en" lang="en">15 keys</span></h3><span><span class="fr">type Stream Deck MK.2 · 5 × 3</span><span class="en" lang="en">Stream Deck MK.2 type · 5 × 3</span></span></div>
+      <div class="deckhd"><h3><span class="fr">15 touches</span><span class="en" lang="en">15 keys</span><span class="es" lang="es">15 teclas</span></h3><span><span class="fr">type Stream Deck MK.2 · 5 × 3</span><span class="en" lang="en">Stream Deck MK.2 type · 5 × 3</span><span class="es" lang="es">Tipo Stream Deck MK.2 · 5 × 3</span></span></div>
       <div class="deck mk2" id="deckMk2" aria-label="Clavier 15 touches"></div>
-      <p class="muted"><span class="fr">Rangée du haut : les trois modes, l'afficheur du micro, la touche 123. Les deux rangées du bas portent huit presets et deux touches d'information. La touche 123 change ces dix touches en pavé numérique ; OK valide et revient aux presets. Un appui sur l'afficheur efface la saisie.</span><span class="en" lang="en">Top row: the three modes, the mic display and the 123 key. The two lower rows hold eight presets and two status keys. The 123 key turns these ten keys into a number pad; OK confirms and returns to the presets. Pressing the display clears the entry.</span></p>
+      <p class="muted"><span class="fr">Rangée du haut : les trois modes, l'afficheur du micro, la touche 123. Les deux rangées du bas portent huit presets et deux touches d'information. La touche 123 change ces dix touches en pavé numérique ; OK valide et revient aux presets. Un appui sur l'afficheur efface la saisie.</span><span class="en" lang="en">Top row: the three modes, the mic display and the 123 key. The two lower rows hold eight presets and two status keys. The 123 key turns these ten keys into a number pad; OK confirms and returns to the presets. Pressing the display clears the entry.</span><span class="es" lang="es">Fila superior: los tres modos, el visor de micro y la tecla 123. Las dos filas inferiores llevan ocho presets y dos teclas de estado. La tecla 123 convierte estas diez teclas en teclado numérico; OK confirma y vuelve a los presets. Pulsar el visor borra la entrada.</span></p>
     </div>
     <div class="deckcol">
-      <div class="deckhd"><h3><span class="fr">6 touches</span><span class="en" lang="en">6 keys</span></h3><span><span class="fr">type Stream Deck Mini · 3 × 2</span><span class="en" lang="en">Stream Deck Mini type · 3 × 2</span></span></div>
+      <div class="deckhd"><h3><span class="fr">6 touches</span><span class="en" lang="en">6 keys</span><span class="es" lang="es">6 teclas</span></h3><span><span class="fr">type Stream Deck Mini · 3 × 2</span><span class="en" lang="en">Stream Deck Mini type · 3 × 2</span><span class="es" lang="es">Tipo Stream Deck Mini · 3 × 2</span></span></div>
       <div class="deck mini" id="deckMini" aria-label="Clavier 6 touches"></div>
       <div class="scale-mini">
         <svg viewBox="46 11.2 28.5 20" role="img" aria-label="Les deux claviers à l'échelle : 15 touches 11,8 cm, Mini 8,4 cm">
@@ -507,45 +578,45 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
           <g class="sc-dim"><path d="M48 26.2v1.2M59.8 26.2v1.2M48 26.8H59.8"/><path d="M64.5 26.2v1.2M72.9 26.2v1.2M64.5 26.8H72.9"/></g>
           <text x="53.9" y="29.6" text-anchor="middle" class="sc-t">11,8 cm</text>
           <text x="68.7" y="29.6" text-anchor="middle" class="sc-t">8,4 cm</text>
-          <text x="53.9" y="13.2" text-anchor="middle" class="sc-l">15 <tspan class="fr">touches</tspan><tspan class="en">keys</tspan></text>
+          <text x="53.9" y="13.2" text-anchor="middle" class="sc-l">15 <tspan class="fr">touches</tspan><tspan class="en">keys</tspan><tspan class="es">teclas</tspan></text>
           <text x="68.7" y="16.4" text-anchor="middle" class="sc-l">Mini · 6</text>
         </svg>
-        <span class="muted"><span class="fr">À l'échelle, photos des deux appareils.</span><span class="en" lang="en">To scale, photos of both devices.</span></span>
+        <span class="muted"><span class="fr">À l'échelle, photos des deux appareils.</span><span class="en" lang="en">To scale, photos of both devices.</span><span class="es" lang="es">A escala, fotos de los dos aparatos.</span></span>
       </div>
-      <p class="muted"><span class="fr">Pour qui ne veut pas d'un appareil encombrant. En haut, les trois modes. En bas, les flèches font défiler les presets et la touche centrale applique celui affiché. La saisie d'un numéro reste sur l'écran tactile.</span><span class="en" lang="en">For those who don't want a bulky device. Top row: the three modes. Bottom row: the arrows scroll through presets and the centre key applies the one shown. Number entry stays on the touch screen.</span></p>
+      <p class="muted"><span class="fr">Pour qui ne veut pas d'un appareil encombrant. En haut, les trois modes. En bas, les flèches font défiler les presets et la touche centrale applique celui affiché. La saisie d'un numéro reste sur l'écran tactile.</span><span class="en" lang="en">For those who don't want a bulky device. Top row: the three modes. Bottom row: the arrows scroll through presets and the centre key applies the one shown. Number entry stays on the touch screen.</span><span class="es" lang="es">Para quien no quiere un aparato voluminoso. Fila superior: los tres modos. Fila inferior: las flechas recorren los presets y la tecla central aplica el mostrado. La entrada numérica queda en la pantalla táctil.</span></p>
     </div>
   </div>
 
   <div class="symlegend">
-    <div><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="3" x2="6" y2="23"/><line x1="13" y1="3" x2="13" y2="23"/><line x1="20" y1="3" x2="20" y2="23"/><rect x="3" y="15" width="6" height="4" fill="currentColor"/><rect x="10" y="5" width="6" height="4" fill="currentColor"/><rect x="17" y="12" width="6" height="4" fill="currentColor"/></svg><p><span class="fr"><b>Faders</b> : MIX FOLLOW, le choix de l'ingénieur du son pendant le direct.</span><span class="en" lang="en"><b>Faders</b>: MIX FOLLOW, the sound engineer's choice during the live action.</span></p></div>
-    <div><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13" cy="13" r="9"/><path d="M13 7l5 3.6-2 6h-6l-2-6z" fill="currentColor"/></svg><p><span class="fr"><b>Ballon</b> : BALL FOLLOW, les micros au plus près de l'action.</span><span class="en" lang="en"><b>Ball</b>: BALL FOLLOW, the mics closest to the action.</span></p></div>
-    <div><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="8" height="12" rx="4"/><path d="M5 12a8 8 0 0 0 16 0M13 20v4"/></svg><p><span class="fr"><b>Micro</b> : MIC SELECT, le choix de l'opérateur.</span><span class="en" lang="en"><b>Mic</b>: MIC SELECT, the operator's choice.</span></p></div>
+    <div><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="3" x2="6" y2="23"/><line x1="13" y1="3" x2="13" y2="23"/><line x1="20" y1="3" x2="20" y2="23"/><rect x="3" y="15" width="6" height="4" fill="currentColor"/><rect x="10" y="5" width="6" height="4" fill="currentColor"/><rect x="17" y="12" width="6" height="4" fill="currentColor"/></svg><p><span class="fr"><b>Faders</b> : MIX FOLLOW, le choix de l'ingénieur du son pendant le direct.</span><span class="en" lang="en"><b>Faders</b>: MIX FOLLOW, the sound engineer's choice during the live action.</span><span class="es" lang="es"><b>Faders</b>: MIX FOLLOW, la elección del técnico de sonido durante el directo.</span></p></div>
+    <div><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="13" cy="13" r="9"/><path d="M13 7l5 3.6-2 6h-6l-2-6z" fill="currentColor"/></svg><p><span class="fr"><b>Ballon</b> : BALL FOLLOW, les micros au plus près de l'action.</span><span class="en" lang="en"><b>Ball</b>: BALL FOLLOW, the mics closest to the action.</span><span class="es" lang="es"><b>Balón</b>: BALL FOLLOW, los micros más cercanos a la acción.</span></p></div>
+    <div><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="8" height="12" rx="4"/><path d="M5 12a8 8 0 0 0 16 0M13 20v4"/></svg><p><span class="fr"><b>Micro</b> : MIC SELECT, le choix de l'opérateur.</span><span class="en" lang="en"><b>Mic</b>: MIC SELECT, the operator's choice.</span><span class="es" lang="es"><b>Micro</b>: MIC SELECT, la elección del operador.</span></p></div>
   </div>
   <div class="speccard">
-    <h3><span class="fr">Images des touches</span><span class="en" lang="en">Key images</span></h3>
+    <h3><span class="fr">Images des touches</span><span class="en" lang="en">Key images</span><span class="es" lang="es">Imágenes de las teclas</span></h3>
     <table>
-      <tr><th><span class="fr">Modèle</span><span class="en" lang="en">Model</span></th><th><span class="fr">Touches</span><span class="en" lang="en">Keys</span></th><th><span class="fr">Rendu natif</span><span class="en" lang="en">Native size</span></th><th><span class="fr">Fichier à fournir</span><span class="en" lang="en">File to supply</span></th></tr>
+      <tr><th><span class="fr">Modèle</span><span class="en" lang="en">Model</span><span class="es" lang="es">Modelo</span></th><th><span class="fr">Touches</span><span class="en" lang="en">Keys</span><span class="es" lang="es">Teclas</span></th><th><span class="fr">Rendu natif</span><span class="en" lang="en">Native size</span><span class="es" lang="es">Tamaño nativo</span></th><th><span class="fr">Fichier à fournir</span><span class="en" lang="en">File to supply</span><span class="es" lang="es">Archivo a entregar</span></th></tr>
       <tr><td>Stream Deck MK.2</td><td class="n">15 · 5 × 3</td><td class="n">72 × 72 px</td><td class="n">PNG 144 × 144 px</td></tr>
       <tr><td>Stream Deck Mini</td><td class="n">6 · 3 × 2</td><td class="n">80 × 80 px</td><td class="n">PNG 144 × 144 px</td></tr>
     </table>
-    <p class="muted"><span class="fr">Un même jeu d'icônes carrées en 144 × 144 px sert les deux modèles : l'application les réduit proprement. Prévoir une marge et un fort contraste. Chaque touche a un état actif et un état inactif ; en production, le plugin EKO envoie l'image de chaque touche en direct.</span><span class="en" lang="en">One set of square 144 × 144 px icons serves both models: the app scales them down cleanly. Leave a margin and use strong contrast. Each key has an active and an inactive state; in production, the EKO plugin sends each key's image live.</span></p>
+    <p class="muted"><span class="fr">Un même jeu d'icônes carrées en 144 × 144 px sert les deux modèles : l'application les réduit proprement. Prévoir une marge et un fort contraste. Chaque touche a un état actif et un état inactif ; en production, le plugin EKO envoie l'image de chaque touche en direct.</span><span class="en" lang="en">One set of square 144 × 144 px icons serves both models: the app scales them down cleanly. Leave a margin and use strong contrast. Each key has an active and an inactive state; in production, the EKO plugin sends each key's image live.</span><span class="es" lang="es">Un único juego de iconos cuadrados de 144 × 144 px sirve para los dos modelos: la aplicación los reduce limpiamente. Dejen un margen y usen un contraste fuerte. Cada tecla tiene un estado activo y uno inactivo; en producción, el plugin EKO envía la imagen de cada tecla en directo.</span></p>
   </div>
 </section>
 
 <section id="synchro">
   <span class="eyebrow">Frame accurate</span>
-  <h2><span class="fr">La synchro, tenue en permanence</span><span class="en" lang="en">Sync, held at all times</span></h2>
+  <h2><span class="fr">La synchro, tenue en permanence</span><span class="en" lang="en">Sync, held at all times</span><span class="es" lang="es">La sincronía, garantizada en todo momento</span></h2>
   <div class="cols">
     <div>
-      <p><span class="fr">Au ralenti, l'œil guette le moment de la frappe ou l'ouverture d'une bouche. Nous traitons ce point à la source.</span><span class="en" lang="en">In slow motion, the eye watches for the moment of the kick or a mouth opening. We deal with this at the source.</span></p>
-      <p><span class="fr">Les ESS (frappes, chocs) ne sont jamais régénérés : EKO les recopie de la bande-son d'origine. Notre détection visuelle des frappes par IA confronte en permanence la signature visuelle de chaque frappe à sa signature audio. Chaque ESS est replacé exactement là où l'image l'attend.</span><span class="en" lang="en">Significant sound events (kicks, impacts) are never regenerated: EKO copies them from the original soundtrack. Our AI visual kick detection constantly checks each kick's visual signature against its audio signature. Each event is placed exactly where the image expects it.</span></p>
-      <p><span class="fr">Cette vérification neutralise les décalages rencontrés en essais :</span><span class="en" lang="en">This check cancels the offsets we met during trials:</span></p>
+      <p><span class="fr">Au ralenti, l'œil guette le moment de la frappe ou l'ouverture d'une bouche. Nous traitons ce point à la source.</span><span class="en" lang="en">In slow motion, the eye watches for the moment of the kick or a mouth opening. We deal with this at the source.</span><span class="es" lang="es">En cámara lenta, el ojo espera el instante del golpe o de una boca que se abre. Lo tratamos en origen.</span></p>
+      <p><span class="fr">Les ESS (frappes, chocs) ne sont jamais régénérés : EKO les recopie de la bande-son d'origine. Notre détection visuelle des frappes par IA confronte en permanence la signature visuelle de chaque frappe à sa signature audio. Chaque ESS est replacé exactement là où l'image l'attend.</span><span class="en" lang="en">Significant sound events (kicks, impacts) are never regenerated: EKO copies them from the original soundtrack. Our AI visual kick detection constantly checks each kick's visual signature against its audio signature. Each event is placed exactly where the image expects it.</span><span class="es" lang="es">Los eventos sonoros significativos (golpes, impactos) nunca se regeneran: EKO los copia de la banda sonora original. Nuestra detección visual de golpes por IA compara en permanencia la firma visual de cada golpe con su firma sonora. Cada evento se coloca exactamente donde la imagen lo espera.</span></p>
+      <p><span class="fr">Cette vérification neutralise les décalages rencontrés en essais :</span><span class="en" lang="en">This check cancels the offsets we met during trials:</span><span class="es" lang="es">Este control anula los desfases encontrados durante las pruebas:</span></p>
       <ul class="tight">
-        <li><span class="fr">les latences des micros HF ;</span><span class="en" lang="en">RF mic latency;</span></li>
-        <li><span class="fr">les images ajoutées par les mélangeurs et les DVE ;</span><span class="en" lang="en">frames added by switchers and DVEs;</span></li>
-        <li><span class="fr">le retard de propagation du son sur les micros éloignés : en 50p, à 340 m/s, le son prend une image de retard tous les 6,8 m.</span><span class="en" lang="en">sound propagation delay on distant mics: at 50p and 340 m/s, sound falls one frame behind every 6.8 m.</span></li>
+        <li><span class="fr">les latences des micros HF ;</span><span class="en" lang="en">RF mic latency;</span><span class="es" lang="es">la latencia de los micros HF;</span></li>
+        <li><span class="fr">les images ajoutées par les mélangeurs et les DVE ;</span><span class="en" lang="en">frames added by switchers and DVEs;</span><span class="es" lang="es">los frames añadidos por los mezcladores y los DVE;</span></li>
+        <li><span class="fr">le retard de propagation du son sur les micros éloignés : en 50p, à 340 m/s, le son prend une image de retard tous les 6,8 m.</span><span class="en" lang="en">sound propagation delay on distant mics: at 50p and 340 m/s, sound falls one frame behind every 6.8 m.</span><span class="es" lang="es">el retardo de propagación del sonido en los micros lejanos: a 50p y 340 m/s, el sonido pierde un frame cada 6,8 m.</span></li>
       </ul>
-      <p><span class="fr">EKO ajuste en continu, micro par micro et image par image.</span><span class="en" lang="en">EKO adjusts continuously, mic by mic and frame by frame.</span></p>
+      <p><span class="fr">EKO ajuste en continu, micro par micro et image par image.</span><span class="en" lang="en">EKO adjusts continuously, mic by mic and frame by frame.</span><span class="es" lang="es">EKO ajusta continuamente, micro a micro y frame a frame.</span></p>
     </div>
     <figure>
       <div class="fig">
@@ -556,15 +627,15 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
             <rect x="212" y="12" width="40" height="28" rx="2" fill="color-mix(in srgb,var(--tally) 14%,var(--surface))" stroke="var(--tally)" stroke-width="1.8"/>
             <rect class="bx" x="256" y="12" width="40" height="28" rx="2"/><rect class="bx" x="300" y="12" width="40" height="28" rx="2"/><rect class="bx" x="344" y="12" width="40" height="28" rx="2"/>
           </g>
-          <text x="232" y="58" text-anchor="middle" class="tmono" style="fill:var(--tally)"><tspan class="fr">frappe détectée</tspan><tspan class="en">kick detected</tspan></text>
+          <text x="232" y="58" text-anchor="middle" class="tmono" style="fill:var(--tally)"><tspan class="fr">frappe détectée</tspan><tspan class="en">kick detected</tspan><tspan class="es">golpe detectado</tspan></text>
           <line x1="232" y1="64" x2="232" y2="190" stroke="var(--tally)" stroke-dasharray="4 4"/>
           <text x="14" y="122" class="tm tmono">MICRO 12</text>
           <line class="ln" x1="80" y1="118" x2="440" y2="118"/>
           <g class="ess">
             <polyline fill="none" stroke="var(--inter)" stroke-width="2" points="200,118 214,118 220,92 226,146 232,84 238,150 244,98 250,136 256,112 262,122 270,118"/>
-            <text x="234" y="168" text-anchor="middle" class="tmono" style="fill:var(--inter)"><tspan class="fr">ESS original</tspan><tspan class="en">original event</tspan></text>
+            <text x="234" y="168" text-anchor="middle" class="tmono" style="fill:var(--inter)"><tspan class="fr">ESS original</tspan><tspan class="en">original event</tspan><tspan class="es">evento original</tspan></text>
           </g>
-          <text x="232" y="200" text-anchor="middle" class="tmono okmark" style="fill:var(--ok)"><tspan class="fr">recalé sur l'image</tspan><tspan class="en">aligned to the image</tspan></text>
+          <text x="232" y="200" text-anchor="middle" class="tmono okmark" style="fill:var(--ok)"><tspan class="fr">recalé sur l'image</tspan><tspan class="en">aligned to the image</tspan><tspan class="es">alineado con la imagen</tspan></text>
         </svg>
       </div>
     </figure>
@@ -572,37 +643,37 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
 </section>
 
 <section id="option">
-  <span class="eyebrow"><span class="fr">Si c'est possible, sans exigence</span><span class="en" lang="en">If possible, not required</span></span>
-  <h2><span class="fr">Ce qui nous aiderait</span><span class="en" lang="en">What would help us</span></h2>
+  <span class="eyebrow"><span class="fr">Si c'est possible, sans exigence</span><span class="en" lang="en">If possible, not required</span><span class="es" lang="es">Si es posible, sin obligación</span></span>
+  <h2><span class="fr">Ce qui nous aiderait</span><span class="en" lang="en">What would help us</span><span class="es" lang="es">Lo que nos ayudaría</span></h2>
   <div class="cols">
     <div class="card">
       <ul class="tight">
-        <li><span class="fr">Le timecode d'origine des images du PGM.</span><span class="en" lang="en">The original timecode of the PGM images.</span></li>
-        <li><span class="fr">Les entrées micro associées aux images du PGM.</span><span class="en" lang="en">The mic inputs associated with the PGM images.</span></li>
-        <li><span class="fr">Les micros proches du ballon, ou sa position.</span><span class="en" lang="en">The mics close to the ball, or its position.</span></li>
+        <li><span class="fr">Le timecode d'origine des images du PGM.</span><span class="en" lang="en">The original timecode of the PGM images.</span><span class="es" lang="es">El timecode original de las imágenes del PGM.</span></li>
+        <li><span class="fr">Les entrées micro associées aux images du PGM.</span><span class="en" lang="en">The mic inputs associated with the PGM images.</span><span class="es" lang="es">Las entradas de micro asociadas a las imágenes del PGM.</span></li>
+        <li><span class="fr">Les micros proches du ballon, ou sa position.</span><span class="en" lang="en">The mics close to the ball, or its position.</span><span class="es" lang="es">Los micros cercanos al balón, o su posición.</span></li>
       </ul>
     </div>
     <div>
-      <p><span class="fr">Par IP ou en SDI. EKO disposerait alors de deux chaînes indépendantes qui doivent aboutir au même résultat : un double contrôle permanent.</span><span class="en" lang="en">Over IP or SDI. EKO would then have two independent chains that must reach the same result: a permanent cross-check.</span></p>
-      <p class="muted"><span class="fr">Sans ces informations, EKO fonctionne avec les seules sources décrites plus haut.</span><span class="en" lang="en">Without this information, EKO works with the sources described above alone.</span></p>
+      <p><span class="fr">Par IP ou en SDI. EKO disposerait alors de deux chaînes indépendantes qui doivent aboutir au même résultat : un double contrôle permanent.</span><span class="en" lang="en">Over IP or SDI. EKO would then have two independent chains that must reach the same result: a permanent cross-check.</span><span class="es" lang="es">Por IP o SDI. EKO tendría entonces dos cadenas independientes que deben llegar al mismo resultado: un control cruzado permanente.</span></p>
+      <p class="muted"><span class="fr">Sans ces informations, EKO fonctionne avec les seules sources décrites plus haut.</span><span class="en" lang="en">Without this information, EKO works with the sources described above alone.</span><span class="es" lang="es">Sin esta información, EKO trabaja solo con las fuentes descritas arriba.</span></p>
     </div>
   </div>
 </section>
 
 <footer>
   <span>Kreativ Labs · EKO · info@kreativlabs.tv</span>
-  <span><span class="fr">Document confidentiel, réservé à ses destinataires. Interface présentée à titre de maquette.</span><span class="en" lang="en">Confidential document, for its recipients only. The interface shown is a mock-up.</span></span>
+  <span><span class="fr">Document confidentiel, réservé à ses destinataires. Interface présentée à titre de maquette.</span><span class="en" lang="en">Confidential document, for its recipients only. The interface shown is a mock-up.</span><span class="es" lang="es">Documento confidencial, reservado a sus destinatarios. La interfaz mostrada es una maqueta.</span></span>
 </footer>
 
 </div>
 
 <script>
 var LANG='fr';
-try{var q=(location.hash||'').replace('#','');if(q==='en'||q==='fr'){LANG=q}else{var st=localStorage.getItem('eko-lang');if(st==='en'||st==='fr')LANG=st;}}catch(e){}
+try{var q=(location.hash||'').replace('#','');if(q==='en'||q==='fr'||q==='es'){LANG=q}else{var st=localStorage.getItem('eko-lang');if(st==='en'||st==='fr'||st==='es')LANG=st;}}catch(e){}
 document.documentElement.setAttribute('data-lang',LANG);document.documentElement.lang=LANG;
-document.title=LANG==='en'?'EKO in the OB van':'EKO en car';
-function L(fr,en){return LANG==='en'?en:fr;}
-document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-setlang')===LANG);b.addEventListener('click',function(){var v=b.getAttribute('data-setlang');if(v===LANG)return;try{localStorage.setItem('eko-lang',v)}catch(e){}if(location.hash==='#fr'||location.hash==='#en'){history.replaceState(null,'',location.pathname)}location.reload();});});
+document.title=LANG==='en'?'EKO in the OB van':LANG==='es'?'EKO en la unidad móvil':'EKO en car';
+function L(fr,en,es){return LANG==='en'?en:LANG==='es'?(es==null?en:es):fr;}
+document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-setlang')===LANG);b.addEventListener('click',function(){var v=b.getAttribute('data-setlang');if(v===LANG)return;try{localStorage.setItem('eko-lang',v)}catch(e){}if(location.hash==='#fr'||location.hash==='#en'||location.hash==='#es'){history.replaceState(null,'',location.pathname)}location.reload();});});
 </script>
 <script>
 (function(){
@@ -632,8 +703,8 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   /* caméra à l'antenne au fil du replay (instant 0–1 → caméra) */
   var SCHED=[[0,1],[.28,2],[.46,'ARB'],[.6,5],[.9,3]];   /* la caméra 3 prend le tir */
   function camAt(u){var c=SCHED[0][1];for(var i=0;i<SCHED.length;i++){if(u>=SCHED[i][0])c=SCHED[i][1];}return c;}
-  function camName(c){return c==='ARB'?L('ARBITRE','REFEREE'):'CAM '+c;}
-  var PRESETS=[[L('Filet G','Net L'),[2,3]],[L('Filet D','Net R'),[12,13]],[L('Corners N','Corners N'),[1,11]],[L('Corners S','Corners S'),[4,14]],[L('Bord N','Side N'),[5,6,7]],[L('Bord S','Side S'),[8,9,10]],[L('Banc','Bench'),[9]],[L('Tribune','Stand'),[6]]];
+  function camName(c){return c==='ARB'?L('ARBITRE','REFEREE','ÁRBITRO'):'CAM '+c;}
+  var PRESETS=[[L('Filet G','Net L','Red I'),[2,3]],[L('Filet D','Net R','Red D'),[12,13]],[L('Corners N','Corners N','Córners N'),[1,11]],[L('Corners S','Corners S','Córners S'),[4,14]],[L('Bord N','Side N','Banda N'),[5,6,7]],[L('Bord S','Side S','Banda S'),[8,9,10]],[L('Banc','Bench','Banquillo'),[9]],[L('Tribune','Stand','Tribuna'),[6]]];
   var state={mode:'select',sel:[12],typed:'',view:'plan',num:false,mixMic:[12]};
   var onAirCam=1;
 
@@ -709,15 +780,15 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
 
   /* ---------- pistes ---------- */
   var TRACKS=[
-    {id:'int',name:'EKO INT',sub:L("d'office","default"),c:'--inter',seed:3},
+    {id:'int',name:'EKO INT',sub:L("d'office","default","por defecto"),c:'--inter',seed:3},
     {id:'cam',name:'CAM FOLLOW',sub:'',c:'--cam',seed:7,camf:true},
-    {id:'mix',name:'MIX FOLLOW',sub:L('option','optional'),c:'--mode',seed:11,mode:'mix'},
-    {id:'ball',name:'BALL FOLLOW',sub:L('option','optional'),c:'--mode',seed:17,mode:'ball'},
-    {id:'select',name:'MIC SELECT',sub:L('option','optional'),c:'--mode',seed:23,mode:'select'},
+    {id:'mix',name:'MIX FOLLOW',sub:L('option','optional','opcional'),c:'--mode',seed:11,mode:'mix'},
+    {id:'ball',name:'BALL FOLLOW',sub:L('option','optional','opcional'),c:'--mode',seed:17,mode:'ball'},
+    {id:'select',name:'MIC SELECT',sub:L('option','optional','opcional'),c:'--mode',seed:23,mode:'select'},
     {id:'clip1',name:'EKO CLIP 1',sub:'LSM 1 · micro 2',c:'--clip',seed:29,clip:[.10,.30],clipLbl:'LSM 1'},
-    {id:'clip2',name:'EKO CLIP 2',sub:L('LSM 3 · micro 13 · passe + tir','LSM 3 · mic 13 · pass + shot'),c:'--clip',seed:31,clip:[.7,1],clipLbl:L('passe + tir','pass + shot')},
-    {id:'clip3',name:'EKO CLIP 3',sub:L('option','optional'),c:'--clip',seed:37,clip:null,hide:true},
-    {id:'boost',name:'BOOST',sub:L("d'office · IA",'default · AI'),c:'--boost',seed:41,boost:true}
+    {id:'clip2',name:'EKO CLIP 2',sub:L('LSM 3 · micro 13 · passe + tir','LSM 3 · mic 13 · pass + shot','LSM 3 · micro 13 · pase + tiro'),c:'--clip',seed:31,clip:[.7,1],clipLbl:L('passe + tir','pass + shot','pase + tiro')},
+    {id:'clip3',name:'EKO CLIP 3',sub:L('option','optional','opcional'),c:'--clip',seed:37,clip:null,hide:true},
+    {id:'boost',name:'BOOST',sub:L("d'office · IA",'default · AI','por defecto · IA'),c:'--boost',seed:41,boost:true}
   ];
   var tl=document.getElementById('tl'), hl=document.getElementById('hiddenList');
   var eyeSvg='<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 8s2.6-5 7-5 7 5 7 5-2.6 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/></svg>';
@@ -726,7 +797,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     var col=getComputedStyle(document.documentElement).getPropertyValue(t.c).trim();
     row.style.setProperty('--tc','var('+t.c+')');
     row.innerHTML='<div class="nm"><span>'+t.name+'</span><small id="sub-'+t.id+'">'+t.sub+'</small></div>';
-    var eye=document.createElement('button'); eye.type='button'; eye.className='eye'; eye.innerHTML=eyeSvg; eye.setAttribute('aria-pressed','true'); eye.setAttribute('aria-label',L('Masquer ','Hide ')+t.name);
+    var eye=document.createElement('button'); eye.type='button'; eye.className='eye'; eye.innerHTML=eyeSvg; eye.setAttribute('aria-pressed','true'); eye.setAttribute('aria-label',L('Masquer ','Hide ','Ocultar ')+t.name);
     eye.addEventListener('click',function(){t.hide=true;layout();});
     row.appendChild(eye);
     var cv=document.createElement('canvas'); row.appendChild(cv); t.cv=cv; t.row=row;
@@ -741,7 +812,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     });
     var nVis=TRACKS.filter(function(t){return !t.hide;}).length;
     var HMAP={5:62,4:82,3:108,2:108,1:108};tl.style.setProperty('--trk-h',(nVis>=6?46:HMAP[nVis])+'px');
-    if(any){var s=document.createElement('span');s.textContent=L('Pistes masquées :','Hidden tracks:');hl.insertBefore(s,hl.firstChild);}
+    if(any){var s=document.createElement('span');s.textContent=L('Pistes masquées :','Hidden tracks:','Pistas ocultas:');hl.insertBefore(s,hl.firstChild);}
     draw();
   }
 
@@ -897,25 +968,25 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     var mk=document.getElementById('deckMk2'); mk.innerHTML='';
     ['mix','ball','select'].forEach(function(m){mk.appendChild(modeKey(m));});
     var shown=state.typed?state.typed+'_':cur.join('·');
-    mk.appendChild(sdKey('disp','<small>MIC</small><b>'+shown+'</b>',function(){state.typed='';render();},L('Afficheur micro, appuyer pour effacer','Mic display, press to clear')));
+    mk.appendChild(sdKey('disp','<small>MIC</small><b>'+shown+'</b>',function(){state.typed='';render();},L('Afficheur micro, appuyer pour effacer','Mic display, press to clear','Visor de micro, pulsar para borrar')));
     if(state.num){
-      mk.appendChild(sdKey('ok','OK',function(){state.num=false;key('OK');},L('Valider','Confirm')));
+      mk.appendChild(sdKey('ok','OK',function(){state.num=false;key('OK');},L('Valider','Confirm','Confirmar')));
       ['1','2','3','4','5','6','7','8','9','0'].forEach(function(d){mk.appendChild(sdKey('dig',d,function(){key(d);}));});
     }else{
-      mk.appendChild(sdKey('',ICON.pad+'123',function(){state.num=true;state.typed='';render();},L('Pavé numérique','Number pad')));
+      mk.appendChild(sdKey('',ICON.pad+'123',function(){state.num=true;state.typed='';render();},L('Pavé numérique','Number pad','Teclado numérico')));
       PRESETS.forEach(function(p,i){
         mk.appendChild(sdKey('pre'+(state.mode==='select'&&state.preset===i?' on':''),p[0]+'<small>'+p[1].join('·')+'</small>',function(){pick(p[1],i);}));
       });
-      var ck=sdKey('info cam','<small>'+(onAirCam==='ARB'?L('ARBITRE','REF'):'CAM')+'</small><b style="font-size:1.4em">'+(onAirCam==='ARB'?'R':onAirCam)+'</b><small>'+CAMMIC[onAirCam].join('·')+'</small>',null); ck.style.boxShadow='inset 0 0 0 2px '+CAMC[onAirCam]; ck.style.color=CAMC[onAirCam]; mk.appendChild(ck);
-      mk.appendChild(sdKey('info air','<small>'+L('ANTENNE','ON AIR')+'</small><b style="font-size:1.1em">LSM 2</b>',null));
+      var ck=sdKey('info cam','<small>'+(onAirCam==='ARB'?L('ARBITRE','REF','ÁRB'):'CAM')+'</small><b style="font-size:1.4em">'+(onAirCam==='ARB'?'R':onAirCam)+'</b><small>'+CAMMIC[onAirCam].join('·')+'</small>',null); ck.style.boxShadow='inset 0 0 0 2px '+CAMC[onAirCam]; ck.style.color=CAMC[onAirCam]; mk.appendChild(ck);
+      mk.appendChild(sdKey('info air','<small>'+L('ANTENNE','ON AIR','EN ANTENA')+'</small><b style="font-size:1.1em">LSM 2</b>',null));
     }
 
     var mi=document.getElementById('deckMini'); mi.innerHTML='';
     ['mix','ball','select'].forEach(function(m){mi.appendChild(modeKey(m));});
     var P=PRESETS[state.miniIdx];
-    mi.appendChild(sdKey('nav','◂',function(){state.miniIdx=(state.miniIdx+PRESETS.length-1)%PRESETS.length;render();},L('Preset précédent','Previous preset')));
-    mi.appendChild(sdKey('pre'+(state.mode==='select'&&state.preset===state.miniIdx?' on':''),P[0]+'<small>'+P[1].join('·')+'</small>',function(){pick(P[1],state.miniIdx);},L('Appliquer ','Apply ')+P[0]));
-    mi.appendChild(sdKey('nav','▸',function(){state.miniIdx=(state.miniIdx+1)%PRESETS.length;render();},L('Preset suivant','Next preset')));
+    mi.appendChild(sdKey('nav','◂',function(){state.miniIdx=(state.miniIdx+PRESETS.length-1)%PRESETS.length;render();},L('Preset précédent','Previous preset','Preset anterior')));
+    mi.appendChild(sdKey('pre'+(state.mode==='select'&&state.preset===state.miniIdx?' on':''),P[0]+'<small>'+P[1].join('·')+'</small>',function(){pick(P[1],state.miniIdx);},L('Appliquer ','Apply ','Aplicar ')+P[0]));
+    mi.appendChild(sdKey('nav','▸',function(){state.miniIdx=(state.miniIdx+1)%PRESETS.length;render();},L('Preset suivant','Next preset','Preset siguiente')));
   }
 
   /* ---------- rendu ---------- */
@@ -931,7 +1002,7 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
   var NAMES={mix:'MIX FOLLOW',ball:'BALL FOLLOW',select:'MIC SELECT'};
   function render(){
     var cur=current(), camMics=CAMMIC[onAirCam];
-    document.getElementById('sub-cam').textContent=camName(onAirCam)+' · '+(onAirCam==='ARB'?L('micro R','mic R'):L('micros ','mics ')+camMics.join(' · '));
+    document.getElementById('sub-cam').textContent=camName(onAirCam)+' · '+(onAirCam==='ARB'?L('micro R','mic R','micro Á'):L('micros ','mics ','micros ')+camMics.join(' · '));
     Object.keys(micEls).forEach(function(k){var n=+k;micEls[k].classList.toggle('lit',cur.indexOf(n)>=0);micEls[k].classList.toggle('cam',camMics.indexOf(n)>=0);});
     document.querySelectorAll('[data-mode]').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-mode')===state.mode);});
     var label=state.typed?state.typed+'_':cur.join(' · ');
@@ -939,9 +1010,9 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
     document.getElementById('modeHint').textContent=NAMES[state.mode].toLowerCase()+' · '+cur.join(' · ');
     var MN={mix:state.mixMic,ball:nearest(),select:state.sel};
     Object.keys(MN).forEach(function(k){var el=document.getElementById('mn-'+k); if(el){el.classList.toggle('multi',MN[k].length>1); el.innerHTML='<small>MIC</small>'+MN[k].join('<br>');}});
-    document.getElementById('sub-mix').textContent=L('option · micro ','optional · mic ')+state.mixMic.join('·');
-    document.getElementById('sub-ball').textContent=L('option · micros ','optional · mics ')+nearest().join(' · ');
-    document.getElementById('sub-select').textContent=L('option · micro ','optional · mic ')+state.sel.join(' · ');
+    document.getElementById('sub-mix').textContent=L('option · micro ','optional · mic ','opcional · micro ')+state.mixMic.join('·');
+    document.getElementById('sub-ball').textContent=L('option · micros ','optional · mics ','opcional · micros ')+nearest().join(' · ');
+    document.getElementById('sub-select').textContent=L('option · micro ','optional · mic ','opcional · micro ')+state.sel.join(' · ');
     pre.querySelectorAll('button').forEach(function(b,i){b.classList.toggle('on',state.mode==='select'&&state.preset===i);});
     buildRemote(); draw();
   }
@@ -987,5 +1058,6 @@ document.querySelectorAll('[data-setlang]').forEach(function(b){b.setAttribute('
 })();
 </script>
 
+<script>try{if(matchMedia("(prefers-reduced-motion: reduce)").matches)document.querySelectorAll(".mxf svg").forEach(function(v){v.pauseAnimations();v.setCurrentTime(8);});}catch(e){}</script>
 </body>
 </html>

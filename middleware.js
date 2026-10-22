@@ -1,5 +1,5 @@
 // Accès protégé par mot de passe. Le mot de passe n'est jamais dans le dépôt :
-// il est lu dans la variable d'environnement Vercel EKO_ACCESS_CODE.
+// il est lu dans les variables d'environnement Vercel EKO_ACCESS_CODE et EKO_ACCESS_CODE_2.
 export const config = { matcher: '/((?!favicon\\.ico).*)' };
 
 const COOKIE = 'eko_access';
@@ -21,7 +21,7 @@ function readCookie(req, name) {
 
 function loginPage(error) {
   const msg = error
-    ? '<p class="err"><span class="fr">Code incorrect. Réessayez.</span><span class="en">Wrong code. Please try again.</span></p>'
+    ? '<p class="err"><span class="fr">Code incorrect. Réessayez.</span><span class="en">Wrong code. Please try again.</span><span class="es">Código incorrecto. Inténtelo de nuevo.</span></p>'
     : '';
   return new Response(`<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
@@ -37,17 +37,17 @@ p{margin:0;color:var(--muted);font-size:.95rem}.err{color:var(--err)}
 input{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--ink)}
 input:focus{outline:2px solid var(--eko);outline-offset:1px}
 button{font:600 1rem Barlow,sans-serif;padding:10px;border:0;border-radius:5px;background:var(--eko);color:#fff;cursor:pointer}
-.en{display:none}html[lang=en] .en{display:inline}html[lang=en] .fr{display:none}
+.en,.es{display:none}html[lang=en] .en,html[lang=es] .es{display:inline}html[lang=en] .fr,html[lang=es] .fr{display:none}
 </style></head><body>
 <form method="POST">
-<h1><b>EKO</b> · <span class="fr">Accès réservé</span><span class="en">Restricted access</span></h1>
-<p><span class="fr">Document confidentiel. Saisissez le code d'accès.</span><span class="en">Confidential document. Enter the access code.</span></p>
+<h1><b>EKO</b> · <span class="fr">Accès réservé</span><span class="en">Restricted access</span><span class="es">Acceso reservado</span></h1>
+<p><span class="fr">Document confidentiel. Saisissez le code d'accès.</span><span class="en">Confidential document. Enter the access code.</span><span class="es">Documento confidencial. Introduzca el código de acceso.</span></p>
 ${msg}
 <label for="code" style="position:absolute;left:-9999px">Code</label>
 <input id="code" name="code" type="password" autocomplete="current-password" autofocus required>
-<button type="submit"><span class="fr">Entrer</span><span class="en">Enter</span></button>
+<button type="submit"><span class="fr">Entrer</span><span class="en">Enter</span><span class="es">Entrar</span></button>
 </form>
-<script>if((navigator.language||'').slice(0,2)!=='fr')document.documentElement.lang='en';</script>
+<script>var l=(navigator.language||'').slice(0,2);if(l!=='fr')document.documentElement.lang=(l==='es'?'es':'en');</script>
 </body></html>`, {
     status: error ? 401 : 200,
     headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex' },
@@ -55,26 +55,27 @@ ${msg}
 }
 
 export default async function middleware(req) {
-  const code = process.env.EKO_ACCESS_CODE;
-  if (!code) return new Response('Access code not configured.', { status: 503 });
-  const expected = await token(code);
+  const codes = [process.env.EKO_ACCESS_CODE, process.env.EKO_ACCESS_CODE_2].filter(Boolean);
+  if (!codes.length) return new Response('Access code not configured.', { status: 503 });
+  const valid = await Promise.all(codes.map(token));
 
   if (req.method === 'POST') {
     const form = await req.formData().catch(() => null);
     const given = form ? String(form.get('code') || '') : '';
-    if (given && (await token(given)) === expected) {
+    const t = given ? await token(given) : '';
+    if (t && valid.includes(t)) {
       const url = new URL(req.url);
       return new Response(null, {
         status: 303,
         headers: {
           location: url.pathname + url.search,
-          'set-cookie': `${COOKIE}=${expected}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`,
+          'set-cookie': `${COOKIE}=${t}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`,
         },
       });
     }
     return loginPage(true);
   }
 
-  if (readCookie(req, COOKIE) === expected) return; // accès accordé : la page statique est servie
+  if (valid.includes(readCookie(req, COOKIE))) return; // accès accordé : la page statique est servie
   return loginPage(false);
 }
