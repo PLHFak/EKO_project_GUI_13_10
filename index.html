@@ -219,6 +219,9 @@ nav.toc .navrow ul{margin:0;min-width:0;overflow-x:auto}
 .mxctl input{flex:1;accent-color:var(--eko)}
 .mxctl button{font:600 .8rem var(--font-mono);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 12px;cursor:pointer}
 .mxctl button:focus-visible,.mxctl input:focus-visible{outline:2px solid var(--eko);outline-offset:2px}
+.mxnotes{margin-top:18px;max-width:820px}
+.mxnotes h3{margin:0 0 4px}
+.mxnotes ul{margin:0;padding-left:1.2em;color:var(--muted)}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .mxf svg .gr{stroke:var(--muted);stroke-width:.6;stroke-dasharray:2 5;opacity:.6}
 .mxf svg .gh{stroke:var(--muted);opacity:.45}
@@ -524,6 +527,13 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
       <li><span class="fr">D'où viendrait le start GPIO : mélangeur image, LSM ou console ?</span><span class="en" lang="en">Where would the GPIO start come from: vision mixer, LSM or console?</span><span class="es" lang="es">¿De dónde vendría el start GPIO: mezclador de vídeo, LSM o mesa?</span></li>
       <li><span class="fr">Les durées de l'adjust (−2 s, +2 s) : fixes, ou réglables par vous ?</span><span class="en" lang="en">Adjust durations (−2 s, +2 s): fixed, or set by you?</span><span class="es" lang="es">Duraciones del ajuste (−2 s, +2 s): ¿fijas o ajustables por ustedes?</span></li>
       <li><span class="fr">Les noms des modes vous parlent-ils ?</span><span class="en" lang="en">Do the mode names make sense to you?</span><span class="es" lang="es">¿Les resultan claros los nombres de los modos?</span></li>
+    </ul>
+  </div>
+  <div class="mxnotes">
+    <h3><span class="fr">Remarques</span><span class="en" lang="en">Remarks</span><span class="es" lang="es">Observaciones</span></h3>
+    <ul>
+      <li><span class="fr">Selon les types de transition prévus par la production, notre reconnaissance peut être optimisée par apprentissage, à condition qu'ils soient bien codifiés dans le plan de production par le réalisateur et le truquiste. En démonstration, nous prévoyons la reconnaissance de l'image complète avant de valider le mix audio.</span><span class="en" lang="en">Depending on the transition types planned by the production, our recognition can be optimised by learning, provided they are clearly codified in the production plan by the director and the vision mixer operator. For the demonstration, we plan full-image recognition before validating the audio mix.</span><span class="es" lang="es">Según los tipos de transición previstos por la producción, nuestro reconocimiento puede optimizarse por aprendizaje, siempre que el realizador y el operador del mezclador los codifiquen claramente en el plan de producción. En la demostración, prevemos el reconocimiento de la imagen completa antes de validar la mezcla de audio.</span></li>
+      <li><span class="fr">La connaissance du bus Preview peut venir du suivi de la matrice ou de la barre ME, mais aussi du protocole du mélangeur ou du système de gestion interne du car.</span><span class="en" lang="en">Preview bus information can come from tracking the router or the ME bar, but also from the vision mixer protocol or the OB van's internal control system.</span><span class="es" lang="es">La información del bus Preview puede venir del seguimiento de la matriz o de la barra ME, pero también del protocolo del mezclador o del sistema de control interno de la unidad móvil.</span></li>
     </ul>
   </div>
 </section>
