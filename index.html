@@ -719,7 +719,7 @@ footer{color:var(--muted);font-size:.9rem;border-top:1px solid var(--line);paddi
 
 <script>
 var LANG='fr';
-try{var q=(location.hash||'').replace('#','');if(q==='en'||q==='fr'||q==='es'){LANG=q}else{var st=localStorage.getItem('eko-lang');if(st==='en'||st==='fr'||st==='es')LANG=st;}}catch(e){}
+try{var q=(location.hash||'').replace('#','')||(new URLSearchParams(location.search).get('lang')||'');if(q==='en'||q==='fr'||q==='es'){LANG=q}else{var st=localStorage.getItem('eko-lang');if(st==='en'||st==='fr'||st==='es')LANG=st;}}catch(e){}
 document.documentElement.setAttribute('data-lang',LANG);document.documentElement.lang=LANG;
 document.title=LANG==='en'?'EKO in the OB van':LANG==='es'?'EKO en la unidad móvil':'EKO en car';
 function L(fr,en,es){return LANG==='en'?en:LANG==='es'?(es==null?en:es):fr;}

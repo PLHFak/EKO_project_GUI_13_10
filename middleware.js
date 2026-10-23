@@ -1,5 +1,6 @@
 // Accès protégé par mot de passe. Le mot de passe n'est jamais dans le dépôt :
-// il est lu dans les variables d'environnement Vercel EKO_ACCESS_CODE et EKO_ACCESS_CODE_2.
+// il est lu dans les variables d'environnement Vercel EKO_ACCESS_CODE, EKO_ACCESS_CODE_2
+// et EKO_ACCESS_CODE_HUB (transmis par le Technical Hub, jamais saisi par un visiteur).
 export const config = { matcher: '/((?!favicon\\.ico).*)' };
 
 const COOKIE = 'eko_access';
@@ -55,7 +56,7 @@ ${msg}
 }
 
 export default async function middleware(req) {
-  const codes = [process.env.EKO_ACCESS_CODE, process.env.EKO_ACCESS_CODE_2].filter(Boolean);
+  const codes = [process.env.EKO_ACCESS_CODE, process.env.EKO_ACCESS_CODE_2, process.env.EKO_ACCESS_CODE_HUB].filter(Boolean);
   if (!codes.length) return new Response('Access code not configured.', { status: 503 });
   const valid = await Promise.all(codes.map(token));
 
@@ -74,6 +75,25 @@ export default async function middleware(req) {
       });
     }
     return loginPage(true);
+  }
+
+  // Lien venu d'un espace documentaire (?code=…) : le visiteur n'a rien à
+  // saisir. On pose le cookie puis on recharge l'adresse sans le code.
+  const url = new URL(req.url);
+  const qcode = url.searchParams.get('code');
+  if (qcode) {
+    const t = await token(qcode);
+    url.searchParams.delete('code');
+    if (valid.includes(t)) {
+      return new Response(null, {
+        status: 303,
+        headers: {
+          location: url.pathname + url.search,
+          'set-cookie': `${COOKIE}=${t}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`,
+          'cache-control': 'no-store',
+        },
+      });
+    }
   }
 
   if (valid.includes(readCookie(req, COOKIE))) return; // accès accordé : la page statique est servie
